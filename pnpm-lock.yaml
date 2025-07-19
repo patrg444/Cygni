@@ -287,8 +287,8 @@ importers:
         specifier: ^7.0.0
         version: 7.2.4
       '@fastify/rate-limit':
-        specifier: ^10.3.0
-        version: 10.3.0
+        specifier: ^8.0.0
+        version: 8.1.1
       '@fastify/swagger':
         specifier: ^8.0.0
         version: 8.15.0
@@ -1901,12 +1901,12 @@ packages:
       fast-deep-equal: 3.1.3
     dev: false
 
-  /@fastify/rate-limit@10.3.0:
-    resolution: {integrity: sha512-eIGkG9XKQs0nyynatApA3EVrojHOuq4l6fhB4eeCk4PIOeadvOJz9/4w3vGI44Go17uaXOWEcPkaD8kuKm7g6Q==}
+  /@fastify/rate-limit@8.1.1:
+    resolution: {integrity: sha512-kTaIBuG7hS26rUPermw1RYsobNHxLcqA9AFUbWR8dEyRR8wknZnpfuD3VaJkrtfxyWLW8xZ5b6/GmQ/gNoEfWA==}
     dependencies:
-      '@lukeed/ms': 2.0.2
-      fastify-plugin: 5.0.1
-      toad-cache: 3.7.0
+      fastify-plugin: 4.5.1
+      ms: 2.1.3
+      tiny-lru: 11.3.4
     dev: false
 
   /@fastify/swagger@8.15.0:
@@ -6436,10 +6436,6 @@ packages:
     resolution: {integrity: sha512-stRHYGeuqpEZTL1Ef0Ovr2ltazUT9g844X5z/zEBFLG8RYlpDiOCIG+ATvYEp+/zmc7sN29mcIMp8gvYplYPIQ==}
     dev: false
 
-  /fastify-plugin@5.0.1:
-    resolution: {integrity: sha512-HCxs+YnRaWzCl+cWRYFnHmeRFyR5GVnJTAaCJQiYzQSDwK9MgJdyAsuL3nh0EWRCYMgQ5MeziymvmAhUHYHDUQ==}
-    dev: false
-
   /fastify@4.29.1:
     resolution: {integrity: sha512-m2kMNHIG92tSNWv+Z3UeTR9AWLLuo7KctC7mlFPtMEVrfjIhmQhkQnT9v15qA/BfVq3vvj134Y0jl9SBje3jXQ==}
     dependencies:
@@ -10006,6 +10002,11 @@ packages:
     resolution: {integrity: sha512-OqyPZ9u96VohAyMfJykzmivOrY2wfMSf3C5TtFJVgN+Hm6aj+voFhlK+kZEIv2FBh1X6Xp3DlnCOfEQ3B2J86A==}
     dependencies:
       real-require: 0.2.0
+    dev: false
+
+  /tiny-lru@11.3.4:
+    resolution: {integrity: sha512-UxWEfRKpFCabAf6fkTNdlfSw/RDUJ/4C6i1aLZaDnGF82PERHyYhz5CMCVYXtLt34LbqgfpJ2bjmgGKgxuF/6A==}
+    engines: {node: '>=12'}
     dev: false
 
   /tinybench@2.9.0:

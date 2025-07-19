@@ -15,7 +15,7 @@
     "@fastify/cors": "^8.0.0",
     "@fastify/helmet": "^11.0.0",
     "@fastify/jwt": "^7.0.0",
-    "@fastify/rate-limit": "^10.3.0",
+    "@fastify/rate-limit": "^8.0.0",
     "@fastify/swagger": "^8.0.0",
     "@prisma/client": "^5.0.0",
     "argon2": "^0.31.0",
