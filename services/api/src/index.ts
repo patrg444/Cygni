@@ -119,7 +119,7 @@ async function start() {
   });
 
   // Ready check (for k8s)
-  app.get('/ready', async (request, reply) => {
+  app.get('/ready', async (_request, reply) => {
     const dbHealthy = await prisma.$queryRaw`SELECT 1`
       .then(() => true)
       .catch(() => false);

@@ -1,5 +1,4 @@
 import Fastify from 'fastify';
-import { z } from 'zod';
 
 const app = Fastify({
   logger: true
