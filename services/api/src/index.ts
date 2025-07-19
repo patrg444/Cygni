@@ -18,7 +18,15 @@ declare module "fastify" {
 
 async function start() {
   // Initialize development secrets if needed
-  await initializeDevelopmentEnv();
+  try {
+    await initializeDevelopmentEnv();
+  } catch (err) {
+    console.error("Warning: Failed to initialize development environment:", err);
+    // Continue anyway in test mode
+    if (process.env.NODE_ENV !== "test") {
+      throw err;
+    }
+  }
   const app = fastify({
     logger: logger,
     trustProxy: true,
