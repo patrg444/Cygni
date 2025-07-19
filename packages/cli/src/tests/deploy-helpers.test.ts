@@ -7,7 +7,7 @@ import {
   getDeploymentHistory,
 } from '../lib/deploy-helpers';
 import * as apiClient from '../lib/api-client';
-import { exec } from 'child_process';
+// import { exec } from 'child_process';
 // import chalk from 'chalk';
 
 vi.mock('../lib/api-client');
