@@ -1,0 +1,28 @@
+lockfileVersion: '6.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+importers:
+
+  .:
+    devDependencies:
+      '@types/node':
+        specifier: ^20.0.0
+        version: 20.0.0
+      turbo:
+        specifier: ^1.10.0
+        version: 1.10.0
+
+packages:
+
+  /@types/node@20.0.0:
+    resolution: {integrity: sha512-placeholder}
+    dev: true
+
+  /turbo@1.10.0:
+    resolution: {integrity: sha512-placeholder}
+    hasBin: true
+    requiresBuild: true
+    dev: true
