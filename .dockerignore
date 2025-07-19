@@ -1,59 +1,36 @@
-# Git
+# Git & local tooling
 .git
-.gitignore
+.github
+.vscode
+.idea
 
-# Node modules
+# Node artifacts
 **/node_modules
 **/.pnpm-store
+**/pnpm-debug.log*
 
-# Build outputs
+# Build, test, coverage
 **/dist
 **/.next
 **/build
 **/.turbo
-
-# Test coverage
-**/coverage
-**/.nyc_output
+coverage
+*.log
 
 # Environment files
 **/.env*
 !**/.env.example
 
-# IDE
-.vscode
-.idea
-*.swp
-*.swo
-*~
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-
-# Testing
+# Test files
 **/__tests__
 **/*.test.ts
 **/*.test.js
 **/*.spec.ts
 **/*.spec.js
 
-# Documentation
-docs
-*.md
-!README.md
-
-# CI/CD
-.github
-.gitlab-ci.yml
-.travis.yml
+# OS files
+.DS_Store
+Thumbs.db
 
 # Temporary files
 *.tmp

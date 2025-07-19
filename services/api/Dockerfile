@@ -1,70 +1,61 @@
-# Multi-stage Dockerfile for API service
-FROM node:20-alpine AS base
+# ---------- base image ----------
+FROM node:20-slim AS base          # use Debian slim, avoids Prisma/OpenSSL pain
+WORKDIR /app
 
-# Install dependencies only when needed
+# ---------- deps layer ----------
 FROM base AS deps
-RUN apk add --no-cache libc6-compat
-WORKDIR /app
+# Workspace descriptors first (for cache)
+COPY pnpm-workspace.yaml pnpm-lock.yaml package.json ./
+# API package manifest (namespaced path keeps cache small)
+COPY services/api/package.json services/api/
 
-# Install pnpm
-RUN npm install -g pnpm@8
+RUN npm i -g pnpm@8
+# Install ONLY deps for the API package (no dev deps yet)
+RUN pnpm install --frozen-lockfile \
+      --filter ./services/api \
+      --prod \
+      --ignore-scripts
 
-# Copy all workspace files
-COPY . .
-
-# Install dependencies for the entire workspace
-RUN pnpm install --frozen-lockfile
-
-# Generate Prisma client for API
-RUN cd services/api && pnpm prisma generate
-
-# Rebuild the source code only when needed
+# ---------- builder layer ----------
 FROM base AS builder
-WORKDIR /app
+COPY pnpm-workspace.yaml pnpm-lock.yaml package.json ./
+COPY services/api/package.json services/api/
 
-# Install pnpm
-RUN npm install -g pnpm@8
+RUN npm i -g pnpm@8
+# Install ALL deps including dev deps for building
+RUN pnpm install --frozen-lockfile \
+      --filter ./services/api
 
-# Copy all files
-COPY . .
+# Copy source code
+COPY services/api/ services/api/
 
-# Install all dependencies
-RUN pnpm install --frozen-lockfile
+# Generate Prisma client *before* tsc build
+RUN pnpm --filter ./services/api prisma generate
 
-# Generate Prisma client and build API
-RUN cd services/api && pnpm prisma generate && pnpm build
+# Build TS → JS
+RUN pnpm --filter ./services/api build
 
-# Production image, copy all the files and run
+# ---------- runtime layer ----------
 FROM base AS runner
+RUN useradd -u 1001 -r -s /bin/false app
+
 WORKDIR /app
-
-# Create non-root user
-RUN addgroup -g 1001 -S nodejs
-RUN adduser -S nodejs -u 1001
-
-# Copy necessary files from builder
 COPY --from=builder /app/services/api/dist ./dist
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/services/api/node_modules ./services/api/node_modules
-COPY --from=builder /app/services/api/package.json ./package.json
+COPY --from=deps /app/services/api/node_modules ./node_modules
+COPY --from=builder /app/services/api/package.json ./
 COPY --from=builder /app/services/api/prisma ./prisma
-
-# Set environment
-ENV NODE_ENV=production
-ENV PORT=3000
-
-# Change ownership
-RUN chown -R nodejs:nodejs /app
-
-# Switch to non-root user
-USER nodejs
-
-# Expose port
-EXPOSE 3000
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
   CMD node -e "require('http').get('http://localhost:3000/health', (res) => { process.exit(res.statusCode === 200 ? 0 : 1); })"
 
-# Start the application
+# Switch to non-root user
+USER 1001
+
+# Set environment
+ENV NODE_ENV=production
+ENV PORT=3000
+
+EXPOSE 3000
+
 CMD ["node", "dist/index.js"]
