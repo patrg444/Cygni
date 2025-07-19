@@ -108,12 +108,13 @@ export const logsCommand = new Command('logs')
 function formatLog(log: any) {
   const timestamp = new Date(log.timestamp).toLocaleTimeString();
   const level = log.level || 'info';
-  const levelColor = {
+  const levelColors: Record<string, typeof chalk.red> = {
     error: chalk.red,
     warn: chalk.yellow,
     info: chalk.blue,
     debug: chalk.gray,
-  }[level] || chalk.white;
+  };
+  const levelColor = levelColors[level] || chalk.white;
 
   const prefix = `${chalk.gray(timestamp)} ${levelColor(level.toUpperCase().padEnd(5))}`;
   const message = log.message || log.msg || JSON.stringify(log);

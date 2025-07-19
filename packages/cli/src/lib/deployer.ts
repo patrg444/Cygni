@@ -9,6 +9,7 @@ export interface DeploymentOptions {
   environment: string;
   healthGate?: string;
   strategy?: string;
+  cachedImageId?: string;
 }
 
 export interface Deployment {

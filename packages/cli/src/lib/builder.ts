@@ -39,7 +39,7 @@ export async function buildProject(config: BuildConfig): Promise<BuildResult> {
   const { commitSha, branch } = await getGitInfo();
   
   // Check for Dockerfile
-  const dockerfilePath = await findDockerfile();
+  const dockerfilePath = await findDockerfile() ?? undefined;
   const hasDockerfile = !!dockerfilePath;
 
   let buildArgs: Record<string, string> = {};

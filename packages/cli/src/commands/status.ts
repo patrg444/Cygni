@@ -59,12 +59,13 @@ export const statusCommand = new Command('status')
         );
         
         const status = latestDeploy?.status || 'no deployments';
-        const statusColor = {
+        const statusColors: Record<string, typeof chalk.green> = {
           active: chalk.green,
           failed: chalk.red,
           deploying: chalk.yellow,
           pending: chalk.yellow,
-        }[status] || chalk.gray;
+        };
+        const statusColor = statusColors[status] || chalk.gray;
 
         console.log(`  ${env.name}: ${statusColor(status)}`);
         if (env.domain) {
@@ -78,12 +79,13 @@ export const statusCommand = new Command('status')
         console.log(chalk.gray('  No deployments yet'));
       } else {
         deployments.data.deployments.forEach((deploy: any) => {
-          const statusIcon = {
+          const statusIcons: Record<string, string> = {
             active: '✅',
             failed: '❌',
             deploying: '🔄',
             pending: '⏳',
-          }[deploy.status] || '❓';
+          };
+          const statusIcon = statusIcons[deploy.status] || '❓';
 
           const time = formatDistanceToNow(new Date(deploy.createdAt), { addSuffix: true });
           

@@ -25,12 +25,13 @@ describe('Builder', () => {
   describe('buildProject', () => {
     it('should get git info successfully', async () => {
       const mockExec = vi.mocked(exec);
-      mockExec.mockImplementation((cmd: any, cb: any) => {
-        if (cmd === 'git rev-parse HEAD') {
+      mockExec.mockImplementation((_cmd: any, cb: any) => {
+        if (_cmd === 'git rev-parse HEAD') {
           cb(null, { stdout: 'abc123def456\n' });
-        } else if (cmd === 'git rev-parse --abbrev-ref HEAD') {
+        } else if (_cmd === 'git rev-parse --abbrev-ref HEAD') {
           cb(null, { stdout: 'main\n' });
         }
+        return {} as any;
       });
 
       vi.mocked(fs.access).mockRejectedValue(new Error('No Dockerfile'));
@@ -44,8 +45,9 @@ describe('Builder', () => {
 
     it('should handle non-git repository gracefully', async () => {
       const mockExec = vi.mocked(exec);
-      mockExec.mockImplementation((cmd: any, cb: any) => {
+      mockExec.mockImplementation((_cmd: any, cb: any) => {
         cb(new Error('Not a git repository'));
+        return {} as any;
       });
 
       vi.mocked(fs.access).mockRejectedValue(new Error('No Dockerfile'));
@@ -58,12 +60,13 @@ describe('Builder', () => {
 
     it('should detect Dockerfile when present', async () => {
       const mockExec = vi.mocked(exec);
-      mockExec.mockImplementation((cmd: any, cb: any) => {
-        if (cmd === 'git rev-parse HEAD') {
+      mockExec.mockImplementation((_cmd: any, cb: any) => {
+        if (_cmd === 'git rev-parse HEAD') {
           cb(null, { stdout: 'abc123def456\n' });
-        } else if (cmd === 'git rev-parse --abbrev-ref HEAD') {
+        } else if (_cmd === 'git rev-parse --abbrev-ref HEAD') {
           cb(null, { stdout: 'main\n' });
         }
+        return {} as any;
       });
 
       vi.mocked(fs.access).mockResolvedValueOnce(undefined); // Dockerfile exists
@@ -76,12 +79,13 @@ describe('Builder', () => {
 
     it('should auto-detect framework when not specified', async () => {
       const mockExec = vi.mocked(exec);
-      mockExec.mockImplementation((cmd: any, cb: any) => {
-        if (cmd === 'git rev-parse HEAD') {
+      mockExec.mockImplementation((_cmd: any, cb: any) => {
+        if (_cmd === 'git rev-parse HEAD') {
           cb(null, { stdout: 'abc123def456\n' });
-        } else if (cmd === 'git rev-parse --abbrev-ref HEAD') {
+        } else if (_cmd === 'git rev-parse --abbrev-ref HEAD') {
           cb(null, { stdout: 'main\n' });
         }
+        return {} as any;
       });
 
       vi.mocked(fs.access).mockRejectedValue(new Error('No Dockerfile'));
@@ -98,15 +102,16 @@ describe('Builder', () => {
       const mockExec = vi.mocked(exec);
       let prebuildCommandRun = false;
 
-      mockExec.mockImplementation((cmd: any, cb: any) => {
-        if (cmd === 'git rev-parse HEAD') {
+      mockExec.mockImplementation((_cmd: any, cb: any) => {
+        if (_cmd === 'git rev-parse HEAD') {
           cb(null, { stdout: 'abc123def456\n' });
-        } else if (cmd === 'git rev-parse --abbrev-ref HEAD') {
+        } else if (_cmd === 'git rev-parse --abbrev-ref HEAD') {
           cb(null, { stdout: 'main\n' });
         } else if (cmd === 'npm run prebuild') {
           prebuildCommandRun = true;
           cb(null, { stdout: 'Prebuild complete\n' });
         }
+        return {} as any;
       });
 
       vi.mocked(fs.access).mockRejectedValue(new Error('No Dockerfile'));
@@ -129,12 +134,13 @@ describe('Builder', () => {
 
     it('should set correct buildpack args for Next.js', async () => {
       const mockExec = vi.mocked(exec);
-      mockExec.mockImplementation((cmd: any, cb: any) => {
-        if (cmd === 'git rev-parse HEAD') {
+      mockExec.mockImplementation((_cmd: any, cb: any) => {
+        if (_cmd === 'git rev-parse HEAD') {
           cb(null, { stdout: 'abc123def456\n' });
-        } else if (cmd === 'git rev-parse --abbrev-ref HEAD') {
+        } else if (_cmd === 'git rev-parse --abbrev-ref HEAD') {
           cb(null, { stdout: 'main\n' });
         }
+        return {} as any;
       });
 
       vi.mocked(fs.access).mockRejectedValue(new Error('No Dockerfile'));
@@ -149,12 +155,13 @@ describe('Builder', () => {
 
     it('should check lowercase dockerfile variant', async () => {
       const mockExec = vi.mocked(exec);
-      mockExec.mockImplementation((cmd: any, cb: any) => {
-        if (cmd === 'git rev-parse HEAD') {
+      mockExec.mockImplementation((_cmd: any, cb: any) => {
+        if (_cmd === 'git rev-parse HEAD') {
           cb(null, { stdout: 'abc123def456\n' });
-        } else if (cmd === 'git rev-parse --abbrev-ref HEAD') {
+        } else if (_cmd === 'git rev-parse --abbrev-ref HEAD') {
           cb(null, { stdout: 'main\n' });
         }
+        return {} as any;
       });
 
       vi.mocked(fs.access)

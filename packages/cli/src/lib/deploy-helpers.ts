@@ -35,7 +35,7 @@ export async function checkBuildCache(
     let dockerfileHash = '';
     if (dockerfilePath) {
       const { stdout } = await execAsync(`sha256sum ${dockerfilePath}`);
-      dockerfileHash = stdout.split(' ')[0];
+      dockerfileHash = stdout.split(' ')[0] || '';
     }
 
     // Check cache

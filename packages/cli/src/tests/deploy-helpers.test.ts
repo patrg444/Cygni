@@ -78,8 +78,9 @@ describe('Deploy Helpers', () => {
   describe('checkBuildCache', () => {
     it('should return cached build when found', async () => {
       const mockExec = vi.mocked(exec);
-      mockExec.mockImplementation((cmd: any, cb: any) => {
+      mockExec.mockImplementation((_cmd: any, cb: any) => {
         cb(null, { stdout: 'abc123def456789  Dockerfile\n' });
+        return {} as any;
       });
 
       mockApi.get.mockResolvedValueOnce({

@@ -71,3 +71,31 @@ export async function updateConfig(updates: Partial<CygniConfig>, dir: string = 
   const updated = { ...config, ...updates };
   await saveConfig(updated, dir);
 }
+
+export function createProjectConfig(name: string, framework?: string): CygniConfig {
+  return {
+    name,
+    framework,
+    services: {
+      web: framework ? getFrameworkDefaults(framework) : undefined
+    }
+  };
+}
+
+function getFrameworkDefaults(framework: string): CygniConfig['services']['web'] {
+  const defaults: Record<string, CygniConfig['services']['web']> = {
+    'next': {
+      build: { command: 'npm run build' },
+      start: { command: 'npm run start', port: 3000 }
+    },
+    'react': {
+      build: { command: 'npm run build' },
+      start: { command: 'npx serve -s build', port: 3000 }
+    },
+    'node': {
+      start: { command: 'npm start', port: 3000 }
+    }
+  };
+  
+  return defaults[framework] || {};
+}
