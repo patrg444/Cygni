@@ -1,6 +1,5 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
 import { Role, JWTPayload, AuthContext } from '../types/auth';
-import { Role as PrismaRole } from '@prisma/client';
 import { prisma } from '../utils/prisma';
 
 declare module 'fastify' {
