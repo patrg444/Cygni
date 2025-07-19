@@ -1,0 +1,29 @@
+{
+  "name": "@cloudexpress/builder",
+  "version": "0.1.0",
+  "description": "Cygni Container Builder Service",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "test": "vitest",
+    "lint": "eslint src --ext .ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@fastify/websocket": "^8.0.0",
+    "@kubernetes/client-node": "^0.19.0",
+    "@aws-sdk/client-s3": "^3.0.0",
+    "@aws-sdk/client-ecr": "^3.0.0",
+    "fastify": "^4.0.0",
+    "pino": "^8.0.0",
+    "zod": "^3.0.0",
+    "nanoid": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "tsx": "^3.0.0",
+    "typescript": "^5.0.0",
+    "vitest": "^0.34.0"
+  }
+}

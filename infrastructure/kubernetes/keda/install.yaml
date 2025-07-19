@@ -1,0 +1,55 @@
+# Install KEDA using Helm:
+# helm repo add kedacore https://kedacore.github.io/charts
+# helm repo update
+# helm install keda kedacore/keda --namespace keda --create-namespace
+
+---
+# Prometheus ScaledObject for RPS-based scaling
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: keda-prometheus-config
+  namespace: cloudexpress-system
+data:
+  prometheus-url: "http://prometheus-kube-prometheus-prometheus.monitoring.svc.cluster.local:9090"
+---
+# Example ScaledObject for CygniService
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: cloudexpress-rps-scaler-template
+  namespace: cloudexpress-system
+spec:
+  scaleTargetRef:
+    name: "{{ .DeploymentName }}"
+  minReplicaCount: 1
+  maxReplicaCount: 10
+  pollingInterval: 30
+  cooldownPeriod: 300
+  triggers:
+  - type: prometheus
+    metadata:
+      serverAddress: http://prometheus-kube-prometheus-prometheus.monitoring.svc.cluster.local:9090
+      metricName: http_requests_per_second
+      query: |
+        sum(rate(cloudexpress_http_requests_total{namespace="{{ .Namespace }}",service="{{ .ServiceName }}"}[30s]))
+      threshold: "75"  # Target 75 RPS per pod
+  - type: prometheus
+    metadata:
+      serverAddress: http://prometheus-kube-prometheus-prometheus.monitoring.svc.cluster.local:9090
+      metricName: cpu_utilization
+      query: |
+        avg(container_cpu_usage_seconds_total{namespace="{{ .Namespace }}",pod=~"{{ .ServiceName }}-.*"})
+      threshold: "0.7"  # Fallback to CPU at 70%
+---
+# TriggerAuthentication for secure Prometheus access (if needed)
+apiVersion: keda.sh/v1alpha1
+kind: TriggerAuthentication
+metadata:
+  name: prometheus-auth
+  namespace: cloudexpress-system
+spec:
+  secretTargetRef:
+  - parameter: bearerToken
+    name: prometheus-token
+    key: token

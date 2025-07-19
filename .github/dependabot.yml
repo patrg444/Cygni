@@ -1,0 +1,107 @@
+version: 2
+updates:
+  # NPM dependencies
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "03:00"
+    open-pull-requests-limit: 10
+    groups:
+      production-dependencies:
+        dependency-type: "production"
+      development-dependencies:
+        dependency-type: "development"
+    commit-message:
+      prefix: "deps"
+      prefix-development: "deps-dev"
+    labels:
+      - "dependencies"
+      - "automated"
+
+  # Service-specific NPM dependencies
+  - package-ecosystem: "npm"
+    directory: "/services/api"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+      - "service:api"
+
+  - package-ecosystem: "npm"
+    directory: "/services/auth"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+      - "service:auth"
+
+  - package-ecosystem: "npm"
+    directory: "/services/builder"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+      - "service:builder"
+
+  # Go dependencies
+  - package-ecosystem: "gomod"
+    directory: "/services/runtime-orchestrator"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+      - "service:orchestrator"
+      - "language:go"
+
+  # Docker dependencies
+  - package-ecosystem: "docker"
+    directory: "/services/api"
+    schedule:
+      interval: "monthly"
+    labels:
+      - "dependencies"
+      - "docker"
+
+  - package-ecosystem: "docker"
+    directory: "/services/auth"
+    schedule:
+      interval: "monthly"
+    labels:
+      - "dependencies"
+      - "docker"
+
+  - package-ecosystem: "docker"
+    directory: "/services/builder"
+    schedule:
+      interval: "monthly"
+    labels:
+      - "dependencies"
+      - "docker"
+
+  - package-ecosystem: "docker"
+    directory: "/services/runtime-orchestrator"
+    schedule:
+      interval: "monthly"
+    labels:
+      - "dependencies"
+      - "docker"
+
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+      - "ci/cd"
+
+  # Terraform
+  - package-ecosystem: "terraform"
+    directory: "/infrastructure/terraform"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+      - "infrastructure"

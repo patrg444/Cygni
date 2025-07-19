@@ -1,0 +1,179 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  organizations OrganizationMember[]
+  projects      ProjectMember[]
+  deployments   Deployment[]
+  apiKeys       ApiKey[]
+}
+
+model Organization {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  members  OrganizationMember[]
+  projects Project[]
+}
+
+model OrganizationMember {
+  userId         String
+  organizationId String
+  role           Role
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  user         User         @relation(fields: [userId], references: [id])
+  organization Organization @relation(fields: [organizationId], references: [id])
+
+  @@id([userId, organizationId])
+}
+
+model Project {
+  id             String   @id @default(cuid())
+  organizationId String
+  name           String
+  slug           String
+  framework      String?
+  repository     String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organization Organization      @relation(fields: [organizationId], references: [id])
+  members      ProjectMember[]
+  environments Environment[]
+  deployments  Deployment[]
+  builds       Build[]
+  secrets      Secret[]
+
+  @@unique([organizationId, slug])
+}
+
+model ProjectMember {
+  userId    String
+  projectId String
+  role      Role
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user    User    @relation(fields: [userId], references: [id])
+  project Project @relation(fields: [projectId], references: [id])
+
+  @@id([userId, projectId])
+}
+
+model Environment {
+  id        String   @id @default(cuid())
+  projectId String
+  name      String
+  slug      String
+  domain    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  project     Project      @relation(fields: [projectId], references: [id])
+  deployments Deployment[]
+  secrets     Secret[]
+
+  @@unique([projectId, slug])
+}
+
+model Deployment {
+  id            String   @id @default(cuid())
+  projectId     String
+  environmentId String
+  buildId       String
+  status        DeploymentStatus
+  userId        String
+  metadata      Json?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  project     Project     @relation(fields: [projectId], references: [id])
+  environment Environment @relation(fields: [environmentId], references: [id])
+  build       Build       @relation(fields: [buildId], references: [id])
+  user        User        @relation(fields: [userId], references: [id])
+}
+
+model Build {
+  id        String      @id @default(cuid())
+  projectId String
+  commitSha String
+  branch    String
+  status    BuildStatus
+  logs      String?
+  imageUrl  String?
+  metadata  Json?
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  project     Project      @relation(fields: [projectId], references: [id])
+  deployments Deployment[]
+}
+
+model Secret {
+  id            String   @id @default(cuid())
+  projectId     String
+  environmentId String?
+  key           String
+  value         String // Encrypted
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  project     Project      @relation(fields: [projectId], references: [id])
+  environment Environment? @relation(fields: [environmentId], references: [id])
+
+  @@unique([projectId, environmentId, key])
+}
+
+model ApiKey {
+  id        String   @id @default(cuid())
+  userId    String
+  name      String
+  key       String   @unique
+  lastUsed  DateTime?
+  expiresAt DateTime?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+enum Role {
+  owner
+  admin
+  developer
+  viewer
+}
+
+enum DeploymentStatus {
+  pending
+  building
+  deploying
+  active
+  failed
+  cancelled
+}
+
+enum BuildStatus {
+  pending
+  running
+  success
+  failed
+  cancelled
+}

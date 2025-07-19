@@ -1,0 +1,31 @@
+# CODEOWNERS for Cygni
+# This file defines who reviews PRs for different parts of the codebase
+
+# Global owners
+* @patrg444
+
+# Control Plane
+/services/api/ @patrg444
+/services/auth/ @patrg444
+/services/builder/ @patrg444
+
+# Data Plane
+/services/runtime-orchestrator/ @patrg444
+/infrastructure/kubernetes/ @patrg444
+
+# Documentation
+/docs/ @patrg444
+*.md @patrg444
+
+# CI/CD
+/.github/ @patrg444
+
+# Infrastructure as Code
+/infrastructure/terraform/ @patrg444
+/infrastructure/helm/ @patrg444
+
+# Security-sensitive files
+/services/api/src/middleware/auth.ts @patrg444
+/services/api/src/utils/crypto.ts @patrg444
+**/secrets* @patrg444
+**/security* @patrg444

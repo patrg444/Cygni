@@ -1,0 +1,97 @@
+prometheus:
+  prometheusSpec:
+    retention: 30d
+    retentionSize: 50GB
+    resources:
+      requests:
+        cpu: 500m
+        memory: 2Gi
+      limits:
+        cpu: 2
+        memory: 4Gi
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 100Gi
+    serviceMonitorSelectorNilUsesHelmValues: false
+    podMonitorSelectorNilUsesHelmValues: false
+    ruleSelectorNilUsesHelmValues: false
+
+alertmanager:
+  alertmanagerSpec:
+    storage:
+      volumeClaimTemplate:
+        spec:
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 10Gi
+
+grafana:
+  enabled: true
+  adminPassword: changeme
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    hosts:
+      - grafana.cloudexpress.io
+    tls:
+      - secretName: grafana-tls
+        hosts:
+          - grafana.cloudexpress.io
+  sidecar:
+    datasources:
+      enabled: true
+      defaultDatasourceEnabled: true
+    dashboards:
+      enabled: true
+      searchNamespace: ALL
+  additionalDataSources:
+    - name: Loki
+      type: loki
+      url: http://loki-gateway.loki.svc.cluster.local
+      access: proxy
+      jsonData:
+        maxLines: 1000
+
+# Custom ServiceMonitors for Cygni services
+additionalServiceMonitors:
+  - name: cloudexpress-api
+    selector:
+      matchLabels:
+        app: cloudexpress-api
+    endpoints:
+      - port: metrics
+        interval: 30s
+  - name: cloudexpress-builder
+    selector:
+      matchLabels:
+        app: cloudexpress-builder
+    endpoints:
+      - port: metrics
+        interval: 30s
+
+# Prometheus rules for Cygni
+additionalPrometheusRules:
+  - name: cloudexpress-alerts
+    groups:
+      - name: deployment
+        rules:
+          - alert: DeploymentFailed
+            expr: cloudexpress_deployment_status{status="failed"} > 0
+            for: 5m
+            annotations:
+              summary: "Deployment failed for project {{ $labels.project }}"
+          - alert: BuildQueueBacklog
+            expr: cloudexpress_build_queue_size > 10
+            for: 10m
+            annotations:
+              summary: "Build queue backlog is growing"
+          - alert: HighErrorRate
+            expr: rate(cloudexpress_api_errors_total[5m]) > 0.1
+            for: 5m
+            annotations:
+              summary: "High error rate on API"

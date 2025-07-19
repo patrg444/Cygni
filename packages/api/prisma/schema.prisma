@@ -1,0 +1,151 @@
+// CloudExpress Database Schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String         @id @default(cuid())
+  email          String         @unique
+  password       String
+  name           String?
+  role           String         @default("member")
+  status         String         @default("active")
+  lastLoginAt    DateTime?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  
+  teamId         String
+  team           Team           @relation(fields: [teamId], references: [id])
+  notifications  Notification[]
+}
+
+model Team {
+  id                    String    @id @default(cuid())
+  name                  String
+  stripeCustomerId      String?
+  stripeSubscriptionId  String?
+  subscriptionStatus    String?
+  billingEmail         String?
+  currentPeriodEnd     DateTime?
+  paymentFailedAt      DateTime?
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+  
+  users                User[]
+  projects             Project[]
+  invoices             Invoice[]
+}
+
+model Project {
+  id              String       @id @default(cuid())
+  name            String
+  slug            String       @unique
+  status          String       @default("active")
+  budgetExceededAt DateTime?
+  suspendedAt     DateTime?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  
+  teamId          String
+  team            Team         @relation(fields: [teamId], references: [id])
+  deployments     Deployment[]
+  environments    Environment[]
+}
+
+model Deployment {
+  id          String      @id @default(cuid())
+  status      String
+  metadata    Json?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  
+  projectId   String
+  project     Project     @relation(fields: [projectId], references: [id])
+  
+  environmentId String
+  environment   Environment @relation(fields: [environmentId], references: [id])
+}
+
+model Environment {
+  id          String       @id @default(cuid())
+  name        String
+  slug        String
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  
+  projectId   String
+  project     Project      @relation(fields: [projectId], references: [id])
+  deployments Deployment[]
+  
+  @@unique([projectId, slug])
+}
+
+model Waitlist {
+  id          String   @id @default(cuid())
+  email       String   @unique
+  position    Int      @unique
+  source      String?
+  referrer    String?
+  metadata    Json?
+  createdAt   DateTime @default(now())
+}
+
+model UsageEvent {
+  id          String   @id @default(cuid())
+  projectId   String
+  serviceId   String?
+  metricType  String
+  quantity    Decimal
+  timestamp   DateTime @default(now())
+  region      String?
+  
+  @@index([projectId, timestamp])
+}
+
+model Invoice {
+  id              String    @id @default(cuid())
+  teamId          String
+  team            Team      @relation(fields: [teamId], references: [id])
+  stripeInvoiceId String    @unique
+  amount          Decimal
+  currency        String
+  status          String
+  periodStart     DateTime
+  periodEnd       DateTime
+  paidAt          DateTime?
+  createdAt       DateTime  @default(now())
+}
+
+model JwtKey {
+  id          String   @id @default(cuid())
+  kid         String   @unique
+  privateKey  String
+  publicKey   String
+  algorithm   String
+  expiresAt   DateTime
+  createdAt   DateTime @default(now())
+  
+  @@index([expiresAt])
+}
+
+model Notification {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  type        String
+  severity    String
+  title       String
+  message     String
+  data        Json?
+  read        Boolean  @default(false)
+  readAt      DateTime?
+  createdAt   DateTime @default(now())
+  
+  @@index([userId, read])
+}

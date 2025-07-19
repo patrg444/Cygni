@@ -1,0 +1,35 @@
+name: nextjs-starter
+framework: nextjs
+
+services:
+  web:
+    build:
+      command: npm run build
+    start:
+      command: npm start
+      port: 3000
+    environment:
+      NODE_ENV: production
+    scaling:
+      min: 1
+      max: 10
+      cpu: 0.5
+      memory: 512M
+    
+  database:
+    type: postgres
+    version: "15"
+    size: small
+    
+  auth:
+    enabled: true
+    providers:
+      - google
+      - github
+      - email
+      
+environments:
+  production:
+    domain: myapp.cloudexpress.app
+  preview:
+    domain: preview-{branch}.myapp.cloudexpress.app

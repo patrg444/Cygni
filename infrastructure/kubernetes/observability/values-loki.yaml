@@ -1,0 +1,68 @@
+loki:
+  auth_enabled: false
+  commonConfig:
+    replication_factor: 1
+  storage:
+    type: s3
+    s3:
+      endpoint: minio.cloudexpress-system.svc.cluster.local:9000
+      bucketnames: loki
+      access_key_id: ${AWS_ACCESS_KEY_ID}
+      secret_access_key: ${AWS_SECRET_ACCESS_KEY}
+      s3forcepathstyle: true
+      insecure: true
+  limits_config:
+    retention_period: 168h # 7 days
+    enforce_metric_name: false
+    reject_old_samples: true
+    reject_old_samples_max_age: 168h
+    ingestion_rate_mb: 10
+    ingestion_burst_size_mb: 20
+  
+singleBinary:
+  replicas: 1
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+gateway:
+  enabled: true
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    hosts:
+      - host: loki.cloudexpress.io
+        paths:
+          - path: /
+            pathType: Prefix
+
+promtail:
+  enabled: true
+  config:
+    clients:
+      - url: http://loki-gateway.loki.svc.cluster.local/loki/api/v1/push
+    snippets:
+      pipelineStages:
+        - docker: {}
+        - match:
+            selector: '{app="cloudexpress"}'
+            stages:
+              - json:
+                  expressions:
+                    level: level
+                    msg: msg
+                    trace_id: trace_id
+              - labels:
+                  level:
+                  trace_id:
+        - match:
+            selector: '{namespace="cloudexpress-builds"}'
+            stages:
+              - regex:
+                  expression: '.*build-(?P<build_id>[a-zA-Z0-9]+).*'
+              - labels:
+                  build_id:

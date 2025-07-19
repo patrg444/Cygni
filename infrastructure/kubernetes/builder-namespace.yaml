@@ -1,0 +1,75 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cloudexpress-builds
+  labels:
+    name: cloudexpress-builds
+---
+# Service account for builder jobs
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: builder
+  namespace: cloudexpress-builds
+---
+# Role for builder to manage secrets
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: builder-role
+  namespace: cloudexpress-builds
+rules:
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["create", "get", "list", "delete"]
+- apiGroups: ["batch"]
+  resources: ["jobs"]
+  verbs: ["create", "get", "list", "watch", "delete"]
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: [""]
+  resources: ["pods/log"]
+  verbs: ["get", "list"]
+---
+# RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: builder-rolebinding
+  namespace: cloudexpress-builds
+subjects:
+- kind: ServiceAccount
+  name: builder
+  namespace: cloudexpress-builds
+roleRef:
+  kind: Role
+  name: builder-role
+  apiGroup: rbac.authorization.k8s.io
+---
+# Resource quota for builds namespace
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: build-quota
+  namespace: cloudexpress-builds
+spec:
+  hard:
+    requests.cpu: "100"
+    requests.memory: "200Gi"
+    persistentvolumeclaims: "10"
+    pods: "50"
+---
+# Network policy - only allow egress
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-ingress
+  namespace: cloudexpress-builds
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress
+  egress:
+  - {} # Allow all egress for pulling code and pushing images

@@ -1,0 +1,33 @@
+{
+  "name": "@cloudexpress/services-api",
+  "version": "0.1.0",
+  "description": "Cygni API Service",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "test": "vitest",
+    "lint": "eslint src --ext .ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@fastify/cors": "^8.0.0",
+    "@fastify/helmet": "^11.0.0",
+    "@fastify/jwt": "^7.0.0",
+    "@fastify/swagger": "^8.0.0",
+    "@prisma/client": "^5.0.0",
+    "argon2": "^0.31.0",
+    "fastify": "^4.0.0",
+    "nanoid": "^4.0.0",
+    "pino": "^8.0.0",
+    "pino-pretty": "^10.0.0",
+    "zod": "^3.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "prisma": "^5.0.0",
+    "tsx": "^3.0.0",
+    "typescript": "^5.0.0",
+    "vitest": "^0.34.0"
+  }
+}
