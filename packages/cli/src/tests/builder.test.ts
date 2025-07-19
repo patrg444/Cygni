@@ -48,7 +48,7 @@ describe("Builder", () => {
     it("should handle non-git repository gracefully", async () => {
       // Mock exec to return error for git commands
       const { exec } = await import("child_process");
-      vi.mocked(exec).mockImplementation((cmd, _options, callback) => {
+      vi.mocked(exec).mockImplementation((_cmd, _options, callback) => {
         const cb = typeof _options === 'function' ? _options : callback;
         cb?.(new Error("Not a git repository"), '', '');
         return {} as any;
@@ -87,9 +87,9 @@ describe("Builder", () => {
 
       // Mock exec to track prebuild command
       const { exec } = await import("child_process");
-      vi.mocked(exec).mockImplementation((cmd, _options, callback) => {
+      vi.mocked(exec).mockImplementation((_cmd, _options, callback) => {
         const cb = typeof _options === 'function' ? _options : callback;
-        const cmdStr = typeof cmd === 'string' ? cmd : '';
+        const cmdStr = typeof _cmd === 'string' ? _cmd : '';
         if (cmdStr === "git rev-parse HEAD") {
           cb?.(null, "abc123def456\n", "");
         } else if (cmdStr === "git rev-parse --abbrev-ref HEAD") {
