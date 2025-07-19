@@ -19,7 +19,7 @@ export interface WebhookPayload {
     buildId: string;
     userId: string;
     createdAt: Date;
-    metadata?: Record<string, unknown>;
+    metadata?: unknown;
   };
   project?: {
     id: string;
@@ -49,7 +49,7 @@ export interface DeploymentEventPayload {
     buildId: string;
     userId: string;
     createdAt: Date;
-    metadata?: Record<string, unknown>;
+    metadata?: unknown;
     environment?: {
       id: string;
       name: string;
@@ -57,7 +57,7 @@ export interface DeploymentEventPayload {
     };
     build?: {
       id: string;
-      imageUrl?: string;
+      imageUrl?: string | null;
     };
     project?: {
       id: string;
@@ -94,7 +94,7 @@ export class WebhookService {
         buildId: deployment.buildId,
         userId: deployment.userId,
         createdAt: deployment.createdAt,
-        metadata: deployment.metadata,
+        metadata: deployment.metadata as unknown,
       },
       project: {
         id: project.id,
@@ -194,7 +194,7 @@ export class WebhookService {
         buildId: deployment.buildId,
         userId: deployment.userId,
         createdAt: deployment.createdAt,
-        metadata: deployment.metadata,
+        metadata: deployment.metadata as unknown,
       },
       project: {
         id: deployment.project.id,
@@ -264,7 +264,7 @@ export class WebhookService {
         buildId: deployment.buildId,
         userId: deployment.userId,
         createdAt: deployment.createdAt,
-        metadata: deployment.metadata,
+        metadata: deployment.metadata as unknown,
       },
       project: {
         id: deployment.project.id,
@@ -360,7 +360,7 @@ export class WebhookService {
   }
 
   static async updateGitHubStatus(deployment: {
-    project: { repository?: string; slug: string };
+    project: { repository?: string | null; slug: string };
     environment: { name: string; slug: string };
     status: DeploymentStatus;
     build: { commitSha?: string };

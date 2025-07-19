@@ -12,7 +12,7 @@ const createDeploymentSchema = z.object({
   projectId: z.string(),
   buildId: z.string(),
   environment: z.string(),
-  metadata: z.record(z.unknown()).optional(),
+  metadata: z.any().optional(),
 });
 
 const ORCHESTRATOR_URL =
@@ -65,7 +65,7 @@ export const deploymentRoutes: FastifyPluginAsync = async (app) => {
           environmentId: environment.id,
           userId: request.auth!.user.id,
           status: DeploymentStatus.pending,
-          metadata: body.metadata || {},
+          metadata: body.metadata || undefined,
         },
         include: {
           build: true,
@@ -976,7 +976,7 @@ function getNamespaceForEnvironment(
   }
 }
 
-async function monitorDeploymentStatus(app: { log: { info: (msg: string, data?: unknown) => void } }, deploymentId: string) {
+async function monitorDeploymentStatus(app: { log: { info: (msg: string, data?: unknown) => void; error: (msg: string, data?: unknown) => void } }, deploymentId: string) {
   // Poll orchestrator for deployment status
   const checkStatus = async () => {
     try {

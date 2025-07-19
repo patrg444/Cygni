@@ -34,14 +34,12 @@ jobs:
 
       - name: Run ESLint
         run: pnpm run lint
-        continue-on-error: true
 
       - name: Run TypeScript type checking
         run: pnpm run typecheck
-        continue-on-error: true
 
       - name: Run Prettier check
-        run: pnpm run format:check || true
+        run: pnpm run format:check
 
   # Security scanning
   security:
@@ -50,6 +48,7 @@ jobs:
     permissions:
       contents: read
       security-events: write
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
     steps:
       - uses: actions/checkout@v4
 
@@ -104,8 +103,7 @@ jobs:
         run: pnpm install --no-frozen-lockfile
 
       - name: Run tests
-        run: pnpm test || echo "No tests configured yet"
-        continue-on-error: true
+        run: pnpm test
 
   # Build Docker images
   build-images:
@@ -138,4 +136,3 @@ jobs:
         run: |
           echo "Kubernetes validation would run here"
           echo "Skipping CRDs and Helm values files"
-        continue-on-error: true
