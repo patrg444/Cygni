@@ -60,8 +60,10 @@ RUN pnpm install --prod --frozen-lockfile
 COPY --from=builder /app/services/api/dist ./services/api/dist
 COPY --from=builder /app/services/api/prisma ./services/api/prisma
 
-# Switch to app directory
+# Generate Prisma client
 WORKDIR /app/services/api
+RUN pnpm prisma generate
+
 
 # Set user
 USER nodejs
