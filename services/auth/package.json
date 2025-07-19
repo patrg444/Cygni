@@ -16,7 +16,7 @@
     "argon2": "^0.31.0",
     "fastify": "^4.0.0",
     "zod": "^3.0.0",
-    "nanoid": "^4.0.0"
+    "nanoid": "^5.1.5"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
