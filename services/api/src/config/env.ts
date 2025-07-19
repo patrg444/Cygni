@@ -6,6 +6,15 @@ import path from 'path';
 const envPath = path.resolve(process.cwd(), '.env');
 dotenv.config({ path: envPath });
 
+// Pre-process environment variables for development
+const processedEnv = { ...process.env };
+
+// In development, JWT_SECRET will be auto-generated if not provided
+if (process.env.NODE_ENV === 'development' && !process.env.JWT_SECRET) {
+  // Placeholder that will be replaced by initializeDevelopmentEnv
+  processedEnv.JWT_SECRET = 'development-placeholder-will-be-replaced';
+}
+
 // Environment schema
 const envSchema = z.object({
   // Node
@@ -49,7 +58,7 @@ const envSchema = z.object({
 });
 
 // Parse and validate environment
-const parseResult = envSchema.safeParse(process.env);
+const parseResult = envSchema.safeParse(processedEnv);
 
 if (!parseResult.success) {
   console.error('❌ Invalid environment variables:');

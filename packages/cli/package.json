@@ -1,11 +1,11 @@
 {
-  "name": "@cloudexpress/cli",
+  "name": "@cygni/cli",
   "version": "0.1.0",
   "description": "Cygni CLI - Deploy and manage your applications",
   "main": "dist/index.js",
   "bin": {
-    "cloudexpress": "./dist/index.js",
-    "cx": "./dist/index.js"
+    "cygni": "./dist/index.js",
+    "cy": "./dist/index.js"
   },
   "scripts": {
     "dev": "tsx watch src/index.ts",

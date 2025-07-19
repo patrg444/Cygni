@@ -28,6 +28,9 @@ lerna-debug.log*
 .env.test.local
 .env.production.local
 
+# Cygni local development
+.cygni/
+
 # IDE
 .vscode/
 .idea/

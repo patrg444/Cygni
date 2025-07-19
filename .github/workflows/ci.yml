@@ -6,51 +6,233 @@ on:
   pull_request:
     branches: [main, develop]
 
+env:
+  NODE_VERSION: '20'
+  PNPM_VERSION: '8'
+
 jobs:
-  # Basic validation
-  validate:
-    name: Validate
+  # Lint and type check
+  lint:
+    name: Lint & Type Check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       
-      - name: Check files
-        run: |
-          echo "✅ Repository structure validated"
-          ls -la
+      - uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
           
-      - name: Validate JSON files
-        run: |
-          find . -name "*.json" -type f -exec echo "Checking {}" \; -exec jq empty {} \; || true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
           
-  # Dockerfile validation
-  docker-validate:
-    name: Docker Validate
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Create test Dockerfile
-        run: |
-          cat > Dockerfile.test << 'EOF'
-          FROM node:20-alpine
-          WORKDIR /app
-          COPY package.json ./
-          RUN echo "Build would happen here"
-          CMD ["echo", "Cygni platform"]
-          EOF
-          
-      - name: Test Docker build
-        run: docker build -f Dockerfile.test -t cygni-test .
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
         
-  # Basic tests
-  test:
-    name: Test
+      - name: Run linter
+        run: pnpm run lint
+        
+      - name: Run type check
+        run: pnpm run typecheck
+
+  # Unit tests
+  test-unit:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: ['18', '20']
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: 'pnpm'
+          
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        
+      - name: Run unit tests
+        run: pnpm run test:unit
+
+  # Integration tests with health checks
+  test-integration:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15.6-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: cygni_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+          
+      redis:
+        image: redis:7.2-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+          
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+          
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        
+      - name: Setup test database
+        run: |
+          cd services/api
+          npx prisma migrate deploy
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/cygni_test
+          
+      - name: Run API health check
+        run: |
+          cd services/api
+          # Start API in background
+          NODE_ENV=test pnpm start &
+          API_PID=$!
+          
+          # Wait for API to be ready
+          echo "Waiting for API to start..."
+          for i in {1..30}; do
+            if curl -f http://localhost:3000/health 2>/dev/null; then
+              echo "API is healthy!"
+              break
+            fi
+            if [ $i -eq 30 ]; then
+              echo "API failed to start"
+              kill $API_PID
+              exit 1
+            fi
+            sleep 1
+          done
+          
+          # Run health checks
+          echo "Running health checks..."
+          curl -f http://localhost:3000/health || exit 1
+          curl -f http://localhost:3000/ready || exit 1
+          
+          # Run integration tests
+          pnpm run test:integration
+          
+          # Cleanup
+          kill $API_PID
+        env:
+          NODE_ENV: test
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/cygni_test
+          REDIS_URL: redis://localhost:6379
+          JWT_SECRET: test-secret-min-32-chars-for-testing
+          PORT: 3000
+
+  # Docker build test
+  docker-build:
+    name: Docker Build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: [api, cli]
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        
+      - name: Build Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./services/${{ matrix.service }}/Dockerfile
+          push: false
+          tags: cygni/${{ matrix.service }}:test
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          
+      - name: Run Docker health check
+        if: matrix.service == 'api'
+        run: |
+          # Run container with test config
+          docker run -d \
+            --name cygni-api-test \
+            -p 3000:3000 \
+            -e NODE_ENV=test \
+            -e DATABASE_URL=postgresql://postgres:postgres@host.docker.internal:5432/cygni_test \
+            -e REDIS_URL=redis://host.docker.internal:6379 \
+            -e JWT_SECRET=test-secret-min-32-chars-for-testing \
+            --add-host=host.docker.internal:host-gateway \
+            cygni/api:test
+          
+          # Wait for container to be healthy
+          echo "Waiting for container health..."
+          for i in {1..30}; do
+            if docker exec cygni-api-test wget -qO- http://localhost:3000/health; then
+              echo "Container is healthy!"
+              break
+            fi
+            if [ $i -eq 30 ]; then
+              echo "Container failed health check"
+              docker logs cygni-api-test
+              exit 1
+            fi
+            sleep 1
+          done
+          
+          # Cleanup
+          docker stop cygni-api-test
+          docker rm cygni-api-test
+
+  # Security scan
+  security:
+    name: Security Scan
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       
-      - name: Run basic tests
-        run: |
-          echo "✅ Tests would run here"
-          echo "✅ All checks passed"
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'CRITICAL,HIGH'
+          
+      - name: Upload Trivy scan results
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+  # All checks passed
+  ci-success:
+    name: CI Success
+    needs: [lint, test-unit, test-integration, docker-build, security]
+    runs-on: ubuntu-latest
+    steps:
+      - name: CI passed
+        run: echo "✅ All CI checks passed!"

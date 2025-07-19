@@ -1,0 +1,319 @@
+# Default values for cygni.
+# This is a YAML-formatted file.
+
+global:
+  # Global image registry
+  imageRegistry: ""
+  
+  # Global image pull secrets
+  imagePullSecrets: []
+  
+  # Storage class for persistent volumes
+  storageClass: ""
+
+# Common labels applied to all resources
+commonLabels: {}
+
+# Common annotations applied to all resources
+commonAnnotations: {}
+
+# API Service
+api:
+  enabled: true
+  
+  replicaCount: 2
+  
+  image:
+    repository: cygni/api
+    pullPolicy: IfNotPresent
+    tag: ""  # Overrides the image tag whose default is the chart appVersion
+  
+  service:
+    type: ClusterIP
+    port: 3000
+    targetPort: 3000
+    annotations: {}
+  
+  ingress:
+    enabled: false
+    className: "nginx"
+    annotations:
+      cert-manager.io/cluster-issuer: "letsencrypt-prod"
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    hosts:
+      - host: api.cygni.dev
+        paths:
+          - path: /
+            pathType: Prefix
+    tls:
+      - secretName: api-cygni-tls
+        hosts:
+          - api.cygni.dev
+  
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+  
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: 80
+  
+  # Environment variables
+  env:
+    NODE_ENV: production
+    LOG_LEVEL: info
+  
+  # Environment variables from secrets
+  envFrom:
+    - secretRef:
+        name: cygni-api-secrets
+  
+  # Health checks
+  livenessProbe:
+    httpGet:
+      path: /health
+      port: http
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+  
+  readinessProbe:
+    httpGet:
+      path: /ready
+      port: http
+    initialDelaySeconds: 10
+    periodSeconds: 5
+    timeoutSeconds: 3
+    failureThreshold: 3
+  
+  # Pod disruption budget
+  podDisruptionBudget:
+    enabled: true
+    minAvailable: 1
+  
+  # Security context
+  podSecurityContext:
+    runAsNonRoot: true
+    runAsUser: 1001
+    fsGroup: 1001
+  
+  securityContext:
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    capabilities:
+      drop:
+        - ALL
+
+# Builder Service (placeholder)
+builder:
+  enabled: false
+  replicaCount: 1
+  
+  image:
+    repository: cygni/builder
+    pullPolicy: IfNotPresent
+    tag: ""
+
+# Runtime Orchestrator (placeholder)
+runtimeOrchestrator:
+  enabled: false
+  replicaCount: 1
+  
+  image:
+    repository: cygni/runtime-orchestrator
+    pullPolicy: IfNotPresent
+    tag: ""
+
+# PostgreSQL Configuration
+postgresql:
+  enabled: true
+  
+  auth:
+    database: cygni
+    username: cygni
+    # Password will be auto-generated if not set
+    # existingSecret: cygni-postgresql-secret
+  
+  primary:
+    persistence:
+      enabled: true
+      size: 10Gi
+    
+    resources:
+      requests:
+        cpu: 250m
+        memory: 256Mi
+      limits:
+        cpu: 1000m
+        memory: 1Gi
+  
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+
+# Redis Configuration
+redis:
+  enabled: true
+  
+  architecture: standalone
+  
+  auth:
+    enabled: true
+    # Password will be auto-generated if not set
+    # existingSecret: cygni-redis-secret
+  
+  master:
+    persistence:
+      enabled: true
+      size: 8Gi
+    
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
+  
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+
+# MinIO Configuration
+minio:
+  enabled: true
+  
+  mode: standalone
+  
+  rootUser: minioadmin
+  # rootPassword will be auto-generated if not set
+  # existingSecret: cygni-minio-secret
+  
+  persistence:
+    enabled: true
+    size: 20Gi
+  
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+  
+  metrics:
+    serviceMonitor:
+      enabled: true
+
+# Service Account
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+# Network Policies
+networkPolicy:
+  enabled: true
+  
+  # Allow ingress from
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              name: ingress-nginx
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: cygni
+  
+  # Allow egress to
+  egress:
+    - to:
+        - namespaceSelector: {}
+      ports:
+        - protocol: TCP
+          port: 53  # DNS
+        - protocol: UDP
+          port: 53  # DNS
+    - to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: postgresql
+      ports:
+        - protocol: TCP
+          port: 5432
+    - to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: redis
+      ports:
+        - protocol: TCP
+          port: 6379
+    - to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: minio
+      ports:
+        - protocol: TCP
+          port: 9000
+
+# Pod Security Policy
+podSecurityPolicy:
+  enabled: false
+
+# Monitoring
+monitoring:
+  enabled: true
+  
+  serviceMonitor:
+    enabled: true
+    interval: 30s
+    path: /metrics
+    
+  prometheusRule:
+    enabled: true
+    rules:
+      - alert: CygniAPIHighErrorRate
+        expr: rate(http_requests_total{job="cygni-api",status=~"5.."}[5m]) > 0.05
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High error rate on Cygni API"
+          description: "Error rate is above 5% for 5 minutes"
+      
+      - alert: CygniAPIPodDown
+        expr: up{job="cygni-api"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Cygni API pod is down"
+          description: "Cygni API pod has been down for more than 1 minute"
+
+# Backup
+backup:
+  enabled: false
+  
+  # Backup schedule (cron format)
+  schedule: "0 2 * * *"
+  
+  # S3 configuration for backups
+  s3:
+    bucket: ""
+    region: us-east-1
+    endpoint: ""
+    
+  # Retention policy
+  retention:
+    days: 30

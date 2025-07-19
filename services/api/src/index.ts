@@ -7,6 +7,7 @@ import { logger } from './utils/logger';
 import { registerRoutes } from './routes';
 import { authenticateUser } from './middleware/auth';
 import { prisma } from './utils/prisma';
+import { initializeDevelopmentEnv } from './utils/dev-secrets';
 
 declare module 'fastify' {
   interface FastifyInstance {
@@ -15,6 +16,8 @@ declare module 'fastify' {
 }
 
 async function start() {
+  // Initialize development secrets if needed
+  await initializeDevelopmentEnv();
   const app = fastify({
     logger: logger,
     trustProxy: true,

@@ -7,6 +7,13 @@ import { buildProject } from '../lib/builder';
 import { deployToCloudExpress } from '../lib/deployer';
 import { watchLogs } from '../lib/logs';
 import { getApiClient } from '../lib/api-client';
+import {
+  validateDeploymentOptions,
+  checkBuildCache,
+  displayDeploymentSummary,
+  checkDeploymentHealth,
+  handleDeploymentFailure,
+} from '../lib/deploy-helpers';
 
 export const deployCommand = new Command('deploy')
   .description('Deploy your application to CloudExpress')
@@ -19,16 +26,31 @@ export const deployCommand = new Command('deploy')
     if (options.rollback) {
       return handleRollback(options);
     }
-    console.log(chalk.blue('Deploying to CloudExpress...\n'));
-
+    
     try {
+      // Validate options
+      validateDeploymentOptions(options);
+      
+      console.log(chalk.blue('Deploying to Cygni...\n'));
+
       // Load configuration
       const config = await loadConfig();
       
       // Build project
       const buildSpinner = ora('Building project...').start();
       const buildResult = await buildProject(config);
-      buildSpinner.succeed('Build complete!');
+      
+      // Check build cache for idempotency
+      const cachedBuild = await checkBuildCache(
+        buildResult.commitSha,
+        buildResult.dockerfilePath
+      );
+      
+      if (cachedBuild) {
+        buildSpinner.succeed(`Build cached (${cachedBuild.imageId.substring(0, 12)})`);
+      } else {
+        buildSpinner.succeed('Build complete!');
+      }
 
       // Deploy
       const deploySpinner = ora('Deploying application...').start();
@@ -36,15 +58,30 @@ export const deployCommand = new Command('deploy')
         config,
         buildResult,
         environment: options.env,
+        strategy: options.strategy,
+        cachedImageId: cachedBuild?.imageId,
       });
-      deploySpinner.succeed('Deployment successful!');
+      deploySpinner.succeed('Deployment initiated!');
+
+      // Check deployment health
+      if (options.healthGate !== 'off') {
+        const healthSpinner = ora('Checking deployment health...').start();
+        const isHealthy = await checkDeploymentHealth(
+          deployment.id,
+          options.healthGate
+        );
+        
+        if (isHealthy) {
+          healthSpinner.succeed('Deployment is healthy!');
+        } else {
+          healthSpinner.fail('Deployment health check failed');
+          await handleDeploymentFailure(deployment.id, new Error('Health check failed'), options);
+          process.exit(1);
+        }
+      }
 
       // Show deployment info
-      console.log('\n' + chalk.green('✅ Deployment Complete!'));
-      console.log('\nYour app is available at:');
-      console.log(chalk.cyan(deployment.url));
-      console.log('\nDeployment ID: ' + chalk.gray(deployment.id));
-      console.log('Environment: ' + chalk.gray(options.env));
+      displayDeploymentSummary(deployment, options);
 
       // Watch logs if requested
       if (options.watch) {

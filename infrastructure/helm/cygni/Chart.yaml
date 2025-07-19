@@ -1,0 +1,36 @@
+apiVersion: v2
+name: cygni
+description: A Helm chart for Cygni - Developer-first cloud platform
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+
+keywords:
+  - cygni
+  - paas
+  - cloud
+  - platform
+
+home: https://cygni.dev
+sources:
+  - https://github.com/cygni/cygni
+
+maintainers:
+  - name: Cygni Team
+    email: team@cygni.dev
+
+dependencies:
+  - name: postgresql
+    version: "12.12.10"
+    repository: https://charts.bitnami.com/bitnami
+    condition: postgresql.enabled
+    
+  - name: redis
+    version: "18.4.0"
+    repository: https://charts.bitnami.com/bitnami
+    condition: redis.enabled
+    
+  - name: minio
+    version: "5.0.14"
+    repository: https://charts.min.io/
+    condition: minio.enabled

@@ -1,5 +1,5 @@
 terraform {
-  required_version = ">= 1.0"
+  required_version = ">= 1.5.0"
   
   required_providers {
     aws = {
@@ -15,125 +15,244 @@ terraform {
       version = "~> 2.11"
     }
   }
+
+  backend "s3" {
+    # Backend configuration should be provided via -backend-config flags or backend.hcl file
+    # Example:
+    # bucket         = "cygni-terraform-state"
+    # key            = "infrastructure/terraform.tfstate"
+    # region         = "us-east-1"
+    # dynamodb_table = "cygni-terraform-locks"
+    # encrypt        = true
+  }
 }
 
-# Variables
-variable "project_name" {
-  description = "Name of the CloudExpress project"
-  type        = string
-  default     = "cloudexpress"
-}
-
-variable "environment" {
-  description = "Environment name"
-  type        = string
-  default     = "production"
-}
-
-variable "region" {
-  description = "AWS region"
-  type        = string
-  default     = "us-east-1"
-}
-
-variable "domain_name" {
-  description = "Primary domain name for CloudExpress"
-  type        = string
-  default     = "cloudexpress.app"
-}
-
-# Provider for us-east-1 (required for CloudFront certificates)
 provider "aws" {
-  alias  = "us-east-1"
-  region = "us-east-1"
-}
+  region = var.aws_region
 
-# EKS Cluster
-module "eks" {
-  source = "./modules/eks"
-  
-  cluster_name    = "${var.project_name}-${var.environment}"
-  region          = var.region
-  vpc_id          = module.vpc.vpc_id
-  subnet_ids      = module.vpc.private_subnets
-  
-  node_groups = {
-    general = {
-      desired_capacity = 3
-      min_capacity     = 2
-      max_capacity     = 10
-      instance_types   = ["t3.medium"]
+  default_tags {
+    tags = {
+      Environment = var.environment
+      Project     = "cygni"
+      ManagedBy   = "terraform"
     }
   }
 }
 
-# VPC
-module "vpc" {
-  source = "./modules/vpc"
-  
-  name               = "${var.project_name}-${var.environment}"
-  cidr               = "10.0.0.0/16"
+# Data source for availability zones
+data "aws_availability_zones" "available" {
+  state = "available"
+}
+
+# Network Module
+module "network" {
+  source = "./modules/network"
+
+  environment         = var.environment
+  vpc_cidr           = var.vpc_cidr
   availability_zones = data.aws_availability_zones.available.names
   
-  public_subnet_cidrs  = ["10.0.1.0/24", "10.0.2.0/24"]
-  private_subnet_cidrs = ["10.0.10.0/24", "10.0.20.0/24"]
+  # Public subnets for ALB
+  public_subnet_cidrs = [
+    for i in range(2) : cidrsubnet(var.vpc_cidr, 8, i)
+  ]
+  
+  # Private subnets for EKS nodes
+  private_subnet_cidrs = [
+    for i in range(2) : cidrsubnet(var.vpc_cidr, 8, i + 10)
+  ]
+  
+  # Database subnets
+  database_subnet_cidrs = [
+    for i in range(2) : cidrsubnet(var.vpc_cidr, 8, i + 20)
+  ]
+
+  enable_nat_gateway = var.enable_nat_gateway
+  single_nat_gateway = var.environment != "production"
 }
 
-# RDS PostgreSQL
+# Security Module
+module "security" {
+  source = "./modules/security"
+
+  environment = var.environment
+  vpc_id      = module.network.vpc_id
+}
+
+# Database Module (RDS PostgreSQL)
 module "database" {
-  source = "./modules/rds"
+  source = "./modules/database"
+
+  environment             = var.environment
+  vpc_id                 = module.network.vpc_id
+  database_subnet_ids    = module.network.database_subnet_ids
+  allowed_security_groups = [module.compute.node_security_group_id]
+
+  instance_class          = var.rds_instance_class
+  allocated_storage       = var.rds_allocated_storage
+  storage_encrypted       = true
+  backup_retention_period = var.environment == "production" ? 30 : 7
+  backup_window          = "03:00-04:00"
+  maintenance_window     = "sun:04:00-sun:05:00"
+
+  # High Availability
+  multi_az = var.environment == "production"
   
-  identifier     = "${var.project_name}-${var.environment}"
-  engine_version = "15.3"
-  instance_class = "db.t3.micro"
-  
-  vpc_id     = module.vpc.vpc_id
-  subnet_ids = module.vpc.private_subnets
-  
-  database_name = "cloudexpress"
+  # Read replica configuration
+  create_read_replica = var.environment == "production"
+  read_replica_count  = var.environment == "production" ? 1 : 0
 }
 
-# S3 Buckets
-resource "aws_s3_bucket" "storage" {
-  bucket = "${var.project_name}-${var.environment}-storage"
-}
+# Storage Module (S3 for artifacts)
+module "storage" {
+  source = "./modules/storage"
 
-resource "aws_s3_bucket" "builds" {
-  bucket = "${var.project_name}-${var.environment}-builds"
-}
-
-# ECR Repositories
-resource "aws_ecr_repository" "app_images" {
-  name                 = "${var.project_name}/apps"
-  image_tag_mutability = "MUTABLE"
+  environment = var.environment
   
-  image_scanning_configuration {
-    scan_on_push = true
+  # Versioning for production
+  enable_versioning = var.environment == "production"
+  
+  # Lifecycle rules
+  lifecycle_rules = [
+    {
+      id      = "delete-old-artifacts"
+      enabled = true
+      expiration_days = var.environment == "production" ? 90 : 30
+    }
+  ]
+}
+
+# Compute Module (EKS)
+module "compute" {
+  source = "./modules/compute"
+
+  environment          = var.environment
+  vpc_id              = module.network.vpc_id
+  private_subnet_ids  = module.network.private_subnet_ids
+  
+  cluster_version     = var.eks_cluster_version
+  
+  # Node groups
+  node_groups = {
+    main = {
+      desired_capacity = var.environment == "production" ? 3 : 2
+      min_capacity     = var.environment == "production" ? 3 : 1
+      max_capacity     = var.environment == "production" ? 10 : 5
+      
+      instance_types = [var.eks_node_instance_type]
+      
+      disk_size = 100
+      
+      labels = {
+        Environment = var.environment
+        NodeGroup   = "main"
+      }
+      
+      taints = []
+    }
+  }
+
+  # Enable IRSA (IAM Roles for Service Accounts)
+  enable_irsa = true
+
+  # Add-ons
+  cluster_addons = {
+    coredns = {
+      most_recent = true
+    }
+    kube-proxy = {
+      most_recent = true
+    }
+    vpc-cni = {
+      most_recent = true
+    }
+    aws-ebs-csi-driver = {
+      most_recent = true
+    }
   }
 }
 
-# Certificates
-module "certificates" {
-  source = "./modules/certificates"
+# Configure Kubernetes provider
+provider "kubernetes" {
+  host                   = module.compute.cluster_endpoint
+  cluster_ca_certificate = base64decode(module.compute.cluster_certificate_authority_data)
   
-  domain_name               = var.domain_name
-  subject_alternative_names = ["*.${var.domain_name}", "*.preview.${var.domain_name}"]
-  environment               = var.environment
-  
-  providers = {
-    aws.us-east-1 = aws.us-east-1
+  exec {
+    api_version = "client.authentication.k8s.io/v1beta1"
+    command     = "aws"
+    args = ["eks", "get-token", "--cluster-name", module.compute.cluster_name]
   }
 }
 
-# Outputs
-output "eks_cluster_endpoint" {
-  value = module.eks.cluster_endpoint
+# Configure Helm provider
+provider "helm" {
+  kubernetes {
+    host                   = module.compute.cluster_endpoint
+    cluster_ca_certificate = base64decode(module.compute.cluster_certificate_authority_data)
+    
+    exec {
+      api_version = "client.authentication.k8s.io/v1beta1"
+      command     = "aws"
+      args = ["eks", "get-token", "--cluster-name", module.compute.cluster_name]
+    }
+  }
 }
 
-output "database_endpoint" {
-  value = module.database.endpoint
+# Install cert-manager
+resource "helm_release" "cert_manager" {
+  name             = "cert-manager"
+  repository       = "https://charts.jetstack.io"
+  chart            = "cert-manager"
+  version          = "v1.13.0"
+  namespace        = "cert-manager"
+  create_namespace = true
+
+  set {
+    name  = "installCRDs"
+    value = "true"
+  }
+
+  set {
+    name  = "global.leaderElection.namespace"
+    value = "cert-manager"
+  }
 }
 
-output "ecr_repository_url" {
-  value = aws_ecr_repository.app_images.repository_url
+# Install ingress-nginx
+resource "helm_release" "ingress_nginx" {
+  name             = "ingress-nginx"
+  repository       = "https://kubernetes.github.io/ingress-nginx"
+  chart            = "ingress-nginx"
+  version          = "4.8.0"
+  namespace        = "ingress-nginx"
+  create_namespace = true
+
+  values = [
+    yamlencode({
+      controller = {
+        service = {
+          type = "LoadBalancer"
+          annotations = {
+            "service.beta.kubernetes.io/aws-load-balancer-type" = "nlb"
+            "service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled" = "true"
+          }
+        }
+        metrics = {
+          enabled = true
+        }
+      }
+    })
+  ]
+}
+
+# Create Cygni namespace
+resource "kubernetes_namespace" "cygni" {
+  metadata {
+    name = "cygni-${var.environment}"
+    
+    labels = {
+      environment = var.environment
+      managed-by  = "terraform"
+    }
+  }
 }

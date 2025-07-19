@@ -76,7 +76,7 @@ export async function deployToCloudExpress(options: DeploymentOptions): Promise<
   deploySpinner.succeed(`Deployment created: ${deployment.data.id}`);
 
   // Poll deployment status
-  const deployStatusSpinner = ora('Deploying to CloudExpress...').start();
+  const deployStatusSpinner = ora('Deploying to Cygni...').start();
   let deployStatus = deployment.data.status;
   attempts = 0;
 
