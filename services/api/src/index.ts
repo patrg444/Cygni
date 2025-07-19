@@ -132,7 +132,7 @@ async function start() {
   });
 
   // Register application routes
-  await registerRoutes(app);
+  await registerRoutes(app as any);
 
   // Graceful shutdown
   const closeGracefully = async (signal: string) => {

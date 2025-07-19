@@ -52,13 +52,11 @@ export const secretRoutes: FastifyPluginAsync = async (app) => {
     const body = createSecretSchema.parse(request.body);
 
     // Check if secret already exists
-    const existing = await prisma.secret.findUnique({
+    const existing = await prisma.secret.findFirst({
       where: {
-        projectId_environmentId_key: {
-          projectId,
-          environmentId: body.environmentId || null,
-          key: body.key,
-        },
+        projectId,
+        environmentId: body.environmentId || null,
+        key: body.key,
       },
     });
 
@@ -177,23 +175,32 @@ export const secretRoutes: FastifyPluginAsync = async (app) => {
       const encryptedValue = encrypt(value);
 
       try {
-        // Upsert secret
-        await prisma.secret.upsert({
+        // Check if secret exists
+        const existing = await prisma.secret.findFirst({
           where: {
-            projectId_environmentId_key: {
-              projectId,
-              environmentId: environmentId || null,
-              key,
-            },
-          },
-          update: { value: encryptedValue },
-          create: {
             projectId,
+            environmentId: environmentId || null,
             key,
-            value: encryptedValue,
-            environmentId,
           },
         });
+
+        if (existing) {
+          // Update existing secret
+          await prisma.secret.update({
+            where: { id: existing.id },
+            data: { value: encryptedValue },
+          });
+        } else {
+          // Create new secret
+          await prisma.secret.create({
+            data: {
+              projectId,
+              key,
+              value: encryptedValue,
+              environmentId,
+            },
+          });
+        }
 
         results.push({ key, success: true });
       } catch (error) {

@@ -353,20 +353,20 @@ async function monitorDeploymentStatus(app: any, deploymentId: string) {
       const namespace = getNamespaceForEnvironment(deployment.environment.slug, deployment.project.slug);
       const status = await axios.get(`${ORCHESTRATOR_URL}/api/services/${namespace}/${deployment.project.slug}/status`);
 
-      let newStatus = deployment.status;
+      let newStatus: DeploymentStatus = deployment.status;
       
       switch (status.data.phase) {
         case 'Running':
           if (status.data.readyReplicas === status.data.replicas && status.data.replicas > 0) {
-            newStatus = 'active' as DeploymentStatus;
+            newStatus = DeploymentStatus.active;
           }
           break;
         case 'Failed':
-          newStatus = 'failed' as DeploymentStatus;
+          newStatus = DeploymentStatus.failed;
           break;
         case 'Deploying':
         case 'RollingBack':
-          newStatus = 'deploying' as DeploymentStatus;
+          newStatus = DeploymentStatus.deploying;
           break;
       }
 

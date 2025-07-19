@@ -1,5 +1,6 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
 import { Role, JWTPayload, AuthContext } from '../types/auth';
+import { Role as PrismaRole } from '@prisma/client';
 import { prisma } from '../utils/prisma';
 
 declare module 'fastify' {
@@ -118,7 +119,7 @@ async function getUserById(id: string) {
 }
 
 async function getUserOrganizations(userId: string) {
-  return await prisma.organizationMember.findMany({
+  const members = await prisma.organizationMember.findMany({
     where: { userId },
     include: {
       organization: {
@@ -132,6 +133,11 @@ async function getUserOrganizations(userId: string) {
       },
     },
   });
+
+  return members.map(member => ({
+    organization: member.organization,
+    role: member.role as unknown as Role,
+  }));
 }
 
 async function getProjectById(id: string) {

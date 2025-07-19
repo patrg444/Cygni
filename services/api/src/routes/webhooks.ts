@@ -1,7 +1,7 @@
 import { FastifyPluginAsync } from 'fastify';
 import * as crypto from 'crypto';
 import { prisma } from '../utils/prisma';
-import { BuildStatus, DeploymentStatus } from '@prisma/client';
+import { BuildStatus } from '@prisma/client';
 import axios from 'axios';
 
 const ORCHESTRATOR_URL = process.env.ORCHESTRATOR_URL || 'http://runtime-orchestrator:8080';

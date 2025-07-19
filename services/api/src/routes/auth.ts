@@ -148,7 +148,7 @@ export const authRoutes: FastifyPluginAsync = async (app) => {
   // Refresh token
   app.post('/refresh', { 
     preHandler: app.authenticate 
-  }, async (request, reply) => {
+  }, async (request, _reply) => {
     const user = request.auth!.user;
     
     // Get fresh organization data
@@ -173,7 +173,7 @@ export const authRoutes: FastifyPluginAsync = async (app) => {
   // Get current user
   app.get('/me', { 
     preHandler: app.authenticate 
-  }, async (request, reply) => {
+  }, async (request, _reply) => {
     return {
       user: request.auth!.user,
       organizations: request.auth!.organizations,
