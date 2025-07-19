@@ -7,14 +7,15 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 # Copy dependency files
-COPY package.json ./
-COPY prisma ./prisma/
+COPY services/api/package.json ./
+COPY pnpm-lock.yaml ./
+COPY services/api/prisma ./prisma/
 
 # Install pnpm
 RUN npm install -g pnpm@8
 
 # Install dependencies
-RUN pnpm install --no-frozen-lockfile
+RUN pnpm install --frozen-lockfile
 
 # Generate Prisma client
 RUN pnpm prisma generate
@@ -24,16 +25,17 @@ FROM base AS builder
 WORKDIR /app
 
 # Copy package files first
-COPY package.json ./
-COPY tsconfig.json ./
+COPY services/api/package.json ./
+COPY pnpm-lock.yaml ./
+COPY services/api/tsconfig.json ./
 
 # Install all dependencies including devDependencies
 RUN npm install -g pnpm@8
-RUN pnpm install --no-frozen-lockfile
+RUN pnpm install --frozen-lockfile
 
 # Copy source files and prisma
-COPY src ./src
-COPY prisma ./prisma
+COPY services/api/src ./src
+COPY services/api/prisma ./prisma
 
 # Generate Prisma client
 RUN pnpm prisma generate
