@@ -8,14 +8,14 @@
     "services/*"
   ],
   "scripts": {
-    "dev": "turbo run dev",
-    "build": "turbo run build",
-    "test": "turbo run test",
-    "test:unit": "turbo run test",
-    "test:integration": "turbo run test",
-    "lint": "turbo run lint",
+    "dev": "npx turbo run dev",
+    "build": "npx turbo run build",
+    "test": "npx turbo run test",
+    "test:unit": "npx turbo run test",
+    "test:integration": "npx turbo run test",
+    "lint": "npx turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
-    "typecheck": "turbo run typecheck"
+    "typecheck": "npx turbo run typecheck"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

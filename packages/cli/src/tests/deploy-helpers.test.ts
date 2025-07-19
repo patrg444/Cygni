@@ -11,7 +11,18 @@ import { exec } from 'child_process';
 // import chalk from 'chalk';
 
 vi.mock('../lib/api-client');
-vi.mock('child_process');
+
+// Mock child_process with proper exec implementation
+vi.mock('child_process', () => ({
+  exec: vi.fn((cmd: string, callback: any) => {
+    // Default behavior for sha256sum
+    if (cmd.startsWith('sha256sum')) {
+      callback(null, { stdout: 'abc123def456789  Dockerfile\n' }, '');
+    } else {
+      callback(new Error('Command not found'));
+    }
+  })
+}));
 
 // Mock console methods
 const originalLog = console.log;
@@ -77,12 +88,6 @@ describe('Deploy Helpers', () => {
 
   describe('checkBuildCache', () => {
     it('should return cached build when found', async () => {
-      const mockExec = vi.mocked(exec);
-      mockExec.mockImplementation((_cmd: any, cb: any) => {
-        cb(null, { stdout: 'abc123def456789  Dockerfile\n' });
-        return {} as any;
-      });
-
       mockApi.get.mockResolvedValueOnce({
         data: {
           cached: true,
@@ -124,11 +129,12 @@ describe('Deploy Helpers', () => {
     });
 
     it('should calculate dockerfile hash when provided', async () => {
-      const mockExec = vi.mocked(exec);
-      mockExec.mockImplementation((_cmd: any, cb: any) => {
-        expect(_cmd).toBe('sha256sum Dockerfile');
-        cb(null, { stdout: 'hash123  Dockerfile\n' });
-        return {} as any;
+      // Update the mock to return the expected hash
+      const { exec } = await import('child_process');
+      vi.mocked(exec).mockImplementationOnce((cmd: any, callback: any) => {
+        if (cmd === 'sha256sum Dockerfile') {
+          callback(null, { stdout: 'hash123  Dockerfile\n' }, '');
+        }
       });
 
       mockApi.get.mockResolvedValueOnce({
@@ -157,10 +163,10 @@ describe('Deploy Helpers', () => {
 
       displayDeploymentSummary(deployment, { env: 'production' });
 
-      expect(consoleOutput).toContain(expect.stringContaining('✅ Deployment Complete!'));
-      expect(consoleOutput).toContain(expect.stringContaining('https://myapp.cygni.dev'));
-      expect(consoleOutput).toContain(expect.stringContaining('dep-123'));
-      expect(consoleOutput).toContain(expect.stringContaining('production'));
+      expect(consoleOutput.some(line => line.includes('✅ Deployment Complete!'))).toBe(true);
+      expect(consoleOutput.some(line => line.includes('https://myapp.cygni.dev'))).toBe(true);
+      expect(consoleOutput.some(line => line.includes('dep-123'))).toBe(true);
+      expect(consoleOutput.some(line => line.includes('production'))).toBe(true);
     });
 
     it('should display strategy when not rolling', () => {
@@ -173,11 +179,19 @@ describe('Deploy Helpers', () => {
 
       displayDeploymentSummary(deployment, { env: 'production', strategy: 'canary' });
 
-      expect(consoleOutput).toContain(expect.stringContaining('canary'));
+      expect(consoleOutput.some(line => line.includes('canary'))).toBe(true);
     });
   });
 
   describe('checkDeploymentHealth', () => {
+    beforeEach(() => {
+      vi.useFakeTimers();
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
     it('should return true when deployment is healthy', async () => {
       mockApi.get.mockResolvedValueOnce({
         data: { healthy: true },
@@ -195,7 +209,13 @@ describe('Deploy Helpers', () => {
         .mockResolvedValueOnce({ data: { healthy: false } })
         .mockResolvedValueOnce({ data: { healthy: true } });
 
-      const result = await checkDeploymentHealth('dep-123', 'normal');
+      const promise = checkDeploymentHealth('dep-123', 'normal');
+      
+      // Advance timers for each retry
+      await vi.advanceTimersByTimeAsync(3000);
+      await vi.advanceTimersByTimeAsync(3000);
+      
+      const result = await promise;
 
       expect(result).toBe(true);
       expect(mockApi.get).toHaveBeenCalledTimes(3);
@@ -215,7 +235,14 @@ describe('Deploy Helpers', () => {
     it('should retry more times with strict gate', async () => {
       mockApi.get.mockResolvedValue({ data: { healthy: false } });
 
-      const result = await checkDeploymentHealth('dep-123', 'strict');
+      const promise = checkDeploymentHealth('dep-123', 'strict');
+      
+      // Advance timers for all retries (9 times, as the last attempt doesn't wait)
+      for (let i = 0; i < 9; i++) {
+        await vi.advanceTimersByTimeAsync(3000);
+      }
+      
+      const result = await promise;
 
       expect(result).toBe(false);
       expect(mockApi.get).toHaveBeenCalledTimes(10); // strict = 10 attempts
