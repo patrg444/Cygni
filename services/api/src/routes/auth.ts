@@ -123,7 +123,7 @@ export const authRoutes: FastifyPluginAsync = async (app) => {
     const token = await app.jwt.sign({
       sub: user.id,
       email: user.email,
-      organizations: user.organizations.map(om => ({
+      organizations: user.organizations.map((om: any) => ({
         id: om.organization.id,
         role: om.role,
       })),
@@ -136,7 +136,7 @@ export const authRoutes: FastifyPluginAsync = async (app) => {
         email: user.email,
         name: user.name,
       },
-      organizations: user.organizations.map(om => ({
+      organizations: user.organizations.map((om: any) => ({
         id: om.organization.id,
         name: om.organization.name,
         slug: om.organization.slug,
