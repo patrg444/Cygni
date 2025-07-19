@@ -112,6 +112,7 @@ async function getUserById(id: string) {
       email: true,
       name: true,
       createdAt: true,
+      updatedAt: true,
     },
   });
 }
@@ -125,6 +126,8 @@ async function getUserOrganizations(userId: string) {
           id: true,
           name: true,
           slug: true,
+          createdAt: true,
+          updatedAt: true,
         },
       },
     },
@@ -139,6 +142,8 @@ async function getProjectById(id: string) {
       organizationId: true,
       name: true,
       slug: true,
+      createdAt: true,
+      updatedAt: true,
     },
   });
 }

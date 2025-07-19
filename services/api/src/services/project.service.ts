@@ -78,7 +78,6 @@ class ProjectService {
         slug,
         framework: input.framework,
         repository: input.repository,
-        description: input.description,
         environments: {
           create: [
             { name: 'Production', slug: 'production' },
@@ -186,7 +185,6 @@ class ProjectService {
             id: true,
             email: true,
             name: true,
-            avatarUrl: true,
           }
         }
       },
@@ -230,7 +228,6 @@ class ProjectService {
             id: true,
             email: true,
             name: true,
-            avatarUrl: true,
           }
         }
       }
@@ -252,7 +249,6 @@ class ProjectService {
             id: true,
             email: true,
             name: true,
-            avatarUrl: true,
           }
         }
       }

@@ -99,7 +99,7 @@ export const deploymentRoutes: FastifyPluginAsync = async (app) => {
         data: { 
           status: DeploymentStatus.failed,
           metadata: {
-            ...deployment.metadata,
+            ...(deployment.metadata as any),
             error: 'Failed to create service in orchestrator',
           },
         },
@@ -346,7 +346,7 @@ async function monitorDeploymentStatus(app: any, deploymentId: string) {
         },
       });
 
-      if (!deployment || deployment.status === DeploymentStatus.active || deployment.status === DeploymentStatus.failed) {
+      if (!deployment || deployment.status === 'active' || deployment.status === 'failed') {
         return; // Stop monitoring
       }
 
@@ -358,15 +358,15 @@ async function monitorDeploymentStatus(app: any, deploymentId: string) {
       switch (status.data.phase) {
         case 'Running':
           if (status.data.readyReplicas === status.data.replicas && status.data.replicas > 0) {
-            newStatus = DeploymentStatus.active;
+            newStatus = 'active' as DeploymentStatus;
           }
           break;
         case 'Failed':
-          newStatus = DeploymentStatus.failed;
+          newStatus = 'failed' as DeploymentStatus;
           break;
         case 'Deploying':
         case 'RollingBack':
-          newStatus = DeploymentStatus.deploying;
+          newStatus = 'deploying' as DeploymentStatus;
           break;
       }
 
@@ -376,7 +376,7 @@ async function monitorDeploymentStatus(app: any, deploymentId: string) {
           data: { 
             status: newStatus,
             metadata: {
-              ...deployment.metadata,
+              ...(deployment.metadata as any),
               endpoint: status.data.endpoint,
               lastChecked: new Date().toISOString(),
             },
@@ -385,7 +385,7 @@ async function monitorDeploymentStatus(app: any, deploymentId: string) {
       }
 
       // Continue monitoring if still deploying
-      if (newStatus === DeploymentStatus.deploying) {
+      if (newStatus === 'deploying') {
         setTimeout(checkStatus, 5000); // Check again in 5 seconds
       }
     } catch (error) {

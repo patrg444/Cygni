@@ -8,7 +8,6 @@ const createProjectSchema = z.object({
   name: z.string().min(1).max(100),
   framework: z.string().optional(),
   repository: z.string().url().optional(),
-  description: z.string().max(500).optional(),
 });
 
 export type CreateProjectInput = z.infer<typeof createProjectSchema>;
@@ -31,7 +30,6 @@ export const createProjectRoute: FastifyPluginAsync = async (app) => {
           name: { type: 'string', minLength: 1, maxLength: 100 },
           framework: { type: 'string' },
           repository: { type: 'string', format: 'uri' },
-          description: { type: 'string', maxLength: 500 }
         },
         required: ['name']
       }

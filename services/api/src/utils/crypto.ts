@@ -1,4 +1,4 @@
-import crypto from 'crypto';
+import * as crypto from 'crypto';
 
 const algorithm = 'aes-256-gcm';
 const secretKey = process.env.ENCRYPTION_KEY || crypto.randomBytes(32).toString('hex');

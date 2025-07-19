@@ -1,6 +1,6 @@
-import crypto from 'crypto';
-import fs from 'fs/promises';
-import path from 'path';
+import * as crypto from 'crypto';
+import * as fs from 'fs/promises';
+import * as path from 'path';
 
 const DEV_SECRETS_PATH = path.join(process.cwd(), '.cygni', 'dev.env');
 

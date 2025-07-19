@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import dotenv from 'dotenv';
-import path from 'path';
+import * as dotenv from 'dotenv';
+import * as path from 'path';
 
 // Load environment variables once
 const envPath = path.resolve(process.cwd(), '.env');

@@ -1,5 +1,5 @@
 import { FastifyPluginAsync } from 'fastify';
-import crypto from 'crypto';
+import * as crypto from 'crypto';
 import { prisma } from '../utils/prisma';
 import { BuildStatus, DeploymentStatus } from '@prisma/client';
 import axios from 'axios';

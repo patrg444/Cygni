@@ -1,6 +1,6 @@
 import { FastifyPluginAsync } from 'fastify';
 import { z } from 'zod';
-import argon2 from 'argon2';
+import * as argon2 from 'argon2';
 import { nanoid } from 'nanoid';
 import { prisma } from '../utils/prisma';
 import { Role } from '../types/auth';
