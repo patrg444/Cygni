@@ -19,10 +19,10 @@
     "nanoid": "^4.0.0"
   },
   "devDependencies": {
-    "@types/node": "^20.0.0",
-    "prisma": "^5.0.0",
-    "tsx": "^3.0.0",
+    "@types/node": "^24.0.15",
+    "prisma": "^6.12.0",
+    "tsx": "^4.20.3",
     "typescript": "^5.0.0",
-    "vitest": "^0.34.0"
+    "vitest": "^3.2.4"
   }
 }
