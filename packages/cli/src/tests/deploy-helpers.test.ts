@@ -8,7 +8,7 @@ import {
 } from '../lib/deploy-helpers';
 import * as apiClient from '../lib/api-client';
 import { exec } from 'child_process';
-import chalk from 'chalk';
+// import chalk from 'chalk';
 
 vi.mock('../lib/api-client');
 vi.mock('child_process');

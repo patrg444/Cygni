@@ -61,14 +61,14 @@ export const projectMembersRoutes: FastifyPluginAsync = async (app) => {
         addedBy: request.auth!.user.id
       });
 
-      reply.status(201);
+      _reply.status(201);
       return member;
     } catch (error: any) {
       if (error.code === 'USER_NOT_FOUND') {
-        return reply.status(404).send({ error: 'User not found' });
+        return _reply.status(404).send({ error: 'User not found' });
       }
       if (error.code === 'ALREADY_MEMBER') {
-        return reply.status(400).send({ error: 'User is already a member' });
+        return _reply.status(400).send({ error: 'User is already a member' });
       }
       throw error;
     }
@@ -101,7 +101,7 @@ export const projectMembersRoutes: FastifyPluginAsync = async (app) => {
     const member = await projectService.updateMemberRole(projectId, userId, role);
 
     if (!member) {
-      return reply.status(404).send({ error: 'Member not found' });
+      return _reply.status(404).send({ error: 'Member not found' });
     }
 
     return member;
@@ -127,7 +127,7 @@ export const projectMembersRoutes: FastifyPluginAsync = async (app) => {
     const isLastOwner = await projectService.isLastOwner(projectId, userId);
     
     if (isLastOwner) {
-      return reply.status(400).send({ 
+      return _reply.status(400).send({ 
         error: 'Cannot remove the last owner of the project',
         code: 'LAST_OWNER' 
       });
@@ -136,9 +136,9 @@ export const projectMembersRoutes: FastifyPluginAsync = async (app) => {
     const removed = await projectService.removeProjectMember(projectId, userId);
 
     if (!removed) {
-      return reply.status(404).send({ error: 'Member not found' });
+      return _reply.status(404).send({ error: 'Member not found' });
     }
 
-    reply.status(204);
+    _reply.status(204);
   });
 };

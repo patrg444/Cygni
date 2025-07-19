@@ -1,7 +1,7 @@
 import { exec } from 'child_process';
 import { promisify } from 'util';
 import fs from 'fs/promises';
-import path from 'path';
+// import path from 'path';
 import { createHash } from 'crypto';
 import chalk from 'chalk';
 import { detectFramework } from '../utils/framework-detector';

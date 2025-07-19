@@ -30,11 +30,11 @@ export const deploymentRoutes: FastifyPluginAsync = async (app) => {
     });
 
     if (!build) {
-      return reply.status(404).send({ error: 'Build not found' });
+      return _reply.status(404).send({ error: 'Build not found' });
     }
 
     if (build.status !== 'success') {
-      return reply.status(400).send({ error: 'Build is not successful' });
+      return _reply.status(400).send({ error: 'Build is not successful' });
     }
 
     // Verify environment exists
@@ -46,7 +46,7 @@ export const deploymentRoutes: FastifyPluginAsync = async (app) => {
     });
 
     if (!environment) {
-      return reply.status(404).send({ error: 'Environment not found' });
+      return _reply.status(404).send({ error: 'Environment not found' });
     }
 
     // Create deployment record
@@ -105,7 +105,7 @@ export const deploymentRoutes: FastifyPluginAsync = async (app) => {
         },
       });
       
-      return reply.status(500).send({ error: 'Failed to start deployment' });
+      return _reply.status(500).send({ error: 'Failed to start deployment' });
     }
 
     // Start monitoring deployment status
@@ -137,7 +137,7 @@ export const deploymentRoutes: FastifyPluginAsync = async (app) => {
     });
 
     if (!deployment) {
-      return reply.status(404).send({ error: 'Deployment not found' });
+      return _reply.status(404).send({ error: 'Deployment not found' });
     }
 
     // Get current status from orchestrator
@@ -230,7 +230,7 @@ export const deploymentRoutes: FastifyPluginAsync = async (app) => {
     });
 
     if (!deployment) {
-      return reply.status(404).send({ error: 'Deployment not found' });
+      return _reply.status(404).send({ error: 'Deployment not found' });
     }
 
     // Get current service status from orchestrator
@@ -240,7 +240,7 @@ export const deploymentRoutes: FastifyPluginAsync = async (app) => {
       const status = await axios.get(`${ORCHESTRATOR_URL}/api/services/${namespace}/${deployment.project.slug}/status`);
       
       if (!status.data.previousImage) {
-        return reply.status(400).send({ error: 'No previous deployment available for rollback' });
+        return _reply.status(400).send({ error: 'No previous deployment available for rollback' });
       }
 
       // Trigger rollback in orchestrator
@@ -268,7 +268,7 @@ export const deploymentRoutes: FastifyPluginAsync = async (app) => {
       return rollbackDeployment;
     } catch (error) {
       app.log.error('Failed to rollback deployment', { error, deploymentId });
-      return reply.status(500).send({ error: 'Failed to initiate rollback' });
+      return _reply.status(500).send({ error: 'Failed to initiate rollback' });
     }
   });
 
@@ -291,7 +291,7 @@ export const deploymentRoutes: FastifyPluginAsync = async (app) => {
     });
 
     if (!deployment) {
-      return reply.status(404).send({ error: 'Deployment not found' });
+      return _reply.status(404).send({ error: 'Deployment not found' });
     }
 
     // Query logs from Loki

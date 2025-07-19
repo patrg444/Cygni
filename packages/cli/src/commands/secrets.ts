@@ -1,5 +1,5 @@
 import { Command } from 'commander';
-import { input, password, confirm, select } from '@inquirer/prompts';
+import { password, confirm } from '@inquirer/prompts';
 import chalk from 'chalk';
 import ora from 'ora';
 import fs from 'fs/promises';

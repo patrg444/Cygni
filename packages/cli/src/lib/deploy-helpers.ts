@@ -1,10 +1,10 @@
 import chalk from 'chalk';
 import ora from 'ora';
-import { createHash } from 'crypto';
+// import { createHash } from 'crypto';
 import { exec } from 'child_process';
 import { promisify } from 'util';
-import { CygniConfig } from '../utils/config';
-import { BuildResult } from './builder';
+// import { CygniConfig } from '../utils/config';
+// import { BuildResult } from './builder';
 import { getApiClient } from './api-client';
 
 const execAsync = promisify(exec);

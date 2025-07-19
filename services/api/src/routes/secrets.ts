@@ -63,7 +63,7 @@ export const secretRoutes: FastifyPluginAsync = async (app) => {
     });
 
     if (existing) {
-      return reply.status(409).send({ error: 'Secret already exists' });
+      return _reply.status(409).send({ error: 'Secret already exists' });
     }
 
     // Encrypt value
@@ -104,7 +104,7 @@ export const secretRoutes: FastifyPluginAsync = async (app) => {
     });
 
     if (!secret) {
-      return reply.status(404).send({ error: 'Secret not found' });
+      return _reply.status(404).send({ error: 'Secret not found' });
     }
 
     // Encrypt new value
@@ -140,7 +140,7 @@ export const secretRoutes: FastifyPluginAsync = async (app) => {
     });
 
     if (!secret) {
-      return reply.status(404).send({ error: 'Secret not found' });
+      return _reply.status(404).send({ error: 'Secret not found' });
     }
 
     await prisma.secret.delete({

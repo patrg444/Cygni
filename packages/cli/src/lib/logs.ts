@@ -41,7 +41,7 @@ function formatAndPrintLog(log: any) {
   const timestamp = new Date(log.timestamp).toLocaleTimeString();
   const level = log.level || 'info';
   
-  let message = `[${timestamp}] ${log.message || log.msg || JSON.stringify(log)}`;
+  const message = `[${timestamp}] ${log.message || log.msg || JSON.stringify(log)}`;
   
   // Color based on level
   if (level === 'error') {
