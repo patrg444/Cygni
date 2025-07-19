@@ -4,6 +4,7 @@ import { prisma } from "../utils/prisma";
 import { requireRole } from "../middleware/auth";
 import { Role } from "../types/auth";
 import { nanoid } from "nanoid";
+import { DeploymentStatus } from "@prisma/client";
 
 const createWebhookSchema = z.object({
   url: z.string().url(),
@@ -288,7 +289,7 @@ export const projectWebhookRoutes: FastifyPluginAsync = async (app) => {
           id: "test-deployment-id",
           projectId: webhook.projectId,
           environmentId: "test-env-id",
-          status: "active",
+          status: DeploymentStatus.active,
           buildId: "test-build-id",
           userId: request.auth!.user.id,
           createdAt: new Date(),

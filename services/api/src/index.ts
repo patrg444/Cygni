@@ -61,7 +61,7 @@ async function start() {
     errorResponseBuilder: (_request, context) => {
       return {
         error: "Too Many Requests",
-        message: `Rate limit exceeded. You have made ${context.total} requests. Please retry after ${context.ttl} ms.`,
+        message: `Rate limit exceeded. Please retry after ${context.ttl} ms.`,
         statusCode: 429,
         date: Date.now(),
         expiresIn: context.ttl,
