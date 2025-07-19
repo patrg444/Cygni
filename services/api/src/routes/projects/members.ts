@@ -12,7 +12,7 @@ const addMemberSchema = z.object({
 export const projectMembersRoutes: FastifyPluginAsync = async (app) => {
   // List project members
   app.get('/projects/:projectId/members', {
-    preHandler: [app.authenticate, requireRole([Role.OWNER, Role.ADMIN, Role.DEVELOPER, Role.VIEWER])],
+    preHandler: [app.authenticate, requireRole([Role.owner, Role.admin, Role.developer, Role.viewer])],
     schema: {
       params: {
         type: 'object',
@@ -31,7 +31,7 @@ export const projectMembersRoutes: FastifyPluginAsync = async (app) => {
 
   // Add project member
   app.post('/projects/:projectId/members', {
-    preHandler: [app.authenticate, requireRole([Role.OWNER, Role.ADMIN])],
+    preHandler: [app.authenticate, requireRole([Role.owner, Role.admin])],
     schema: {
       params: {
         type: 'object',
@@ -76,7 +76,7 @@ export const projectMembersRoutes: FastifyPluginAsync = async (app) => {
 
   // Update member role
   app.patch('/projects/:projectId/members/:userId', {
-    preHandler: [app.authenticate, requireRole([Role.OWNER, Role.ADMIN])],
+    preHandler: [app.authenticate, requireRole([Role.owner, Role.admin])],
     schema: {
       params: {
         type: 'object',
@@ -109,7 +109,7 @@ export const projectMembersRoutes: FastifyPluginAsync = async (app) => {
 
   // Remove project member
   app.delete('/projects/:projectId/members/:userId', {
-    preHandler: [app.authenticate, requireRole([Role.OWNER, Role.ADMIN])],
+    preHandler: [app.authenticate, requireRole([Role.owner, Role.admin])],
     schema: {
       params: {
         type: 'object',

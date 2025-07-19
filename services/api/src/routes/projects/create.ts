@@ -16,7 +16,7 @@ export type CreateProjectInput = z.infer<typeof createProjectSchema>;
 export const createProjectRoute: FastifyPluginAsync = async (app) => {
   // Create project
   app.post('/organizations/:organizationId/projects', {
-    preHandler: [app.authenticate, requireRole([Role.OWNER, Role.ADMIN])],
+    preHandler: [app.authenticate, requireRole([Role.owner, Role.admin])],
     schema: {
       params: {
         type: 'object',

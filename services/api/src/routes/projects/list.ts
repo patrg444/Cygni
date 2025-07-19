@@ -6,7 +6,7 @@ import { projectService } from '../../services/project.service';
 export const listProjectsRoute: FastifyPluginAsync = async (app) => {
   // List projects in organization
   app.get('/organizations/:organizationId/projects', {
-    preHandler: [app.authenticate, requireRole([Role.OWNER, Role.ADMIN, Role.DEVELOPER, Role.VIEWER])],
+    preHandler: [app.authenticate, requireRole([Role.owner, Role.admin, Role.developer, Role.viewer])],
     schema: {
       params: {
         type: 'object',

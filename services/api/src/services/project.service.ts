@@ -88,7 +88,7 @@ class ProjectService {
         members: {
           create: {
             userId: input.createdBy,
-            role: Role.OWNER
+            role: Role.owner
           }
         }
       },
@@ -279,7 +279,7 @@ class ProjectService {
     const owners = await prisma.projectMember.count({
       where: {
         projectId,
-        role: Role.OWNER,
+        role: Role.owner,
       }
     });
 
@@ -297,7 +297,7 @@ class ProjectService {
       select: { role: true }
     });
 
-    return userRole?.role === Role.OWNER;
+    return userRole?.role === Role.owner;
   }
 
   private generateSlug(name: string): string {

@@ -42,7 +42,7 @@ export class KanikoBuilder {
     await this.createECRAuthSecret(buildId);
 
     // Create Kaniko job
-    const job = await this.createKanikoJob({
+    await this.createKanikoJob({
       buildId,
       imageName,
       ...options,

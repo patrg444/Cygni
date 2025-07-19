@@ -16,7 +16,7 @@ export type UpdateProjectInput = z.infer<typeof updateProjectSchema>;
 export const updateProjectRoute: FastifyPluginAsync = async (app) => {
   // Update project
   app.patch('/projects/:projectId', {
-    preHandler: [app.authenticate, requireRole([Role.OWNER, Role.ADMIN])],
+    preHandler: [app.authenticate, requireRole([Role.owner, Role.admin])],
     schema: {
       params: {
         type: 'object',

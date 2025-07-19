@@ -18,7 +18,7 @@ const updateSecretSchema = z.object({
 export const secretRoutes: FastifyPluginAsync = async (app) => {
   // List secrets for project
   app.get('/projects/:projectId/secrets', {
-    preHandler: [app.authenticate, requireRole([Role.OWNER, Role.ADMIN, Role.DEVELOPER, Role.VIEWER])]
+    preHandler: [app.authenticate, requireRole([Role.owner, Role.admin, Role.developer, Role.viewer])]
   }, async (request, _reply) => {
     const { projectId } = request.params as { projectId: string };
     const { environmentId } = request.query as { environmentId?: string };
@@ -46,7 +46,7 @@ export const secretRoutes: FastifyPluginAsync = async (app) => {
 
   // Create secret
   app.post('/projects/:projectId/secrets', {
-    preHandler: [app.authenticate, requireRole([Role.OWNER, Role.ADMIN])]
+    preHandler: [app.authenticate, requireRole([Role.owner, Role.admin])]
   }, async (request, _reply) => {
     const { projectId } = request.params as { projectId: string };
     const body = createSecretSchema.parse(request.body);
@@ -91,7 +91,7 @@ export const secretRoutes: FastifyPluginAsync = async (app) => {
 
   // Update secret
   app.patch('/projects/:projectId/secrets/:secretId', {
-    preHandler: [app.authenticate, requireRole([Role.OWNER, Role.ADMIN])]
+    preHandler: [app.authenticate, requireRole([Role.owner, Role.admin])]
   }, async (request, _reply) => {
     const { projectId, secretId } = request.params as { projectId: string; secretId: string };
     const body = updateSecretSchema.parse(request.body);
@@ -128,7 +128,7 @@ export const secretRoutes: FastifyPluginAsync = async (app) => {
 
   // Delete secret
   app.delete('/projects/:projectId/secrets/:secretId', {
-    preHandler: [app.authenticate, requireRole([Role.OWNER, Role.ADMIN])]
+    preHandler: [app.authenticate, requireRole([Role.owner, Role.admin])]
   }, async (request, _reply) => {
     const { projectId, secretId } = request.params as { projectId: string; secretId: string };
 
@@ -157,7 +157,7 @@ export const secretRoutes: FastifyPluginAsync = async (app) => {
 
   // Bulk create/update secrets
   app.post('/projects/:projectId/secrets/bulk', {
-    preHandler: [app.authenticate, requireRole([Role.OWNER, Role.ADMIN])]
+    preHandler: [app.authenticate, requireRole([Role.owner, Role.admin])]
   }, async (request, _reply) => {
     const { projectId } = request.params as { projectId: string };
     const { secrets, environmentId } = z.object({

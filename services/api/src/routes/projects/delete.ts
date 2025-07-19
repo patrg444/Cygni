@@ -6,7 +6,7 @@ import { projectService } from '../../services/project.service';
 export const deleteProjectRoute: FastifyPluginAsync = async (app) => {
   // Delete project
   app.delete('/projects/:projectId', {
-    preHandler: [app.authenticate, requireRole([Role.OWNER])],
+    preHandler: [app.authenticate, requireRole([Role.owner])],
     schema: {
       params: {
         type: 'object',

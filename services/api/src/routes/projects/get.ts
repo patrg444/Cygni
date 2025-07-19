@@ -6,7 +6,7 @@ import { projectService } from '../../services/project.service';
 export const getProjectRoute: FastifyPluginAsync = async (app) => {
   // Get project details
   app.get('/projects/:projectId', {
-    preHandler: [app.authenticate, requireRole([Role.OWNER, Role.ADMIN, Role.DEVELOPER, Role.VIEWER])],
+    preHandler: [app.authenticate, requireRole([Role.owner, Role.admin, Role.developer, Role.viewer])],
     schema: {
       params: {
         type: 'object',

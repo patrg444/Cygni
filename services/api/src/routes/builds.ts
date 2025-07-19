@@ -19,7 +19,7 @@ const BUILDER_SERVICE_URL = process.env.BUILDER_SERVICE_URL || 'http://builder:3
 export const buildRoutes: FastifyPluginAsync = async (app) => {
   // Create build
   app.post('/builds', {
-    preHandler: [app.authenticate, requireRole([Role.OWNER, Role.ADMIN, Role.DEVELOPER])]
+    preHandler: [app.authenticate, requireRole([Role.owner, Role.admin, Role.developer])]
   }, async (request, reply) => {
     const body = createBuildSchema.parse(request.body);
 
@@ -71,7 +71,7 @@ export const buildRoutes: FastifyPluginAsync = async (app) => {
 
   // Get build
   app.get('/builds/:buildId', {
-    preHandler: [app.authenticate, requireRole([Role.OWNER, Role.ADMIN, Role.DEVELOPER, Role.VIEWER])]
+    preHandler: [app.authenticate, requireRole([Role.owner, Role.admin, Role.developer, Role.viewer])]
   }, async (request, reply) => {
     const { buildId } = request.params as { buildId: string };
 
@@ -97,7 +97,7 @@ export const buildRoutes: FastifyPluginAsync = async (app) => {
 
   // Get build logs
   app.get('/builds/:buildId/logs', {
-    preHandler: [app.authenticate, requireRole([Role.OWNER, Role.ADMIN, Role.DEVELOPER, Role.VIEWER])]
+    preHandler: [app.authenticate, requireRole([Role.owner, Role.admin, Role.developer, Role.viewer])]
   }, async (request, reply) => {
     const { buildId } = request.params as { buildId: string };
     const { follow } = request.query as { follow?: boolean };
@@ -132,7 +132,7 @@ export const buildRoutes: FastifyPluginAsync = async (app) => {
 
   // List builds for project
   app.get('/projects/:projectId/builds', {
-    preHandler: [app.authenticate, requireRole([Role.OWNER, Role.ADMIN, Role.DEVELOPER, Role.VIEWER])]
+    preHandler: [app.authenticate, requireRole([Role.owner, Role.admin, Role.developer, Role.viewer])]
   }, async (request, reply) => {
     const { projectId } = request.params as { projectId: string };
     const { limit = 20, offset = 0 } = request.query as { limit?: number; offset?: number };
@@ -164,7 +164,7 @@ export const buildRoutes: FastifyPluginAsync = async (app) => {
 
   // Cancel build
   app.post('/builds/:buildId/cancel', {
-    preHandler: [app.authenticate, requireRole([Role.OWNER, Role.ADMIN, Role.DEVELOPER])]
+    preHandler: [app.authenticate, requireRole([Role.owner, Role.admin, Role.developer])]
   }, async (request, reply) => {
     const { buildId } = request.params as { buildId: string };
 

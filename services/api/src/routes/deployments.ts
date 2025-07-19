@@ -19,7 +19,7 @@ const ORCHESTRATOR_URL = process.env.ORCHESTRATOR_URL || 'http://runtime-orchest
 export const deploymentRoutes: FastifyPluginAsync = async (app) => {
   // Create deployment
   app.post('/deployments', {
-    preHandler: [app.authenticate, requireRole([Role.OWNER, Role.ADMIN, Role.DEVELOPER])]
+    preHandler: [app.authenticate, requireRole([Role.owner, Role.admin, Role.developer])]
   }, async (request, _reply) => {
     const body = createDeploymentSchema.parse(request.body);
 
@@ -116,7 +116,7 @@ export const deploymentRoutes: FastifyPluginAsync = async (app) => {
 
   // Get deployment
   app.get('/deployments/:deploymentId', {
-    preHandler: [app.authenticate, requireRole([Role.OWNER, Role.ADMIN, Role.DEVELOPER, Role.VIEWER])]
+    preHandler: [app.authenticate, requireRole([Role.owner, Role.admin, Role.developer, Role.viewer])]
   }, async (request, _reply) => {
     const { deploymentId } = request.params as { deploymentId: string };
 
@@ -162,7 +162,7 @@ export const deploymentRoutes: FastifyPluginAsync = async (app) => {
 
   // List deployments for project
   app.get('/projects/:projectId/deployments', {
-    preHandler: [app.authenticate, requireRole([Role.OWNER, Role.ADMIN, Role.DEVELOPER, Role.VIEWER])]
+    preHandler: [app.authenticate, requireRole([Role.owner, Role.admin, Role.developer, Role.viewer])]
   }, async (request, _reply) => {
     const { projectId } = request.params as { projectId: string };
     const { environment, limit = 20, offset = 0 } = request.query as { 
@@ -216,7 +216,7 @@ export const deploymentRoutes: FastifyPluginAsync = async (app) => {
 
   // Rollback deployment
   app.post('/deployments/:deploymentId/rollback', {
-    preHandler: [app.authenticate, requireRole([Role.OWNER, Role.ADMIN, Role.DEVELOPER])]
+    preHandler: [app.authenticate, requireRole([Role.owner, Role.admin, Role.developer])]
   }, async (request, _reply) => {
     const { deploymentId } = request.params as { deploymentId: string };
 
@@ -274,7 +274,7 @@ export const deploymentRoutes: FastifyPluginAsync = async (app) => {
 
   // Get deployment logs
   app.get('/deployments/:deploymentId/logs', {
-    preHandler: [app.authenticate, requireRole([Role.OWNER, Role.ADMIN, Role.DEVELOPER, Role.VIEWER])]
+    preHandler: [app.authenticate, requireRole([Role.owner, Role.admin, Role.developer, Role.viewer])]
   }, async (request, _reply) => {
     const { deploymentId } = request.params as { deploymentId: string };
     const { lines = 100, since } = request.query as { 
