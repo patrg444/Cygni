@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
+    "start": "node dist/index.js",
     "test": "vitest",
     "lint": "eslint src --ext .ts",
     "typecheck": "tsc --noEmit"
@@ -17,6 +18,7 @@
     "@fastify/swagger": "^8.0.0",
     "@prisma/client": "^5.0.0",
     "argon2": "^0.31.0",
+    "dotenv": "^16.0.0",
     "fastify": "^4.0.0",
     "nanoid": "^4.0.0",
     "pino": "^8.0.0",
