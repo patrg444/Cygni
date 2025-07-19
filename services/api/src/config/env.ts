@@ -72,7 +72,7 @@ const envSchema = z.object({
 const parseResult = envSchema.safeParse(processedEnv);
 
 if (!parseResult.success) {
-  console.error("❌ Invalid environment variables:");
+  console.error(" Invalid environment variables:");
   console.error(parseResult.error.format());
   process.exit(1);
 }

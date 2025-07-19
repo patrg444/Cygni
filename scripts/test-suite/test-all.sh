@@ -436,10 +436,10 @@ main() {
     echo ""
     
     if [ $FAILED -eq 0 ]; then
-        echo -e "${GREEN}✅ All critical tests passed!${NC}"
+        echo -e "${GREEN} All critical tests passed!${NC}"
         echo "CloudExpress is ready for launch prep."
     else
-        echo -e "${RED}❌ Some tests failed.${NC}"
+        echo -e "${RED} Some tests failed.${NC}"
         echo "Please fix the issues before proceeding."
         exit 1
     fi

@@ -81,8 +81,8 @@ EOF
 
 chmod 600 "$CYGNI_DIR/dev.env"
 
-echo -e "${GREEN}✓ Development secrets initialized successfully!${NC}"
-echo -e "${GREEN}✓ Secrets saved to .cygni/dev.env (git-ignored)${NC}"
+echo -e "${GREEN} Development secrets initialized successfully!${NC}"
+echo -e "${GREEN} Secrets saved to .cygni/dev.env (git-ignored)${NC}"
 echo -e "${YELLOW}Note: Never commit .env or .cygni/dev.env to version control${NC}"
 echo
 echo "To start the development environment, run:"

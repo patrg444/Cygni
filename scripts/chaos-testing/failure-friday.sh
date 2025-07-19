@@ -4,7 +4,7 @@
 
 set -e
 
-echo "🔥 CloudExpress Failure Friday - $(date)"
+echo " CloudExpress Failure Friday - $(date)"
 echo "================================================"
 echo ""
 
@@ -29,28 +29,28 @@ echo ""
 inject_failure() {
     case $FAILURE_TYPE in
         "health-gate")
-            echo -e "${YELLOW}💉 Injecting health gate failure...${NC}"
+            echo -e "${YELLOW} Injecting health gate failure...${NC}"
             # Set impossibly low error rate threshold to trigger failure
             kubectl patch cloudexpressservice $SERVICE -n $NAMESPACE \
                 --type='json' -p='[{"op": "replace", "path": "/spec/healthGate/maxErrorRate", "value": 0.01}]'
             ;;
         
         "high-latency")
-            echo -e "${YELLOW}💉 Injecting high latency...${NC}"
+            echo -e "${YELLOW} Injecting high latency...${NC}"
             # Set low P95 latency threshold
             kubectl patch cloudexpressservice $SERVICE -n $NAMESPACE \
                 --type='json' -p='[{"op": "replace", "path": "/spec/healthGate/maxP95Latency", "value": 10}]'
             ;;
         
         "pod-failure")
-            echo -e "${YELLOW}💉 Killing random pod...${NC}"
+            echo -e "${YELLOW} Killing random pod...${NC}"
             # Delete a random pod
             POD=$(kubectl get pods -n $NAMESPACE -l app=$SERVICE -o jsonpath='{.items[0].metadata.name}')
             kubectl delete pod $POD -n $NAMESPACE --grace-period=0 --force
             ;;
         
         "resource-pressure")
-            echo -e "${YELLOW}💉 Creating resource pressure...${NC}"
+            echo -e "${YELLOW} Creating resource pressure...${NC}"
             # Lower resource limits to create pressure
             kubectl patch deployment $SERVICE -n $NAMESPACE \
                 --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/resources/limits/memory", "value": "50Mi"}]'
@@ -61,7 +61,7 @@ inject_failure() {
 # Function to monitor rollback
 monitor_rollback() {
     echo ""
-    echo -e "${YELLOW}👀 Monitoring for automatic rollback...${NC}"
+    echo -e "${YELLOW} Monitoring for automatic rollback...${NC}"
     
     START_TIME=$(date +%s)
     TIMEOUT=300  # 5 minutes
@@ -73,7 +73,7 @@ monitor_rollback() {
         
         if [[ "$STATUS" == "RollingBack" ]] || [[ "$STATUS" == "Failed" ]]; then
             ROLLBACK_DETECTED=true
-            echo -e "\n${GREEN}✅ Rollback detected! Status: $STATUS${NC}"
+            echo -e "\n${GREEN} Rollback detected! Status: $STATUS${NC}"
             break
         fi
         
@@ -83,7 +83,7 @@ monitor_rollback() {
     done
     
     if [ "$ROLLBACK_DETECTED" = false ]; then
-        echo -e "\n${RED}❌ No rollback detected within timeout!${NC}"
+        echo -e "\n${RED} No rollback detected within timeout!${NC}"
         return 1
     fi
 }
@@ -91,7 +91,7 @@ monitor_rollback() {
 # Function to verify alerts
 verify_alerts() {
     echo ""
-    echo -e "${YELLOW}🔔 Verifying alerts...${NC}"
+    echo -e "${YELLOW} Verifying alerts...${NC}"
     
     # Check for Kubernetes events
     echo "Recent events:"
@@ -108,7 +108,7 @@ verify_alerts() {
 # Function to cleanup
 cleanup() {
     echo ""
-    echo -e "${YELLOW}🧹 Cleaning up...${NC}"
+    echo -e "${YELLOW} Cleaning up...${NC}"
     
     # Reset health gate to normal values
     kubectl patch cloudexpressservice $SERVICE -n $NAMESPACE \
@@ -117,7 +117,7 @@ cleanup() {
             {"op": "replace", "path": "/spec/healthGate/maxP95Latency", "value": 1000}
         ]'
     
-    echo -e "${GREEN}✅ Cleanup complete${NC}"
+    echo -e "${GREEN} Cleanup complete${NC}"
 }
 
 # Main execution

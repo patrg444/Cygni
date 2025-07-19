@@ -78,7 +78,7 @@ export function displayDeploymentSummary(
   deployment: DeploymentInfo,
   options: any,
 ): void {
-  console.log("\n" + chalk.green("✅ Deployment Complete!"));
+  console.log("\n" + chalk.green(" Deployment Complete!"));
   console.log("\nYour app is available at:");
   console.log(chalk.cyan(deployment.url));
   console.log("\nDeployment ID: " + chalk.gray(deployment.id));
@@ -147,7 +147,7 @@ export async function handleDeploymentFailure(
   error: any,
   options: any,
 ): Promise<void> {
-  console.error(chalk.red("\n❌ Deployment failed!"));
+  console.error(chalk.red("\n Deployment failed!"));
   console.error(chalk.red(error.message));
 
   if (options.autoRollback !== false) {

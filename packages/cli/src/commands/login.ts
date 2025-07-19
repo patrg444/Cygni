@@ -83,7 +83,7 @@ export const loginCommand = new Command("login")
         organizations: userData.organizations || [],
       });
 
-      console.log("\n" + chalk.green("✓ Logged in successfully!"));
+      console.log("\n" + chalk.green(" Logged in successfully!"));
       console.log("\nOrganizations:");
       userData.organizations?.forEach((org: any) => {
         console.log(`  - ${org.name} (${org.slug}) [${org.role}]`);

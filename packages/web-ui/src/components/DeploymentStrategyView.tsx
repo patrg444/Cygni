@@ -149,7 +149,7 @@ export function DeploymentStrategyView({
               <div className="flex justify-between">
                 <span className="text-gray-600">Traffic steps:</span>
                 <span className="font-medium">
-                  {strategy.config.canarySteps?.join("% → ")}%
+                  {strategy.config.canarySteps?.join("%  ")}%
                 </span>
               </div>
               <div className="flex justify-between">

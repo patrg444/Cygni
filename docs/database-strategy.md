@@ -90,7 +90,7 @@ class DatabaseProviderFactory {
 ### Partner Databases
 
 - Pass-through pricing + 20% margin
-- Example: Neon $20/month → Cygni $24/month
+- Example: Neon $20/month Cygni $24/month
 
 ## Migration Path
 
@@ -149,8 +149,8 @@ func (p *RDSProvisioner) Create(ctx context.Context, spec DatabaseSpec) (*Databa
 
 | Feature          | Cygni   | Vercel       | Railway | Render |
 | ---------------- | ------- | ------------ | ------- | ------ |
-| Managed Postgres | ✅      | Via partners | ✅      | ✅     |
-| Serverless DB    | Phase 2 | ✅ (Neon)    | ❌      | ❌     |
-| BYOD             | ✅      | ✅           | ✅      | ✅     |
-| Branching        | Phase 2 | ✅           | ❌      | ❌     |
+| Managed Postgres |         | Via partners |         |        |
+| Serverless DB    | Phase 2 | (Neon)       |         |        |
+| BYOD             |         |              |         |        |
+| Branching        | Phase 2 |              |         |        |
 | Pricing          | $5-75   | $20+         | $20+    | $15+   |

@@ -3,7 +3,7 @@
 
 set -e
 
-echo "🪜 CloudExpress Backend Validation Ladder"
+echo " CloudExpress Backend Validation Ladder"
 echo "========================================"
 echo ""
 
@@ -26,12 +26,12 @@ run_stage() {
 }
 
 check_pass() {
-    echo -e "${GREEN}✅ $1${NC}"
+    echo -e "${GREEN} $1${NC}"
     PASSED=$((PASSED + 1))
 }
 
 check_fail() {
-    echo -e "${RED}❌ $1${NC}"
+    echo -e "${RED} $1${NC}"
     FAILED=$((FAILED + 1))
 }
 
@@ -95,7 +95,7 @@ fi
 if curl -s http://localhost:3000/api/health > /dev/null 2>&1; then
     check_pass "Health endpoint responsive"
 else
-    echo "⚠️  API server not running (start with 'npm run dev')"
+    echo "  API server not running (start with 'npm run dev')"
 fi
 
 # Stage 5: Environment Variables
@@ -165,7 +165,7 @@ echo -e "${RED}Failed: $FAILED${NC}"
 echo ""
 
 if [ $FAILED -eq 0 ]; then
-    echo -e "${GREEN}🎉 All validation stages passed!${NC}"
+    echo -e "${GREEN} All validation stages passed!${NC}"
     echo ""
     echo "Next steps:"
     echo "1. Start the API: npm run dev"
@@ -173,7 +173,7 @@ if [ $FAILED -eq 0 ]; then
     echo "3. Test with Postman/Newman"
     echo "4. Deploy to staging"
 else
-    echo -e "${RED}⚠️  Some validation stages failed${NC}"
+    echo -e "${RED}  Some validation stages failed${NC}"
     echo ""
     echo "Fix the issues above before proceeding."
 fi

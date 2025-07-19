@@ -3,7 +3,7 @@
 
 set -e
 
-echo "🩺 CloudExpress API Doctor"
+echo "�� CloudExpress API Doctor"
 echo "=========================="
 echo ""
 
@@ -26,11 +26,11 @@ check() {
     printf "%-30s" "$name"
     
     if eval "$command" > /dev/null 2>&1; then
-        echo -e "${GREEN}✅ OK${NC}"
+        echo -e "${GREEN} OK${NC}"
         PASSED_CHECKS=$((PASSED_CHECKS + 1))
         return 0
     else
-        echo -e "${RED}❌ FAILED${NC}"
+        echo -e "${RED} FAILED${NC}"
         FAILED_CHECKS=$((FAILED_CHECKS + 1))
         return 1
     fi
@@ -61,10 +61,10 @@ check_env() {
     printf "%-30s" "$var"
     
     if [ -n "${!var}" ] || grep -q "^$var=" .env 2>/dev/null; then
-        echo -e "${GREEN}✅ Set${NC}"
+        echo -e "${GREEN} Set${NC}"
         PASSED_CHECKS=$((PASSED_CHECKS + 1))
     else
-        echo -e "${RED}❌ Missing${NC}"
+        echo -e "${RED} Missing${NC}"
         FAILED_CHECKS=$((FAILED_CHECKS + 1))
     fi
     TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
@@ -127,11 +127,11 @@ echo "-------"
 DISK_USAGE=$(df -h . | awk 'NR==2 {print $5}' | sed 's/%//')
 if [ $DISK_USAGE -lt 90 ]; then
     printf "%-30s" "Disk space"
-    echo -e "${GREEN}✅ ${DISK_USAGE}% used${NC}"
+    echo -e "${GREEN} ${DISK_USAGE}% used${NC}"
     PASSED_CHECKS=$((PASSED_CHECKS + 1))
 else
     printf "%-30s" "Disk space"
-    echo -e "${RED}❌ ${DISK_USAGE}% used (low space)${NC}"
+    echo -e "${RED} ${DISK_USAGE}% used (low space)${NC}"
     FAILED_CHECKS=$((FAILED_CHECKS + 1))
 fi
 TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
@@ -147,9 +147,9 @@ echo -e "Failed: ${RED}$FAILED_CHECKS${NC}"
 echo ""
 
 if [ $FAILED_CHECKS -eq 0 ]; then
-    echo -e "${GREEN}🎉 All checks passed! Your system is ready.${NC}"
+    echo -e "${GREEN} All checks passed! Your system is ready.${NC}"
     exit 0
 else
-    echo -e "${YELLOW}⚠️  Some checks failed. Please fix the issues above.${NC}"
+    echo -e "${YELLOW}  Some checks failed. Please fix the issues above.${NC}"
     exit 1
 fi

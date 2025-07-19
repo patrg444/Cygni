@@ -4,7 +4,7 @@ import * as bcrypt from "bcrypt";
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log("🌱 Starting database seed...");
+  console.log(" Starting database seed...");
 
   // Clean existing data
   await prisma.usageEvent.deleteMany();
@@ -22,7 +22,7 @@ async function main() {
     },
   });
 
-  console.log("✅ Created team:", team.name);
+  console.log(" Created team:", team.name);
 
   // Create test users
   const hashedPassword = await bcrypt.hash("demo1234", 10);
@@ -47,7 +47,7 @@ async function main() {
     },
   });
 
-  console.log("✅ Created users:", adminUser.email, devUser.email);
+  console.log(" Created users:", adminUser.email, devUser.email);
 
   // Create test project
   const project = await prisma.project.create({
@@ -59,7 +59,7 @@ async function main() {
     },
   });
 
-  console.log("✅ Created project:", project.name);
+  console.log(" Created project:", project.name);
 
   // Create environments
   const prodEnv = await prisma.environment.create({
@@ -78,7 +78,7 @@ async function main() {
     },
   });
 
-  console.log("✅ Created environments:", prodEnv.name, stagingEnv.name);
+  console.log(" Created environments:", prodEnv.name, stagingEnv.name);
 
   // Create sample deployment
   const deployment = await prisma.deployment.create({
@@ -94,7 +94,7 @@ async function main() {
     },
   });
 
-  console.log("✅ Created deployment:", deployment.id);
+  console.log(" Created deployment:", deployment.id);
 
   // Add some waitlist entries
   const waitlistEntries = await Promise.all([
@@ -114,17 +114,17 @@ async function main() {
     }),
   ]);
 
-  console.log("✅ Created waitlist entries:", waitlistEntries.length);
+  console.log(" Created waitlist entries:", waitlistEntries.length);
 
-  console.log("\n🎉 Seed completed successfully!");
-  console.log("\n📝 Test credentials:");
+  console.log("\n Seed completed successfully!");
+  console.log("\n Test credentials:");
   console.log("   Email: admin@cygni.dev");
   console.log("   Password: demo1234");
 }
 
 main()
   .catch((e) => {
-    console.error("❌ Seed failed:", e);
+    console.error(" Seed failed:", e);
     process.exit(1);
   })
   .finally(async () => {

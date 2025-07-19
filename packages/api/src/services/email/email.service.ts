@@ -9,7 +9,7 @@ interface EmailOptions {
 export async function sendEmail(options: EmailOptions): Promise<void> {
   const from = options.from || process.env.FROM_EMAIL || "noreply@cygni.app";
 
-  console.log("📧 Email would be sent:");
+  console.log(" Email would be sent:");
   console.log(`  From: ${from}`);
   console.log(`  To: ${options.to}`);
   console.log(`  Subject: ${options.subject}`);

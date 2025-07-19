@@ -66,7 +66,7 @@ export const statusCommand = new Command("status")
       }
 
       // Environments
-      console.log(chalk.bold("\n📍 Environments:"));
+      console.log(chalk.bold("\n Environments:"));
       project.data.environments.forEach((env: any) => {
         const latestDeploy = deployments.data.deployments.find(
           (d: any) => d.environment === env.slug,
@@ -83,23 +83,23 @@ export const statusCommand = new Command("status")
 
         console.log(`  ${env.name}: ${statusColor(status)}`);
         if (env.domain) {
-          console.log(chalk.gray(`    → https://${env.domain}`));
+          console.log(chalk.gray(`     https://${env.domain}`));
         }
       });
 
       // Recent deployments
-      console.log(chalk.bold("\n🚀 Recent Deployments:"));
+      console.log(chalk.bold("\n Recent Deployments:"));
       if (deployments.data.deployments.length === 0) {
         console.log(chalk.gray("  No deployments yet"));
       } else {
         deployments.data.deployments.forEach((deploy: any) => {
           const statusIcons: Record<string, string> = {
-            active: "✅",
-            failed: "❌",
-            deploying: "🔄",
-            pending: "⏳",
+            active: "",
+            failed: "",
+            deploying: "",
+            pending: "",
           };
-          const statusIcon = statusIcons[deploy.status] || "❓";
+          const statusIcon = statusIcons[deploy.status] || "";
 
           const time = formatDistanceToNow(new Date(deploy.createdAt), {
             addSuffix: true,
@@ -118,7 +118,7 @@ export const statusCommand = new Command("status")
 
       // Metrics
       if (metrics.data.requests) {
-        console.log(chalk.bold("\n📊 Metrics (last 24h):"));
+        console.log(chalk.bold("\n Metrics (last 24h):"));
         console.log(`  Requests: ${metrics.data.requests.total || 0}`);
         console.log(`  Errors: ${metrics.data.requests.errors || 0}`);
         console.log(
@@ -127,7 +127,7 @@ export const statusCommand = new Command("status")
       }
 
       // Quick actions
-      console.log(chalk.bold("\n💡 Quick Actions:"));
+      console.log(chalk.bold("\n Quick Actions:"));
       console.log(chalk.gray("  Deploy:     ") + chalk.cyan("cygni deploy"));
       console.log(
         chalk.gray("  View logs:  ") + chalk.cyan("cygni logs --follow"),

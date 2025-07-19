@@ -68,11 +68,11 @@ export function validateEnv() {
       process.env.NODE_ENV === "production" ? productionSchema : envSchema;
     const env = schema.parse(process.env);
 
-    console.log("✅ Environment variables validated");
+    console.log(" Environment variables validated");
     return env;
   } catch (error) {
     if (error instanceof z.ZodError) {
-      console.error("❌ Invalid environment variables:");
+      console.error(" Invalid environment variables:");
       error.errors.forEach((err) => {
         console.error(`  ${err.path.join(".")}: ${err.message}`);
       });

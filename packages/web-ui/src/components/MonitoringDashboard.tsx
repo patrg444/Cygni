@@ -148,7 +148,7 @@ export function MonitoringDashboard({ projectId }: { projectId: string }) {
                   : "text-green-600",
               )}
             >
-              {metrics?.costTrend?.direction === "up" ? "↑" : "↓"}
+              {metrics?.costTrend?.direction === "up" ? "" : ""}
               {metrics?.costTrend?.percentChange || 0}%
             </div>
           </div>
@@ -222,7 +222,7 @@ function ServiceCard({
           <h4 className="font-semibold text-lg">{service.name}</h4>
           <div className="text-sm text-gray-500">
             {service.namespace}
-            {service.region && ` • ${service.region}`}
+            {service.region && `  ${service.region}`}
           </div>
         </div>
         <div
@@ -330,7 +330,7 @@ function ServiceCard({
                       : "text-green-600",
                   )}
                 >
-                  {service.cost.trend === "up" ? "↑" : "↓"}
+                  {service.cost.trend === "up" ? "" : ""}
                   {service.cost.percentChange}%
                 </span>
               )}

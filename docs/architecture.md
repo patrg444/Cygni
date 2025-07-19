@@ -17,15 +17,15 @@ Cygni is a developer-first cloud platform that combines the simplicity of Platfo
 ### High-Level Components
 
 ```
-┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
-│   CLI / Web UI  │────▶│   Control Plane │────▶│  Cloud Provider │
-└─────────────────┘     └─────────────────┘     └─────────────────┘
-                               │
-                               ▼
-                        ┌─────────────────┐
-                        │   Data Plane    │
-                        │  (Kubernetes)   │
-                        └─────────────────┘
+
+   CLI / Web UI  ��   Control Plane ��  Cloud Provider
+
+
+                               ��
+
+                           Data Plane
+                          (Kubernetes)
+
 ```
 
 ### Control Plane
@@ -166,11 +166,11 @@ The data plane runs the actual workloads and is built on Kubernetes.
 
 ```
 Project
-├── Environments (prod, staging, preview)
-│   ├── Deployments
-│   ├── Secrets
-│   └── Resources (CPU, Memory, Storage)
-└── Team Members (with RBAC)
+ Environments (prod, staging, preview)
+    Deployments
+    Secrets
+    Resources (CPU, Memory, Storage)
+ Team Members (with RBAC)
 ```
 
 ## Scaling Architecture

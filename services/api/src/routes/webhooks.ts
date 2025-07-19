@@ -171,7 +171,7 @@ async function createPreviewEnvironment(app: any, project: any, pr: any) {
       repo: pr.base.repo.name,
       issue: pr.number,
       body:
-        `🚀 **CloudExpress Preview Environment**\n\n` +
+        ` **CloudExpress Preview Environment**\n\n` +
         `Your preview environment is being created!\n\n` +
         `It will be available at: https://pr-${pr.number}--${project.slug}.preview.cygni.app\n\n` +
         `This environment will automatically update with each push to this PR.`,

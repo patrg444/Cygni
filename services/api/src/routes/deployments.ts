@@ -197,11 +197,8 @@ export const deploymentRoutes: FastifyPluginAsync = async (app) => {
     },
     async (request, _reply) => {
       const { projectId } = request.params as { projectId: string };
-      const { 
-        environment, 
-        includePrevious = false 
-      } = request.query as { 
-        environment?: string; 
+      const { environment, includePrevious = false } = request.query as {
+        environment?: string;
         includePrevious?: boolean;
       };
 
@@ -427,9 +424,9 @@ export const deploymentRoutes: FastifyPluginAsync = async (app) => {
       ],
     },
     async (request, _reply) => {
-      const { projectId, environment: envSlug } = request.params as { 
-        projectId: string; 
-        environment: string; 
+      const { projectId, environment: envSlug } = request.params as {
+        projectId: string;
+        environment: string;
       };
 
       // Get the environment
@@ -493,7 +490,7 @@ export const deploymentRoutes: FastifyPluginAsync = async (app) => {
           `${ORCHESTRATOR_URL}/api/services/${namespace}/${activeDeployment.project.slug}/rollback`,
           {
             targetImage: previousDeployment.build.imageUrl,
-          }
+          },
         );
 
         // Create new deployment record for the rollback
@@ -537,8 +534,8 @@ export const deploymentRoutes: FastifyPluginAsync = async (app) => {
           },
         };
       } catch (error) {
-        app.log.error("Failed to rollback deployment", { 
-          error, 
+        app.log.error("Failed to rollback deployment", {
+          error,
           projectId,
           environment: envSlug,
         });
@@ -559,14 +556,14 @@ export const deploymentRoutes: FastifyPluginAsync = async (app) => {
       ],
     },
     async (request, _reply) => {
-      const { projectSlug, environment: envSlug } = request.params as { 
-        projectSlug: string; 
-        environment: string; 
+      const { projectSlug, environment: envSlug } = request.params as {
+        projectSlug: string;
+        environment: string;
       };
 
       // Get project by slug
       const project = await prisma.project.findFirst({
-        where: { 
+        where: {
           slug: projectSlug,
         },
         include: {
@@ -588,7 +585,10 @@ export const deploymentRoutes: FastifyPluginAsync = async (app) => {
       }
 
       // Check access
-      if (project.members.length === 0 && project.organization.members.length === 0) {
+      if (
+        project.members.length === 0 &&
+        project.organization.members.length === 0
+      ) {
         return _reply.status(403).send({ error: "Access denied" });
       }
 
@@ -642,14 +642,17 @@ export const deploymentRoutes: FastifyPluginAsync = async (app) => {
       }
 
       // Trigger rollback in orchestrator
-      const namespace = getNamespaceForEnvironment(environment.slug, project.slug);
+      const namespace = getNamespaceForEnvironment(
+        environment.slug,
+        project.slug,
+      );
 
       try {
         await axios.post(
           `${ORCHESTRATOR_URL}/api/services/${namespace}/${project.slug}/rollback`,
           {
             targetImage: previousDeployment.build.imageUrl,
-          }
+          },
         );
 
         // Create new deployment record for the rollback
@@ -693,8 +696,8 @@ export const deploymentRoutes: FastifyPluginAsync = async (app) => {
           },
         };
       } catch (error) {
-        app.log.error("Failed to rollback deployment", { 
-          error, 
+        app.log.error("Failed to rollback deployment", {
+          error,
           projectSlug,
           environment: envSlug,
         });

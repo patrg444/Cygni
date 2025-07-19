@@ -71,14 +71,14 @@ See `.env.example` for all required variables. Key ones:
 
 ```
 /api
-├── /routes         # Express route handlers
-├── /services       # Business logic
-│   ├── /auth      # JWT rotation, authentication
-│   ├── /billing   # Stripe, budget monitoring
-│   └── /email     # Email sending
-├── /jobs          # Background jobs (cron)
-├── /middleware    # Express middleware
-└── /prisma        # Database schema
+ /routes         # Express route handlers
+ /services       # Business logic
+    /auth      # JWT rotation, authentication
+    /billing   # Stripe, budget monitoring
+    /email     # Email sending
+ /jobs          # Background jobs (cron)
+ /middleware    # Express middleware
+ /prisma        # Database schema
 ```
 
 ## Background Jobs

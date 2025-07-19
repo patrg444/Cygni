@@ -13,10 +13,10 @@ PASSED_CHECKS=0
 check() {
     TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
     if eval "$2"; then
-        echo "✓ $1"
+        echo " $1"
         PASSED_CHECKS=$((PASSED_CHECKS + 1))
     else
-        echo "✗ $1"
+        echo " $1"
     fi
 }
 
@@ -108,7 +108,7 @@ echo "Passed: $PASSED_CHECKS / $TOTAL_CHECKS checks"
 echo ""
 
 if [ $PASSED_CHECKS -eq $TOTAL_CHECKS ]; then
-    echo "✅ CloudExpress is READY for launch prep!"
+    echo " CloudExpress is READY for launch prep!"
     echo ""
     echo "Next immediate actions:"
     echo "1. Deploy landing page: ./scripts/deploy-landing.sh aws"
@@ -118,7 +118,7 @@ if [ $PASSED_CHECKS -eq $TOTAL_CHECKS ]; then
     echo "5. Prepare social media posts"
 else
     FAILED=$((TOTAL_CHECKS - PASSED_CHECKS))
-    echo "⚠️  $FAILED checks failed. Review and fix before launch."
+    echo "  $FAILED checks failed. Review and fix before launch."
 fi
 
 echo ""

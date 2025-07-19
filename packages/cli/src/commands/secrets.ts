@@ -78,7 +78,7 @@ export const secretsCommand = new Command("secrets")
 
           if (environmentId) {
             console.log(
-              chalk.yellow("\n⚠️  Changes will take effect on next deployment"),
+              chalk.yellow("\n  Changes will take effect on next deployment"),
             );
           }
         } catch (error: any) {

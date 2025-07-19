@@ -84,57 +84,57 @@ graph TB
 
 ```
 Cygni/
-├── .github/                    # GitHub Actions workflows
-│   └── workflows/
-│       ├── ci.yml             # Main CI pipeline
-│       ├── release.yml        # Release automation
-│       └── security.yml       # Security scanning
-│
-├── packages/                   # Shared packages (pnpm workspace)
-│   ├── api/                   # API client library
-│   ├── cli/                   # CLI tool
-│   ├── sdk/                   # JavaScript/TypeScript SDK
-│   ├── landing/               # Marketing website
-│   └── web-ui/                # Dashboard UI (Next.js)
-│
-├── services/                   # Microservices
-│   ├── api/                   # Main API service
-│   │   ├── src/
-│   │   │   ├── routes/       # API endpoints
-│   │   │   ├── services/     # Business logic
-│   │   │   ├── middleware/   # Auth, rate limiting
-│   │   │   └── utils/        # Helpers
-│   │   └── prisma/           # Database schema
-│   │
-│   ├── auth/                  # Authentication service
-│   │   └── src/
-│   │       ├── providers/    # OAuth providers
-│   │       └── jwt/          # JWT management
-│   │
-│   ├── builder/               # Build service
-│   │   └── src/
-│   │       └── kaniko/       # Container builder
-│   │
-│   └── runtime-orchestrator/  # Kubernetes controller
-│       ├── api/              # CRD definitions
-│       ├── controllers/      # K8s controllers
-│       └── config/           # K8s manifests
-│
-├── infrastructure/             # Infrastructure as Code
-│   ├── kubernetes/            # K8s manifests
-│   │   ├── base/            # Base configurations
-│   │   └── overlays/        # Environment-specific
-│   ├── terraform/            # Cloud infrastructure
-│   └── helm/                # Helm charts
-│
-├── scripts/                   # Utility scripts
-│   ├── setup-*.sh           # Setup scripts
-│   └── test-suite/          # Test scripts
-│
-└── docs/                      # Documentation
-    ├── api/                  # API docs
-    ├── guides/               # User guides
-    └── architecture/         # Architecture docs
+ .github/                    # GitHub Actions workflows
+    workflows/
+        ci.yml             # Main CI pipeline
+        release.yml        # Release automation
+        security.yml       # Security scanning
+
+ packages/                   # Shared packages (pnpm workspace)
+    api/                   # API client library
+    cli/                   # CLI tool
+    sdk/                   # JavaScript/TypeScript SDK
+    landing/               # Marketing website
+    web-ui/                # Dashboard UI (Next.js)
+
+ services/                   # Microservices
+    api/                   # Main API service
+       src/
+          routes/       # API endpoints
+          services/     # Business logic
+          middleware/   # Auth, rate limiting
+          utils/        # Helpers
+       prisma/           # Database schema
+
+    auth/                  # Authentication service
+       src/
+           providers/    # OAuth providers
+           jwt/          # JWT management
+
+    builder/               # Build service
+       src/
+           kaniko/       # Container builder
+
+    runtime-orchestrator/  # Kubernetes controller
+        api/              # CRD definitions
+        controllers/      # K8s controllers
+        config/           # K8s manifests
+
+ infrastructure/             # Infrastructure as Code
+    kubernetes/            # K8s manifests
+       base/            # Base configurations
+       overlays/        # Environment-specific
+    terraform/            # Cloud infrastructure
+    helm/                # Helm charts
+
+ scripts/                   # Utility scripts
+    setup-*.sh           # Setup scripts
+    test-suite/          # Test scripts
+
+ docs/                      # Documentation
+     api/                  # API docs
+     guides/               # User guides
+     architecture/         # Architecture docs
 ```
 
 ## Service Architecture
@@ -223,7 +223,7 @@ sequenceDiagram
     K8s->>Orchestrator: Status update
     Orchestrator->>API: Deployment active
     API->>CLI: Deployment URL
-    CLI->>User: Success ✓
+    CLI->>User: Success
 ```
 
 ### Request Flow

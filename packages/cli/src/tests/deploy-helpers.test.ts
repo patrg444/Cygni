@@ -180,7 +180,7 @@ describe("Deploy Helpers", () => {
       displayDeploymentSummary(deployment, { env: "production" });
 
       expect(
-        consoleOutput.some((line) => line.includes("✅ Deployment Complete!")),
+        consoleOutput.some((line) => line.includes(" Deployment Complete!")),
       ).toBe(true);
       expect(
         consoleOutput.some((line) => line.includes("https://myapp.cygni.dev")),

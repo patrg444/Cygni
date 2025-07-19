@@ -15,28 +15,28 @@ async function startServer() {
   try {
     // Initialize database connection
     await prisma.$connect();
-    console.log("✅ Database connected");
+    console.log(" Database connected");
 
     // Create Express app
     const app = createServer();
 
     // Initialize background jobs
     initializeBudgetCheckJob();
-    console.log("✅ Background jobs initialized");
+    console.log(" Background jobs initialized");
 
     // Start JWT rotation
     jwtService.startRotationJob();
-    console.log("✅ JWT rotation job started");
+    console.log(" JWT rotation job started");
 
     // Start Express server
     app.listen(PORT, () => {
-      console.log(`🚀 CloudExpress API running on http://localhost:${PORT}`);
-      console.log(`📍 Health check: http://localhost:${PORT}/api/health`);
+      console.log(` CloudExpress API running on http://localhost:${PORT}`);
+      console.log(` Health check: http://localhost:${PORT}/api/health`);
       console.log(
-        `📍 Waitlist signup: POST http://localhost:${PORT}/api/waitlist`,
+        ` Waitlist signup: POST http://localhost:${PORT}/api/waitlist`,
       );
       console.log(
-        `📍 JWKS: http://localhost:${PORT}/api/auth/.well-known/jwks.json`,
+        ` JWKS: http://localhost:${PORT}/api/auth/.well-known/jwks.json`,
       );
     });
   } catch (error) {

@@ -6,13 +6,13 @@
 
 The full-stack developer cloud platform that combines the simplicity of PaaS with the flexibility of AWS. Deploy frontend, backend, databases, and workers - all in one place.
 
-> ⚠️ **Current Status**: Cygni is in early alpha development. Core infrastructure is being built. Not yet ready for production use.
+> **Current Status**: Cygni is in early alpha development. Core infrastructure is being built. Not yet ready for production use.
 
-## 🎯 Vision
+## Vision
 
 Cygni aims to be the developer-first cloud platform that makes deploying full-stack applications as simple as `git push`, while giving you the power and flexibility of your own cloud infrastructure.
 
-## ✨ Features (Planned)
+## Features (Planned)
 
 - **One-Click Deployments**: Push to deploy with automatic CI/CD
 - **Full-Stack Preview Environments**: Complete environments for every PR
@@ -21,9 +21,9 @@ Cygni aims to be the developer-first cloud platform that makes deploying full-st
 - **Bring Your Own Cloud**: Deploy to your own AWS/GCP/Azure account
 - **Open Source**: Fully transparent and self-hostable
 
-## 🚧 Current Implementation Status
+## Current Implementation Status
 
-### ✅ Completed
+### Completed
 
 - **Infrastructure as Code**: Terraform modules for AWS (VPC, RDS, EKS, S3)
 - **Kubernetes Deployment**: Production-ready Helm charts
@@ -33,14 +33,14 @@ Cygni aims to be the developer-first cloud platform that makes deploying full-st
 - **CI/CD**: GitHub Actions with health checks and security scanning
 - **Docker**: Multi-stage builds with security hardening
 
-### 🔄 In Progress
+### In Progress
 
 - Runtime orchestrator for container management
 - Builder service for source-to-container
 - Web dashboard UI
 - Billing and metering integration
 
-### 📋 Roadmap
+### Roadmap
 
 - [ ] Complete runtime orchestrator with Kubernetes CRDs
 - [ ] Implement builder service with buildpack support
@@ -49,14 +49,14 @@ Cygni aims to be the developer-first cloud platform that makes deploying full-st
 - [ ] Implement preview environments
 - [ ] Add monitoring and observability stack
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - **Backend**: Node.js, Fastify, Prisma, PostgreSQL
 - **Infrastructure**: Kubernetes, Terraform, Docker
 - **Languages**: TypeScript, Go (for K8s controllers)
 - **Tools**: pnpm workspaces, Turbo
 
-## 🚀 Quick Start (Development)
+## Quick Start (Development)
 
 ```bash
 # Clone the repository
@@ -77,25 +77,25 @@ pnpm dev
 pnpm test
 ```
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 cygni/
-├── packages/           # Shared packages
-│   ├── cli/           # Command-line interface
-│   └── sdk/           # JavaScript/TypeScript SDK
-├── services/          # Microservices
-│   ├── api/           # REST API service
-│   ├── auth/          # Authentication service (planned)
-│   ├── builder/       # Build service (planned)
-│   └── runtime/       # Runtime orchestrator (planned)
-├── infrastructure/    # Infrastructure as Code
-│   ├── terraform/     # AWS infrastructure
-│   └── helm/          # Kubernetes charts
-└── docs/             # Documentation
+ packages/           # Shared packages
+    cli/           # Command-line interface
+    sdk/           # JavaScript/TypeScript SDK
+ services/          # Microservices
+    api/           # REST API service
+    auth/          # Authentication service (planned)
+    builder/       # Build service (planned)
+    runtime/       # Runtime orchestrator (planned)
+ infrastructure/    # Infrastructure as Code
+    terraform/     # AWS infrastructure
+    helm/          # Kubernetes charts
+ docs/             # Documentation
 ```
 
-## 🧪 Testing
+## Testing
 
 ```bash
 # Run all tests
@@ -114,7 +114,7 @@ pnpm lint
 pnpm typecheck
 ```
 
-## 🚢 Deployment
+## Deployment
 
 ### Local Development
 
@@ -141,7 +141,7 @@ terraform plan -var-file=environments/production.tfvars
 terraform apply -var-file=environments/production.tfvars
 ```
 
-## 🤝 Contributing
+## Contributing
 
 We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 
@@ -153,14 +153,15 @@ We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for deta
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## 📚 Documentation
+## Documentation
 
 - [Architecture Overview](docs/ARCHITECTURE.md)
 - [API Documentation](docs/api/README.md)
 - [CLI Reference](packages/cli/README.md)
 - [SDK Documentation](packages/sdk/README.md)
+- [Secrets Generation Guide](docs/ops/secrets.md)
 
-## 🔒 Security
+## Security
 
 - All containers run as non-root users
 - Secrets are managed via environment variables
@@ -169,10 +170,10 @@ We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for deta
 
 For security issues, please email security@cygni.dev
 
-## 📄 License
+## License
 
 Cygni is open source under the Apache 2.0 license. See [LICENSE](LICENSE) for details.
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 Inspired by platforms like Vercel, Railway, and Render, with the goal of providing similar developer experience while maintaining full control over your infrastructure.

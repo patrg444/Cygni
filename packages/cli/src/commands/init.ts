@@ -68,7 +68,7 @@ export const initCommand = new Command("init")
 
       spinner.succeed("Configuration created!");
 
-      console.log("\n" + chalk.green("✨ Your project is ready!"));
+      console.log("\n" + chalk.green(" Your project is ready!"));
       console.log("\nNext steps:");
       console.log(chalk.gray("  1. ") + "Review your cygni.yaml configuration");
       console.log(
@@ -83,7 +83,7 @@ export const initCommand = new Command("init")
           chalk.cyan("cygni deploy") +
           " to deploy your app",
       );
-      console.log("\nHappy coding! 🚀");
+      console.log("\nHappy coding! ");
     } catch (error) {
       spinner.fail("Failed to create configuration");
       throw error;

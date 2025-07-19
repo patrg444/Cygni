@@ -150,9 +150,7 @@ async function handleRollback(options: any) {
     console.log(chalk.gray(`  Image: ${currentDeployment.build.imageUrl}`));
     console.log(chalk.gray(`  Status: ${currentDeployment.status}`));
     console.log("\nWill rollback to:");
-    console.log(
-      chalk.green(`  Image: ${previousDeployment.build.imageUrl}`),
-    );
+    console.log(chalk.green(`  Image: ${previousDeployment.build.imageUrl}`));
 
     const confirmed = await confirm({
       message: "Are you sure you want to rollback?",
@@ -173,7 +171,7 @@ async function handleRollback(options: any) {
 
     spinner.succeed("Rollback initiated!");
 
-    console.log("\n" + chalk.green("✅ Rollback Started!"));
+    console.log("\n" + chalk.green(" Rollback Started!"));
     console.log("Deployment ID: " + chalk.gray(rollbackResponse.data.id));
 
     if (options.watch) {

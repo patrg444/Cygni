@@ -55,7 +55,7 @@ export async function loadOrGenerateDevSecrets(): Promise<DevSecrets> {
   }
 
   // Generate new secrets
-  console.log("🔐 Generating new development secrets...");
+  console.log(" Generating new development secrets...");
   return generateDevSecrets();
 }
 
@@ -78,10 +78,10 @@ export async function initializeDevelopmentEnv(): Promise<void> {
     // Set environment variables
     process.env.JWT_SECRET = secrets.JWT_SECRET;
 
-    console.log("✅ Development secrets initialized");
-    console.log("📁 Secrets saved to .cygni/dev.env");
+    console.log(" Development secrets initialized");
+    console.log(" Secrets saved to .cygni/dev.env");
   } catch (error) {
-    console.error("❌ Failed to initialize development secrets:", error);
+    console.error(" Failed to initialize development secrets:", error);
     throw error;
   }
 }

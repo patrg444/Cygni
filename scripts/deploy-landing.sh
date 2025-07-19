@@ -3,7 +3,7 @@
 
 set -e
 
-echo "🚀 Deploying CloudExpress landing page..."
+echo " Deploying CloudExpress landing page..."
 
 LANDING_DIR="/Users/patrickgloria/CloudExpress/packages/landing"
 DEPLOY_BRANCH="gh-pages"
@@ -33,7 +33,7 @@ deploy_github_pages() {
     # Cleanup
     rm -rf $TEMP_DIR
     
-    echo "✅ Deployed to https://cloudexpress.github.io"
+    echo " Deployed to https://cloudexpress.github.io"
 }
 
 # Option 2: Netlify deployment
@@ -51,7 +51,7 @@ deploy_netlify() {
     # Deploy to Netlify
     netlify deploy --prod --dir=. --site=cloudexpress-landing
     
-    echo "✅ Deployed to Netlify"
+    echo " Deployed to Netlify"
 }
 
 # Option 3: Simple S3 + CloudFront deployment
@@ -74,7 +74,7 @@ deploy_aws() {
         --distribution-id $DISTRIBUTION_ID \
         --paths "/*"
     
-    echo "✅ Deployed to https://beta.cloudexpress.app"
+    echo " Deployed to https://beta.cloudexpress.app"
 }
 
 # Quick local preview
@@ -105,7 +105,7 @@ case "${1:-github}" in
 esac
 
 echo ""
-echo "🎉 Landing page deployment complete!"
+echo " Landing page deployment complete!"
 echo ""
 echo "Next steps:"
 echo "  1. Verify the deployment at the URL above"

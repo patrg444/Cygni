@@ -3,3 +3,7 @@
 
 # Run lint-staged on staged files
 npx lint-staged
+
+# Run tests for changed packages
+echo "Running tests for changed packages..."
+npx turbo run test --filter="...[HEAD^]"

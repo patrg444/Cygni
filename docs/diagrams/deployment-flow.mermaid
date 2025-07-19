@@ -19,7 +19,7 @@ sequenceDiagram
     
     Note over API,Auth: Validate webhook signature
     API->>Auth: Verify webhook
-    Auth-->>API: Valid ✓
+    Auth-->>API: Valid 
     
     API->>Build: Start build job
     activate Build
@@ -42,7 +42,7 @@ sequenceDiagram
         K8s-->>Orch: Status update
     end
     
-    Orch->>Orch: Health gates pass ✓
+    Orch->>Orch: Health gates pass 
     Orch-->>API: Deployment active
     deactivate Orch
     

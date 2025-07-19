@@ -7,7 +7,7 @@ export interface EmailTemplate {
 export const dripCampaignTemplates: Record<string, EmailTemplate> = {
   // Email 1: Welcome (sent immediately)
   welcome: {
-    subject: "Welcome to CloudExpress! 🚀",
+    subject: "Welcome to CloudExpress! ",
     html: (data) => `
       <div style="font-family: -apple-system, sans-serif; max-width: 600px; margin: 0 auto; color: #1a1a1a;">
         <h1 style="color: #0070f3; font-size: 32px;">Welcome to CloudExpress!</h1>
@@ -37,7 +37,7 @@ export const dripCampaignTemplates: Record<string, EmailTemplate> = {
         <div style="text-align: center; margin: 30px 0;">
           <a href="https://github.com/cygni/cygni" 
              style="display: inline-block; padding: 12px 24px; background: #0070f3; color: white; text-decoration: none; border-radius: 6px; font-weight: 600;">
-            ⭐ Star on GitHub
+             Star on GitHub
           </a>
         </div>
 
@@ -52,7 +52,7 @@ export const dripCampaignTemplates: Record<string, EmailTemplate> = {
 
   // Email 2: Peak Feature Deep Dive (sent after 3 days)
   peakFeature: {
-    subject: "CloudExpress Secret Sauce: Health Gates & Auto-Rollback 🛡️",
+    subject: "CloudExpress Secret Sauce: Health Gates & Auto-Rollback ",
     html: (data) => `
       <div style="font-family: -apple-system, sans-serif; max-width: 600px; margin: 0 auto; color: #1a1a1a;">
         <h1 style="color: #0070f3; font-size: 32px;">Never Ship a Bad Deploy Again</h1>
@@ -74,8 +74,8 @@ export const dripCampaignTemplates: Record<string, EmailTemplate> = {
         
         <div style="background: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0;">
           <p style="margin: 0; line-height: 1.6;">
-            <strong>1. You deploy</strong> → 
-            <strong>2. We monitor metrics</strong> → 
+            <strong>1. You deploy</strong>  
+            <strong>2. We monitor metrics</strong>  
             <strong>3. Bad metrics = auto rollback</strong>
           </p>
         </div>
@@ -89,12 +89,12 @@ export const dripCampaignTemplates: Record<string, EmailTemplate> = {
         <pre style="background: #1a1a1a; color: #fff; padding: 20px; border-radius: 6px; overflow-x: auto;">
 <code>cygni deploy --health-gate strict
 
-✓ Building image...
-✓ Running migrations...
-✓ Deploying to production...
-⚠️  Health gate triggered: Error rate 5.2% (threshold: 5%)
-✓ Rolling back to previous version...
-✓ Rollback complete. Crisis averted! 🎉</code></pre>
+ Building image...
+ Running migrations...
+ Deploying to production...
+  Health gate triggered: Error rate 5.2% (threshold: 5%)
+ Rolling back to previous version...
+ Rollback complete. Crisis averted! </code></pre>
 
         <p style="font-size: 16px; line-height: 1.6;">
           <strong>Fun fact:</strong> We run "Failure Friday" every week where we intentionally 
@@ -187,11 +187,11 @@ export const dripCampaignTemplates: Record<string, EmailTemplate> = {
 
   // Email 4: CTA - Deploy Your First App (sent after 14 days)
   deployNow: {
-    subject: "🎉 Your CloudExpress invite is here!",
+    subject: " Your CloudExpress invite is here!",
     html: (data) => `
       <div style="font-family: -apple-system, sans-serif; max-width: 600px; margin: 0 auto; color: #1a1a1a;">
         <div style="text-align: center; margin: 30px 0;">
-          <h1 style="color: #0070f3; font-size: 48px; margin: 0;">You're in! 🎉</h1>
+          <h1 style="color: #0070f3; font-size: 48px; margin: 0;">You're in! </h1>
         </div>
         
         <p style="font-size: 18px; line-height: 1.6;">Hi ${data.name || "there"},</p>
@@ -213,7 +213,7 @@ export const dripCampaignTemplates: Record<string, EmailTemplate> = {
           
           <a href="https://app.cygni.app/signup?invite=${data.inviteCode}" 
              style="display: inline-block; margin-top: 20px; padding: 14px 28px; background: white; color: #0070f3; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 18px;">
-            Claim Your Account →
+            Claim Your Account 
           </a>
         </div>
 
@@ -243,14 +243,14 @@ export const dripCampaignTemplates: Record<string, EmailTemplate> = {
         <div style="text-align: center; margin: 40px 0;">
           <a href="https://app.cygni.app/signup?invite=${data.inviteCode}" 
              style="display: inline-block; padding: 14px 28px; background: #0070f3; color: white; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 18px;">
-            Start Building →
+            Start Building 
           </a>
         </div>
 
         <p style="font-size: 14px; color: #666; margin-top: 40px;">
           Welcome to the future of deployment!<br><br>
           Patrick & the CloudExpress Team<br><br>
-          P.S. Tweet your first deploy with #CloudExpressLive and we'll send you swag! 🎁
+          P.S. Tweet your first deploy with #CloudExpressLive and we'll send you swag! 
         </p>
       </div>
     `,

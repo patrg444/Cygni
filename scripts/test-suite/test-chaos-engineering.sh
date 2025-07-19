@@ -60,12 +60,12 @@ kubectl() {
 inject_failure() {
     case $1 in
         "health-gate")
-            echo "💉 Injecting health gate failure..."
+            echo " Injecting health gate failure..."
             kubectl patch cloudexpressservice demo -n production \
                 --type='json' -p='[{"op": "replace", "path": "/spec/healthGate/maxErrorRate", "value": 0.01}]'
             ;;
         "pod-failure")
-            echo "💉 Killing random pod..."
+            echo " Killing random pod..."
             kubectl delete pod demo-app-5d7b8c9f6b-abc123 -n production --grace-period=0 --force
             ;;
     esac
@@ -107,7 +107,7 @@ for i in {0..3}; do
     sleep 0.5
 done
 
-echo -e "\n✅ Rollback detected! Status: Failed"
+echo -e "\n Rollback detected! Status: Failed"
 echo "Recent events:"
 echo "  - Health gate threshold exceeded"
 echo "  - Automatic rollback initiated"
@@ -181,7 +181,7 @@ const calculateUsage = () => {
     console.log(`  Egress: $${costs.egress.toFixed(2)}`);
     console.log(`  Requests: $${costs.requests.toFixed(2)}`);
     console.log(`  Total: $${total.toFixed(2)}`);
-    console.log(`  Status: ${total > 10 ? '⚠️ OVER LIMIT' : '✅ Within free tier'}`);
+    console.log(`  Status: ${total > 10 ? ' OVER LIMIT' : ' Within free tier'}`);
 };
 
 calculateUsage();
@@ -218,11 +218,11 @@ const evaluateHealth = (metrics) => {
     }
     
     if (failures.length > 0) {
-        console.log('❌ Health gate FAILED:');
+        console.log(' Health gate FAILED:');
         failures.forEach(f => console.log(`  - ${f}`));
-        console.log('\n🔄 Triggering automatic rollback...');
+        console.log('\n Triggering automatic rollback...');
     } else {
-        console.log('✅ Health gate PASSED - deployment healthy');
+        console.log(' Health gate PASSED - deployment healthy');
     }
 };
 
@@ -251,19 +251,19 @@ const progressCanary = async () => {
         // Simulate health check
         const healthy = Math.random() > 0.2; // 80% success rate
         if (healthy) {
-            console.log('  ✅ Health check passed');
+            console.log('   Health check passed');
         } else {
-            console.log('  ❌ Health check failed - rolling back');
-            console.log('\n🔄 Canary deployment aborted');
+            console.log('   Health check failed - rolling back');
+            console.log('\n Canary deployment aborted');
             return;
         }
         
         if (i < weights.length - 1) {
-            console.log('  ⏳ Waiting before next step...\n');
+            console.log('   Waiting before next step...\n');
         }
     }
     
-    console.log('\n🎉 Canary deployment completed successfully!');
+    console.log('\n Canary deployment completed successfully!');
 };
 
 progressCanary();
@@ -300,7 +300,7 @@ const rotateKeys = () => {
     ];
     
     keys.forEach(key => {
-        const status = key.expires > now ? '✅ Valid' : '❌ Expired';
+        const status = key.expires > now ? ' Valid' : ' Expired';
         console.log(`  - ${key.kid}: ${status}`);
     });
 };
@@ -320,21 +320,21 @@ days=(0 3 7 14)
 
 for i in {0..3}; do
     echo "Day ${days[$i]}: ${emails[$i]} email"
-    echo "  Subject: $([ $i -eq 0 ] && echo "Welcome to CloudExpress! 🚀" || echo "...")"
-    echo "  Status: $([ ${days[$i]} -le 7 ] && echo "✅ Sent" || echo "⏰ Scheduled")"
+    echo "  Subject: $([ $i -eq 0 ] && echo "Welcome to CloudExpress! " || echo "...")"
+    echo "  Status: $([ ${days[$i]} -le 7 ] && echo " Sent" || echo " Scheduled")"
 done
 
 echo ""
 echo "INTEGRATION TEST SUMMARY"
 echo "========================"
-echo "✅ Chaos engineering scripts validated"
-echo "✅ Rollback detection working"
-echo "✅ Waitlist API functional"
-echo "✅ Budget calculations accurate"
-echo "✅ Health gate evaluation correct"
-echo "✅ Canary progression simulated"
-echo "✅ JWT rotation working"
-echo "✅ Email campaign ready"
+echo " Chaos engineering scripts validated"
+echo " Rollback detection working"
+echo " Waitlist API functional"
+echo " Budget calculations accurate"
+echo " Health gate evaluation correct"
+echo " Canary progression simulated"
+echo " JWT rotation working"
+echo " Email campaign ready"
 
 echo ""
 echo "VERIFICATION COMPLETE"

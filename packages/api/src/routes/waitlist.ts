@@ -59,7 +59,7 @@ router.post("/waitlist", async (req: Request, res: Response) => {
       subject: "Welcome to CloudExpress Early Access!",
       html: `
         <div style="font-family: -apple-system, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h1 style="color: #0070f3;">Welcome to CloudExpress! 🚀</h1>
+          <h1 style="color: #0070f3;">Welcome to CloudExpress! </h1>
           
           <p>Thanks for joining our early access list! You're #${position} in line.</p>
           
@@ -76,8 +76,8 @@ router.post("/waitlist", async (req: Request, res: Response) => {
           <p>We'll reach out soon with your early access invite. In the meantime:</p>
           
           <p>
-            <a href="https://github.com/cygni" style="color: #0070f3;">⭐ Star us on GitHub</a><br>
-            <a href="https://twitter.com/cygni" style="color: #0070f3;">📱 Follow us on Twitter</a>
+            <a href="https://github.com/cygni" style="color: #0070f3;"> Star us on GitHub</a><br>
+            <a href="https://twitter.com/cygni" style="color: #0070f3;"> Follow us on Twitter</a>
           </p>
           
           <p>Have questions? Just reply to this email!</p>

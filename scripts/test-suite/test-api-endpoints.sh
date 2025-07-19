@@ -11,10 +11,10 @@ API_URL="${API_URL:-http://localhost:3000/api}"
 check_server() {
     echo "Checking if API server is running at $API_URL..."
     if curl -s -o /dev/null -w "%{http_code}" "$API_URL/health" 2>/dev/null | grep -q "200\|404"; then
-        echo "✅ Server appears to be running"
+        echo " Server appears to be running"
         return 0
     else
-        echo "❌ Server is not running at $API_URL"
+        echo " Server is not running at $API_URL"
         echo ""
         echo "To start the server:"
         echo "  cd packages/api"
@@ -106,9 +106,9 @@ check_implementation() {
     
     for file in "${files[@]}"; do
         if [ -f "$file" ]; then
-            echo "✅ $file exists"
+            echo " $file exists"
         else
-            echo "❌ $file missing"
+            echo " $file missing"
         fi
     done
 }
@@ -120,36 +120,36 @@ check_api_structure() {
     echo "------------------------------"
     
     if [ -d "packages/api" ]; then
-        echo "✅ API package directory exists"
+        echo " API package directory exists"
         
         # Check for package.json
         if [ -f "packages/api/package.json" ]; then
-            echo "✅ package.json exists"
+            echo " package.json exists"
             
             # Check if it has required dependencies
             if grep -q "express" "packages/api/package.json"; then
-                echo "✅ Express dependency found"
+                echo " Express dependency found"
             else
-                echo "⚠️  Express not in dependencies"
+                echo "  Express not in dependencies"
             fi
             
             if grep -q "stripe" "packages/api/package.json"; then
-                echo "✅ Stripe dependency found"
+                echo " Stripe dependency found"
             else
-                echo "⚠️  Stripe not in dependencies"
+                echo "  Stripe not in dependencies"
             fi
         else
-            echo "❌ package.json missing"
+            echo " package.json missing"
         fi
         
         # Check for main server file
         if [ -f "packages/api/src/index.ts" ] || [ -f "packages/api/src/server.ts" ]; then
-            echo "✅ Server entry point exists"
+            echo " Server entry point exists"
         else
-            echo "❌ No server entry point (index.ts/server.ts)"
+            echo " No server entry point (index.ts/server.ts)"
         fi
     else
-        echo "❌ API package directory missing"
+        echo " API package directory missing"
     fi
 }
 
@@ -168,7 +168,7 @@ echo ""
 if check_server; then
     test_endpoints
 else
-    echo "💡 The API endpoints are implemented but not running."
+    echo " The API endpoints are implemented but not running."
     echo ""
     echo "To test the endpoints:"
     echo "1. First, ensure all dependencies are installed"
@@ -180,6 +180,6 @@ fi
 echo ""
 echo "Summary:"
 echo "--------"
-echo "✅ All endpoint code is implemented"
-echo "⚠️  API server needs to be running to test live endpoints"
-echo "📝 Next step: Set up and start the API server"
+echo " All endpoint code is implemented"
+echo "  API server needs to be running to test live endpoints"
+echo " Next step: Set up and start the API server"
