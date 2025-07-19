@@ -23,12 +23,17 @@ RUN pnpm prisma generate
 FROM base AS builder
 WORKDIR /app
 
-# Copy dependencies
-COPY --from=deps /app/node_modules ./node_modules
+# Copy all files
 COPY . .
 
-# Build the application
+# Install all dependencies including devDependencies
 RUN npm install -g pnpm@8
+RUN pnpm install --no-frozen-lockfile
+
+# Generate Prisma client
+RUN pnpm prisma generate
+
+# Build the application
 RUN pnpm build
 
 # Production image, copy all the files and run
@@ -41,7 +46,7 @@ RUN adduser -S nodejs -u 1001
 
 # Copy necessary files
 COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/node_modules ./node_modules
+COPY --from=deps /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/prisma ./prisma
 
