@@ -5,7 +5,7 @@ import ora from 'ora';
 import fs from 'fs/promises';
 import path from 'path';
 import { detectFramework } from '../utils/framework-detector';
-import { createProjectConfig } from '../utils/config';
+import { createProjectConfig, saveConfig } from '../utils/config';
 
 export const initCommand = new Command('init')
   .description('Initialize a new CloudExpress project')
@@ -57,22 +57,10 @@ export const initCommand = new Command('init')
     const spinner = ora('Creating CloudExpress configuration...').start();
 
     try {
-      const config = createProjectConfig({
-        name,
-        framework,
-        services: {
-          database: needsDatabase,
-          auth: needsAuth,
-          storage: needsStorage,
-        },
-      });
+      const config = createProjectConfig(name, framework);
 
-      // Write config file
-      await fs.writeFile(
-        path.join(process.cwd(), 'cygni.yaml'),
-        config,
-        'utf-8'
-      );
+      // Save config file
+      await saveConfig(config);
 
       spinner.succeed('Configuration created!');
 

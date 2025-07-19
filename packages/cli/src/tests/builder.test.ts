@@ -107,7 +107,7 @@ describe('Builder', () => {
           cb(null, { stdout: 'abc123def456\n' });
         } else if (_cmd === 'git rev-parse --abbrev-ref HEAD') {
           cb(null, { stdout: 'main\n' });
-        } else if (cmd === 'npm run prebuild') {
+        } else if (_cmd === 'npm run prebuild') {
           prebuildCommandRun = true;
           cb(null, { stdout: 'Prebuild complete\n' });
         }
