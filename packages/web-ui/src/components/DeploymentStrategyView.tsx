@@ -218,7 +218,7 @@ function CanaryProgress({ strategy }: { strategy: DeploymentStrategy }) {
             className="bg-blue-500 flex items-center justify-center text-white text-sm font-medium transition-all duration-500"
             style={{ width: `${progress.currentTrafficSplit?.canary || 0}%` }}
           >
-            {progress.currentTrafficSplit?.canary > 0 &&
+            {(progress.currentTrafficSplit?.canary ?? 0) > 0 &&
               `${progress.currentTrafficSplit?.canary}% Canary`}
           </div>
         </div>
