@@ -186,6 +186,96 @@ export const deploymentRoutes: FastifyPluginAsync = async (app) => {
     },
   );
 
+  // Get latest deployment with optional previous deployment
+  app.get(
+    "/projects/:projectId/deployments/latest",
+    {
+      preHandler: [
+        app.authenticate,
+        requireRole([Role.owner, Role.admin, Role.developer, Role.viewer]),
+      ],
+    },
+    async (request, _reply) => {
+      const { projectId } = request.params as { projectId: string };
+      const { 
+        environment, 
+        includePrevious = false 
+      } = request.query as { 
+        environment?: string; 
+        includePrevious?: boolean;
+      };
+
+      const where: any = { projectId };
+
+      if (environment) {
+        const env = await prisma.environment.findFirst({
+          where: {
+            projectId,
+            slug: environment,
+          },
+        });
+
+        if (env) {
+          where.environmentId = env.id;
+        } else {
+          return _reply.status(404).send({ error: "Environment not found" });
+        }
+      }
+
+      // Get the latest deployment
+      const latestDeployment = await prisma.deployment.findFirst({
+        where: {
+          ...where,
+          status: DeploymentStatus.active,
+        },
+        orderBy: { createdAt: "desc" },
+        include: {
+          build: true,
+          environment: true,
+          user: {
+            select: {
+              id: true,
+              email: true,
+              name: true,
+            },
+          },
+        },
+      });
+
+      if (!latestDeployment) {
+        return _reply.status(404).send({ error: "No active deployment found" });
+      }
+
+      let previousDeployment = null;
+      if (includePrevious) {
+        previousDeployment = await prisma.deployment.findFirst({
+          where: {
+            ...where,
+            status: DeploymentStatus.active,
+            createdAt: { lt: latestDeployment.createdAt },
+          },
+          orderBy: { createdAt: "desc" },
+          include: {
+            build: true,
+            environment: true,
+            user: {
+              select: {
+                id: true,
+                email: true,
+                name: true,
+              },
+            },
+          },
+        });
+      }
+
+      return {
+        latest: latestDeployment,
+        previous: previousDeployment,
+      };
+    },
+  );
+
   // List deployments for project
   app.get(
     "/projects/:projectId/deployments",

@@ -1,102 +1,99 @@
-version: "3.8"
-
+version: '3.8'
 services:
-  # PostgreSQL database with health checks and security hardening
   postgres:
     image: postgres:15.6-alpine
     container_name: cygni-postgres
     restart: unless-stopped
-    user: "999:999" # postgres user in alpine
+    user: 999:999
     env_file:
-      - .env.development
+    - .env.development
     environment:
       PGDATA: /var/lib/postgresql/data/pgdata
     ports:
-      - "${POSTGRES_PORT:-5432}:5432"
+    - ${POSTGRES_PORT:-5432}:5432
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+    - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test:
+      - CMD-SHELL
+      - pg_isready -U postgres
       interval: 10s
       timeout: 5s
       retries: 5
       start_period: 10s
     networks:
-      - cygni-network
+    - cygni-network
     cap_drop:
-      - ALL
+    - ALL
     cap_add:
-      - CHOWN
-      - DAC_OVERRIDE
-      - SETUID
-      - SETGID
-
-  # Redis cache with persistence and memory limits
+    - CHOWN
+    - DAC_OVERRIDE
+    - SETUID
+    - SETGID
   redis:
     image: redis:7.2-alpine
     container_name: cygni-redis
     restart: unless-stopped
-    user: "999:999"
+    user: 999:999
     env_file:
-      - .env.development
-    command: >
-      redis-server 
-      --appendonly yes 
-      --appendfilename "cygni-appendonly.aof"
-      --maxmemory 256mb
-      --maxmemory-policy allkeys-lru
-      --requirepass ${REDIS_PASSWORD}
+    - .env.development
+    command: 'redis-server  --appendonly yes  --appendfilename "cygni-appendonly.aof" --maxmemory 256mb --maxmemory-policy allkeys-lru --requirepass ${REDIS_PASSWORD}
+
+      '
     ports:
-      - "${REDIS_PORT:-6379}:6379"
+    - ${REDIS_PORT:-6379}:6379
     volumes:
-      - redis_data:/data
+    - redis_data:/data
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test:
+      - CMD
+      - redis-cli
+      - ping
       interval: 10s
       timeout: 5s
       retries: 5
       start_period: 10s
     networks:
-      - cygni-network
+    - cygni-network
     cap_drop:
-      - ALL
+    - ALL
     cap_add:
-      - SETUID
-      - SETGID
-
-  # MinIO object storage for build artifacts
+    - SETUID
+    - SETGID
   minio:
     image: minio/minio:RELEASE.2024-01-16T16-07-38Z
     container_name: cygni-minio
     restart: unless-stopped
-    user: "1000:1000"
+    user: 1000:1000
     env_file:
-      - .env.development
+    - .env.development
     ports:
-      - "${MINIO_PORT:-9000}:9000" # API
-      - "${MINIO_CONSOLE_PORT:-9001}:9001" # Console
+    - ${MINIO_PORT:-9000}:9000
+    - ${MINIO_CONSOLE_PORT:-9001}:9001
     environment:
       MINIO_BROWSER_REDIRECT_URL: http://localhost:${MINIO_CONSOLE_PORT:-9001}
     command: server /data --console-address ":9001"
     volumes:
-      - minio_data:/data
+    - minio_data:/data
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      test:
+      - CMD
+      - curl
+      - -f
+      - http://localhost:9000/minio/health/live
       interval: 10s
       timeout: 5s
       retries: 5
       start_period: 10s
     networks:
-      - cygni-network
+    - cygni-network
     cap_drop:
-      - ALL
+    - ALL
     cap_add:
-      - CHOWN
-      - DAC_OVERRIDE
-      - SETUID
-      - SETGID
-
-  # API service with proper health checks and dependencies
+    - CHOWN
+    - DAC_OVERRIDE
+    - SETUID
+    - SETGID
   api:
     build:
       context: ./services/api
@@ -104,11 +101,11 @@ services:
       target: runner
     container_name: cygni-api
     restart: unless-stopped
-    user: "1001:1001"
+    user: 1001:1001
     env_file:
-      - .env.development
+    - .env.development
     ports:
-      - "${API_PORT:-3000}:3000"
+    - ${API_PORT:-3000}:3000
     environment:
       MINIO_ENDPOINT: http://minio:9000
       MINIO_ACCESS_KEY: ${MINIO_ROOT_USER}
@@ -121,26 +118,23 @@ services:
       minio:
         condition: service_healthy
     volumes:
-      - ./services/api:/app
-      - /app/node_modules
-      - /app/dist
+    - ./services/api:/app
+    - /app/node_modules
+    - /app/dist
     networks:
-      - cygni-network
+    - cygni-network
     healthcheck:
       test:
-        [
-          "CMD",
-          "wget",
-          "--no-verbose",
-          "--tries=1",
-          "--spider",
-          "http://localhost:3000/health",
-        ]
+      - CMD
+      - wget
+      - --no-verbose
+      - --tries=1
+      - --spider
+      - http://localhost:3000/health
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 40s
-
 volumes:
   postgres_data:
     driver: local
@@ -148,10 +142,9 @@ volumes:
     driver: local
   minio_data:
     driver: local
-
 networks:
   cygni-network:
     driver: bridge
     ipam:
       config:
-        - subnet: 172.28.0.0/16
+      - subnet: 172.28.0.0/16

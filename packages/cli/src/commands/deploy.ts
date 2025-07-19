@@ -122,37 +122,36 @@ async function handleRollback(options: any) {
       process.exit(1);
     }
 
-    // Get latest deployment
-    const deployments = await api.get(`/projects/${projectId}/deployments`, {
-      params: {
-        environment: options.env,
-        limit: 1,
+    // Get latest deployment with previous deployment info in a single call
+    const deploymentData = await api.get(
+      `/projects/${projectId}/deployments/latest`,
+      {
+        params: {
+          environment: options.env,
+          includePrevious: true,
+        },
       },
-    });
+    );
 
-    if (deployments.data.deployments.length === 0) {
+    if (!deploymentData.data.latest) {
       console.error(chalk.red("No deployments found to rollback"));
       process.exit(1);
     }
 
-    const currentDeployment = deployments.data.deployments[0];
+    const currentDeployment = deploymentData.data.latest;
+    const previousDeployment = deploymentData.data.previous;
 
-    // Get deployment details to check if rollback is possible
-    const deploymentDetails = await api.get(
-      `/deployments/${currentDeployment.id}`,
-    );
-
-    if (!deploymentDetails.data.previousImage) {
+    if (!previousDeployment) {
       console.error(chalk.red("No previous deployment available for rollback"));
       process.exit(1);
     }
 
     console.log("Current deployment:");
-    console.log(chalk.gray(`  Image: ${deploymentDetails.data.currentImage}`));
-    console.log(chalk.gray(`  Status: ${deploymentDetails.data.status}`));
+    console.log(chalk.gray(`  Image: ${currentDeployment.build.imageUrl}`));
+    console.log(chalk.gray(`  Status: ${currentDeployment.status}`));
     console.log("\nWill rollback to:");
     console.log(
-      chalk.green(`  Image: ${deploymentDetails.data.previousImage}`),
+      chalk.green(`  Image: ${previousDeployment.build.imageUrl}`),
     );
 
     const confirmed = await confirm({
