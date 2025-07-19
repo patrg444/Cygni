@@ -183,7 +183,8 @@ export class KanikoBuilder {
       },
     };
 
-    return await this.k8sApi.createNamespacedJob(this.namespace, job);
+    const response = await this.k8sApi.createNamespacedJob(this.namespace, job);
+    return response.body;
   }
 
   async getBuildStatus(buildId: string): Promise<BuildStatus> {
@@ -225,20 +226,12 @@ export class KanikoBuilder {
       if (!pod.metadata?.name) {
         return 'Pod metadata not available';
       }
-      const logs = await this.k8sCore.readNamespacedPodLog(
+      const logsResponse = await this.k8sCore.readNamespacedPodLog(
         pod.metadata.name,
-        this.namespace,
-        'kaniko',
-        false,
-        undefined,
-        undefined,
-        undefined,
-        false,
-        undefined,
-        100000 // Tail last 100k bytes
+        this.namespace
       );
 
-      return logs.body;
+      return logsResponse.body;
     } catch (error) {
       logger.error('Failed to get build logs', { buildId, error });
       return 'Failed to retrieve logs';
@@ -268,7 +261,9 @@ export class KanikoBuilder {
     const logStream = await stream.log(
       this.namespace,
       pod.metadata.name,
-      'kaniko'
+      'kaniko',
+      process.stdout,
+      { follow: true, tailLines: 100 }
     );
 
     logStream.on('data', (chunk: Buffer) => {
