@@ -23,12 +23,17 @@ RUN pnpm prisma generate
 FROM base AS builder
 WORKDIR /app
 
-# Copy all files
-COPY . .
+# Copy package files first
+COPY package.json ./
+COPY tsconfig.json ./
 
 # Install all dependencies including devDependencies
 RUN npm install -g pnpm@8
 RUN pnpm install --no-frozen-lockfile
+
+# Copy source files and prisma
+COPY src ./src
+COPY prisma ./prisma
 
 # Generate Prisma client
 RUN pnpm prisma generate

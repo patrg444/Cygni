@@ -59,7 +59,7 @@ jobs:
         run: pnpm install --no-frozen-lockfile
         
       - name: Run unit tests
-        run: pnpm run test:unit
+        run: pnpm run test
 
   # Integration tests with health checks
   test-integration:
@@ -105,6 +105,13 @@ jobs:
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
         
+      - name: Build API
+        run: |
+          cd services/api
+          pnpm build
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/cygni_test
+          
       - name: Setup test database
         run: |
           cd services/api
@@ -140,7 +147,7 @@ jobs:
           curl -f http://localhost:3000/ready || exit 1
           
           # Run integration tests
-          pnpm run test:integration
+          pnpm run test
           
           # Cleanup
           kill $API_PID
@@ -225,6 +232,7 @@ jobs:
           
       - name: Upload Trivy scan results
         uses: github/codeql-action/upload-sarif@v3
+        if: always() && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
         with:
           sarif_file: 'trivy-results.sarif'
 
