@@ -130,16 +130,12 @@ async function start() {
 
   // Health check
   app.get("/health", async () => {
-    // Check database connection
-    const dbHealthy = await prisma.$queryRaw`SELECT 1`
-      .then(() => true)
-      .catch(() => false);
-
+    // Basic health check - always returns ok
+    // Database check moved to /ready endpoint
     return {
-      status: dbHealthy ? "ok" : "degraded",
+      status: "ok",
       timestamp: new Date().toISOString(),
       version: process.env.npm_package_version || "unknown",
-      database: dbHealthy ? "connected" : "disconnected",
     };
   });
 
