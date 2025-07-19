@@ -6,46 +6,33 @@ FROM base AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-# Copy workspace files and API package
-COPY pnpm-workspace.yaml ./
-COPY package.json ./
-COPY pnpm-lock.yaml ./
-COPY services/api/package.json ./services/api/
-COPY services/api/prisma ./services/api/prisma/
-
 # Install pnpm
 RUN npm install -g pnpm@8
 
-# Install only production dependencies for the API service
-RUN pnpm install --frozen-lockfile --filter @cloudexpress/services-api --prod
+# Copy all workspace files
+COPY . .
 
-# Generate Prisma client
+# Install dependencies for the entire workspace
+RUN pnpm install --frozen-lockfile
+
+# Generate Prisma client for API
 RUN cd services/api && pnpm prisma generate
 
 # Rebuild the source code only when needed
 FROM base AS builder
 WORKDIR /app
 
-# Copy workspace files
-COPY pnpm-workspace.yaml ./
-COPY package.json ./
-COPY pnpm-lock.yaml ./
-COPY services/api/package.json ./services/api/
-COPY services/api/tsconfig.json ./services/api/
-
-# Install all dependencies including devDependencies for building
+# Install pnpm
 RUN npm install -g pnpm@8
-RUN pnpm install --frozen-lockfile --filter @cloudexpress/services-api
 
-# Copy source files
-COPY services/api/src ./services/api/src
-COPY services/api/prisma ./services/api/prisma
+# Copy all files
+COPY . .
 
-# Generate Prisma client
-RUN cd services/api && pnpm prisma generate
+# Install all dependencies
+RUN pnpm install --frozen-lockfile
 
-# Build the application
-RUN cd services/api && pnpm build
+# Generate Prisma client and build API
+RUN cd services/api && pnpm prisma generate && pnpm build
 
 # Production image, copy all the files and run
 FROM base AS runner
@@ -55,10 +42,10 @@ WORKDIR /app
 RUN addgroup -g 1001 -S nodejs
 RUN adduser -S nodejs -u 1001
 
-# Copy necessary files
+# Copy necessary files from builder
 COPY --from=builder /app/services/api/dist ./dist
-COPY --from=deps /app/node_modules ./node_modules
-COPY --from=deps /app/services/api/node_modules ./services/api/node_modules
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/services/api/node_modules ./services/api/node_modules
 COPY --from=builder /app/services/api/package.json ./package.json
 COPY --from=builder /app/services/api/prisma ./prisma
 
