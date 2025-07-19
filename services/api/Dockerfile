@@ -10,8 +10,7 @@ COPY services/api/package.json services/api/
 
 RUN npm i -g pnpm@8
 RUN pnpm install --frozen-lockfile \
-      --filter ./services/api --prod \
-      --ignore-scripts
+      --filter ./services/api... --prod
 
 # ---------- builder ----------
 FROM base AS builder
@@ -22,7 +21,7 @@ COPY services/api/package.json services/api/
 RUN npm i -g pnpm@8
 # Install ALL deps including dev deps
 RUN pnpm install --frozen-lockfile \
-      --filter ./services/api
+      --filter ./services/api...
 
 # Copy source code
 COPY services/api/ services/api/
