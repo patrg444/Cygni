@@ -1,5 +1,5 @@
 import { Command } from 'commander';
-import { input, select, confirm } from '@inquirer/prompts';
+import { input, select } from '@inquirer/prompts';
 import chalk from 'chalk';
 import ora from 'ora';
 import path from 'path';
