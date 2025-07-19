@@ -58,10 +58,10 @@ async function start() {
       // Use authenticated user ID if available, otherwise IP
       return request.auth?.user?.id || request.ip;
     },
-    errorResponseBuilder: (request, context) => {
+    errorResponseBuilder: (_request, context) => {
       return {
         error: "Too Many Requests",
-        message: `Rate limit exceeded. You have made ${context.current} requests. Please retry after ${context.ttl} ms.`,
+        message: `Rate limit exceeded. You have made ${context.total} requests. Please retry after ${context.ttl} ms.`,
         statusCode: 429,
         date: Date.now(),
         expiresIn: context.ttl,

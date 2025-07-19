@@ -144,7 +144,7 @@ export class WebhookService {
 
   static async notifyDeploymentStatusChange(
     deploymentId: string,
-    oldStatus: DeploymentStatus,
+    _oldStatus: DeploymentStatus,
     newStatus: DeploymentStatus,
   ) {
     const deployment = await prisma.deployment.findUnique({

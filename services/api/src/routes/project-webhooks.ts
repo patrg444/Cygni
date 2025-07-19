@@ -282,7 +282,7 @@ export const projectWebhookRoutes: FastifyPluginAsync = async (app) => {
 
       // Create test payload
       const testPayload = {
-        event: "deployment.created",
+        event: "deployment.created" as const,
         timestamp: new Date().toISOString(),
         deployment: {
           id: "test-deployment-id",
