@@ -177,6 +177,7 @@ jobs:
           context: ./services/${{ matrix.service }}
           file: ./services/${{ matrix.service }}/Dockerfile
           push: false
+          load: true
           tags: cygni/${{ matrix.service }}:test
           cache-from: type=gha
           cache-to: type=gha,mode=max

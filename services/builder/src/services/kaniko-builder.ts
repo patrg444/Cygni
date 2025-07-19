@@ -223,7 +223,7 @@ export class KanikoBuilder {
       }
 
       const pod = pods.body.items[0];
-      if (!pod.metadata?.name) {
+      if (!pod || !pod.metadata?.name) {
         return 'Pod metadata not available';
       }
       const logsResponse = await this.k8sCore.readNamespacedPodLog(
@@ -255,7 +255,7 @@ export class KanikoBuilder {
     }
 
     const pod = pods.body.items[0];
-    if (!pod.metadata?.name) {
+    if (!pod || !pod.metadata?.name) {
       throw new Error('Pod metadata not available');
     }
     const logStream = await stream.log(

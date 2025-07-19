@@ -133,7 +133,7 @@ async function getUserOrganizations(userId: string) {
     },
   });
 
-  return members.map(member => ({
+  return members.map((member: any) => ({
     organization: member.organization,
     role: member.role as unknown as Role,
   }));
