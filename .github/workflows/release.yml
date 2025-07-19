@@ -146,7 +146,7 @@ jobs:
           sed -i "s/cygni@.*/cygni@$VERSION/g" docs/**/*.md
 
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v5
+        uses: peter-evans/create-pull-request@v7
         with:
           title: "docs: update version to ${{ github.ref_name }}"
           body: "Automated PR to update documentation for release ${{ github.ref_name }}"
