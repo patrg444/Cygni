@@ -1,11 +1,11 @@
-import chalk from 'chalk';
-import ora from 'ora';
+import chalk from "chalk";
+import ora from "ora";
 // import { createHash } from 'crypto';
-import { exec } from 'child_process';
-import { promisify } from 'util';
+import { exec } from "child_process";
+import { promisify } from "util";
 // import { CygniConfig } from '../utils/config';
 // import { BuildResult } from './builder';
-import { getApiClient } from './api-client';
+import { getApiClient } from "./api-client";
 
 const execAsync = promisify(exec);
 
@@ -26,20 +26,20 @@ export interface BuildCacheEntry {
 // Check if build is unchanged (idempotency)
 export async function checkBuildCache(
   gitSha: string,
-  dockerfilePath?: string
+  dockerfilePath?: string,
 ): Promise<BuildCacheEntry | null> {
   try {
     const api = await getApiClient();
-    
+
     // Calculate dockerfile hash if present
-    let dockerfileHash = '';
+    let dockerfileHash = "";
     if (dockerfilePath) {
       const { stdout } = await execAsync(`sha256sum ${dockerfilePath}`);
-      dockerfileHash = stdout.split(' ')[0] || '';
+      dockerfileHash = stdout.split(" ")[0] || "";
     }
 
     // Check cache
-    const response = await api.get('/builds/cache', {
+    const response = await api.get("/builds/cache", {
       params: {
         gitSha,
         dockerfileHash,
@@ -58,27 +58,34 @@ export async function checkBuildCache(
 
 // Validate deployment options
 export function validateDeploymentOptions(options: any): void {
-  const validStrategies = ['rolling', 'canary', 'blue-green'];
+  const validStrategies = ["rolling", "canary", "blue-green"];
   if (options.strategy && !validStrategies.includes(options.strategy)) {
-    throw new Error(`Invalid deployment strategy. Must be one of: ${validStrategies.join(', ')}`);
+    throw new Error(
+      `Invalid deployment strategy. Must be one of: ${validStrategies.join(", ")}`,
+    );
   }
 
-  const validHealthGates = ['strict', 'normal', 'off'];
+  const validHealthGates = ["strict", "normal", "off"];
   if (options.healthGate && !validHealthGates.includes(options.healthGate)) {
-    throw new Error(`Invalid health gate level. Must be one of: ${validHealthGates.join(', ')}`);
+    throw new Error(
+      `Invalid health gate level. Must be one of: ${validHealthGates.join(", ")}`,
+    );
   }
 }
 
 // Display deployment summary
-export function displayDeploymentSummary(deployment: DeploymentInfo, options: any): void {
-  console.log('\n' + chalk.green('✅ Deployment Complete!'));
-  console.log('\nYour app is available at:');
+export function displayDeploymentSummary(
+  deployment: DeploymentInfo,
+  options: any,
+): void {
+  console.log("\n" + chalk.green("✅ Deployment Complete!"));
+  console.log("\nYour app is available at:");
   console.log(chalk.cyan(deployment.url));
-  console.log('\nDeployment ID: ' + chalk.gray(deployment.id));
-  console.log('Environment: ' + chalk.gray(options.env));
-  
-  if (options.strategy !== 'rolling') {
-    console.log('Strategy: ' + chalk.gray(options.strategy));
+  console.log("\nDeployment ID: " + chalk.gray(deployment.id));
+  console.log("Environment: " + chalk.gray(options.env));
+
+  if (options.strategy !== "rolling") {
+    console.log("Strategy: " + chalk.gray(options.strategy));
   }
 }
 
@@ -86,7 +93,7 @@ export function displayDeploymentSummary(deployment: DeploymentInfo, options: an
 export async function getDeploymentHistory(
   projectId: string,
   environment: string,
-  limit: number = 10
+  limit: number = 10,
 ): Promise<any[]> {
   const api = await getApiClient();
   const response = await api.get(`/projects/${projectId}/deployments`, {
@@ -102,27 +109,27 @@ export async function getDeploymentHistory(
 // Check deployment health
 export async function checkDeploymentHealth(
   deploymentId: string,
-  healthGateLevel: string
+  healthGateLevel: string,
 ): Promise<boolean> {
   const api = await getApiClient();
-  const maxAttempts = healthGateLevel === 'strict' ? 10 : 5;
+  const maxAttempts = healthGateLevel === "strict" ? 10 : 5;
   const delayMs = 3000;
 
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     try {
       const response = await api.get(`/deployments/${deploymentId}/health`);
-      
+
       if (response.data.healthy) {
         return true;
       }
 
-      if (healthGateLevel === 'off') {
+      if (healthGateLevel === "off") {
         // Don't wait for health if gate is off
         return true;
       }
 
       if (attempt < maxAttempts) {
-        await new Promise(resolve => setTimeout(resolve, delayMs));
+        await new Promise((resolve) => setTimeout(resolve, delayMs));
       }
     } catch (error) {
       if (attempt === maxAttempts) {
@@ -138,20 +145,20 @@ export async function checkDeploymentHealth(
 export async function handleDeploymentFailure(
   deploymentId: string,
   error: any,
-  options: any
+  options: any,
 ): Promise<void> {
-  console.error(chalk.red('\n❌ Deployment failed!'));
+  console.error(chalk.red("\n❌ Deployment failed!"));
   console.error(chalk.red(error.message));
 
   if (options.autoRollback !== false) {
-    const spinner = ora('Initiating automatic rollback...').start();
-    
+    const spinner = ora("Initiating automatic rollback...").start();
+
     try {
       const api = await getApiClient();
       await api.post(`/deployments/${deploymentId}/rollback`);
-      spinner.succeed('Automatic rollback initiated');
+      spinner.succeed("Automatic rollback initiated");
     } catch (rollbackError) {
-      spinner.fail('Automatic rollback failed');
+      spinner.fail("Automatic rollback failed");
     }
   }
 }

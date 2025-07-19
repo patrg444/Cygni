@@ -15,19 +15,19 @@ services:
       max: 10
       cpu: 0.5
       memory: 512M
-    
+
   database:
     type: postgres
     version: "15"
     size: small
-    
+
   auth:
     enabled: true
     providers:
       - google
       - github
       - email
-      
+
 environments:
   production:
     domain: myapp.cloudexpress.app

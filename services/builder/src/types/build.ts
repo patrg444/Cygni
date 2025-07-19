@@ -1,9 +1,9 @@
 export enum BuildStatus {
-  PENDING = 'pending',
-  RUNNING = 'running',
-  SUCCESS = 'success',
-  FAILED = 'failed',
-  CANCELLED = 'cancelled',
+  PENDING = "pending",
+  RUNNING = "running",
+  SUCCESS = "success",
+  FAILED = "failed",
+  CANCELLED = "cancelled",
 }
 
 export interface Build {

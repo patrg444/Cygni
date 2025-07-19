@@ -1,65 +1,66 @@
-import { FastifyPluginAsync } from 'fastify';
-import * as crypto from 'crypto';
-import { prisma } from '../utils/prisma';
-import { BuildStatus } from '@prisma/client';
-import axios from 'axios';
+import { FastifyPluginAsync } from "fastify";
+import * as crypto from "crypto";
+import { prisma } from "../utils/prisma";
+import { BuildStatus } from "@prisma/client";
+import axios from "axios";
 
-const ORCHESTRATOR_URL = process.env.ORCHESTRATOR_URL || 'http://runtime-orchestrator:8080';
+const ORCHESTRATOR_URL =
+  process.env.ORCHESTRATOR_URL || "http://runtime-orchestrator:8080";
 
 export const webhookRoutes: FastifyPluginAsync = async (app) => {
   // GitHub webhook
-  app.post('/webhooks/github', async (request, reply) => {
+  app.post("/webhooks/github", async (request, reply) => {
     // Verify webhook signature
-    const signature = request.headers['x-hub-signature-256'] as string;
-    const event = request.headers['x-github-event'] as string;
-    
+    const signature = request.headers["x-hub-signature-256"] as string;
+    const event = request.headers["x-github-event"] as string;
+
     if (!signature || !verifyGitHubSignature(request.body, signature)) {
-      return reply.status(401).send({ error: 'Invalid signature' });
+      return reply.status(401).send({ error: "Invalid signature" });
     }
 
     const payload = request.body as any;
 
     switch (event) {
-      case 'pull_request':
+      case "pull_request":
         await handlePullRequestEvent(app, payload);
         break;
-      
-      case 'push':
+
+      case "push":
         await handlePushEvent(app, payload);
         break;
-      
+
       default:
-        app.log.info('Unhandled GitHub event', { event });
+        app.log.info("Unhandled GitHub event", { event });
     }
 
-    return { status: 'ok' };
+    return { status: "ok" };
   });
 
   // GitLab webhook
-  app.post('/webhooks/gitlab', async (request, reply) => {
-    const token = request.headers['x-gitlab-token'] as string;
-    
+  app.post("/webhooks/gitlab", async (request, reply) => {
+    const token = request.headers["x-gitlab-token"] as string;
+
     if (!token || token !== process.env.GITLAB_WEBHOOK_SECRET) {
-      return reply.status(401).send({ error: 'Invalid token' });
+      return reply.status(401).send({ error: "Invalid token" });
     }
 
-    const event = request.headers['x-gitlab-event'] as string;
+    const event = request.headers["x-gitlab-event"] as string;
     const payload = request.body as any;
 
     switch (event) {
-      case 'Merge Request Hook':
+      case "Merge Request Hook":
         await handleGitLabMergeRequest(app, payload);
         break;
-      
-      case 'Push Hook':
+
+      case "Push Hook":
         await handleGitLabPush(app, payload);
         break;
-      
+
       default:
-        app.log.info('Unhandled GitLab event', { event });
+        app.log.info("Unhandled GitLab event", { event });
     }
 
-    return { status: 'ok' };
+    return { status: "ok" };
   });
 };
 
@@ -70,27 +71,25 @@ async function handlePullRequestEvent(app: any, payload: any) {
   const project = await prisma.project.findFirst({
     where: {
       repository: {
-        in: [
-          repository.html_url,
-          repository.clone_url,
-          repository.ssh_url,
-        ],
+        in: [repository.html_url, repository.clone_url, repository.ssh_url],
       },
     },
   });
 
   if (!project) {
-    app.log.info('No project found for repository', { repo: repository.html_url });
+    app.log.info("No project found for repository", {
+      repo: repository.html_url,
+    });
     return;
   }
 
   switch (action) {
-    case 'opened':
-    case 'reopened':
-    case 'synchronize':
+    case "opened":
+    case "reopened":
+    case "synchronize":
       // Create or update preview environment
       await createPreviewEnvironment(app, project, pr);
-      
+
       // Trigger build for the PR
       await triggerBuild(app, project, {
         commitSha: pr.head.sha,
@@ -100,7 +99,7 @@ async function handlePullRequestEvent(app: any, payload: any) {
       });
       break;
 
-    case 'closed':
+    case "closed":
       // Delete preview environment
       await deletePreviewEnvironment(app, project, pr.number);
       break;
@@ -111,15 +110,15 @@ async function handlePullRequestEvent(app: any, payload: any) {
     owner: repository.owner.login,
     repo: repository.name,
     sha: pr.head.sha,
-    state: 'pending',
-    context: 'cygni/preview',
-    description: 'Creating preview environment...',
+    state: "pending",
+    context: "cygni/preview",
+    description: "Creating preview environment...",
   });
 }
 
 async function handlePushEvent(app: any, payload: any) {
   const { ref, after: commitSha, repository } = payload;
-  
+
   // Only process default branch pushes
   if (ref !== `refs/heads/${repository.default_branch}`) {
     return;
@@ -128,11 +127,7 @@ async function handlePushEvent(app: any, payload: any) {
   const project = await prisma.project.findFirst({
     where: {
       repository: {
-        in: [
-          repository.html_url,
-          repository.clone_url,
-          repository.ssh_url,
-        ],
+        in: [repository.html_url, repository.clone_url, repository.ssh_url],
       },
     },
   });
@@ -156,18 +151,18 @@ async function createPreviewEnvironment(app: any, project: any, pr: any) {
       projectId: project.id,
       pullRequest: pr.number,
       branch: pr.head.ref,
-      baseEnvironment: 'production',
-      ttl: '72h',
+      baseEnvironment: "production",
+      ttl: "72h",
       database: {
-        cloneFrom: 'production',
-        maxSize: '1Gi',
+        cloneFrom: "production",
+        maxSize: "1Gi",
         anonymize: true,
       },
     });
 
-    app.log.info('Created preview environment', { 
-      projectId: project.id, 
-      pr: pr.number 
+    app.log.info("Created preview environment", {
+      projectId: project.id,
+      pr: pr.number,
     });
 
     // Add comment to PR
@@ -175,35 +170,46 @@ async function createPreviewEnvironment(app: any, project: any, pr: any) {
       owner: pr.base.repo.owner.login,
       repo: pr.base.repo.name,
       issue: pr.number,
-      body: `🚀 **CloudExpress Preview Environment**\n\n` +
-            `Your preview environment is being created!\n\n` +
-            `It will be available at: https://pr-${pr.number}--${project.slug}.preview.cygni.app\n\n` +
-            `This environment will automatically update with each push to this PR.`,
+      body:
+        `🚀 **CloudExpress Preview Environment**\n\n` +
+        `Your preview environment is being created!\n\n` +
+        `It will be available at: https://pr-${pr.number}--${project.slug}.preview.cygni.app\n\n` +
+        `This environment will automatically update with each push to this PR.`,
     });
   } catch (error) {
-    app.log.error('Failed to create preview environment', { error });
+    app.log.error("Failed to create preview environment", { error });
   }
 }
 
-async function deletePreviewEnvironment(app: any, project: any, prNumber: number) {
+async function deletePreviewEnvironment(
+  app: any,
+  project: any,
+  prNumber: number,
+) {
   try {
-    await axios.delete(`${ORCHESTRATOR_URL}/api/preview-environments/pr-${prNumber}-${project.slug}`);
-    
-    app.log.info('Deleted preview environment', { 
-      projectId: project.id, 
-      pr: prNumber 
+    await axios.delete(
+      `${ORCHESTRATOR_URL}/api/preview-environments/pr-${prNumber}-${project.slug}`,
+    );
+
+    app.log.info("Deleted preview environment", {
+      projectId: project.id,
+      pr: prNumber,
     });
   } catch (error) {
-    app.log.error('Failed to delete preview environment', { error });
+    app.log.error("Failed to delete preview environment", { error });
   }
 }
 
-async function triggerBuild(app: any, project: any, options: {
-  commitSha: string;
-  branch: string;
-  isPullRequest: boolean;
-  pullRequestNumber?: number;
-}) {
+async function triggerBuild(
+  app: any,
+  project: any,
+  options: {
+    commitSha: string;
+    branch: string;
+    isPullRequest: boolean;
+    pullRequestNumber?: number;
+  },
+) {
   try {
     // Create build record
     const build = await prisma.build.create({
@@ -220,7 +226,7 @@ async function triggerBuild(app: any, project: any, options: {
     });
 
     // Trigger build in builder service
-    const builderUrl = process.env.BUILDER_SERVICE_URL || 'http://builder:3001';
+    const builderUrl = process.env.BUILDER_SERVICE_URL || "http://builder:3001";
     await axios.post(`${builderUrl}/api/builds`, {
       buildId: build.id,
       projectId: project.id,
@@ -229,29 +235,33 @@ async function triggerBuild(app: any, project: any, options: {
       dockerfilePath: project.dockerfilePath,
     });
 
-    app.log.info('Triggered build', { 
+    app.log.info("Triggered build", {
       buildId: build.id,
       project: project.id,
       sha: options.commitSha,
     });
   } catch (error) {
-    app.log.error('Failed to trigger build', { error });
+    app.log.error("Failed to trigger build", { error });
   }
 }
 
-async function updateGitHubStatus(app: any, options: {
-  owner: string;
-  repo: string;
-  sha: string;
-  state: 'pending' | 'success' | 'failure' | 'error';
-  context: string;
-  description: string;
-  targetUrl?: string;
-}) {
+async function updateGitHubStatus(
+  app: any,
+  options: {
+    owner: string;
+    repo: string;
+    sha: string;
+    state: "pending" | "success" | "failure" | "error";
+    context: string;
+    description: string;
+    targetUrl?: string;
+  },
+) {
   try {
-    const githubToken = process.env.GITHUB_APP_TOKEN || process.env.GITHUB_TOKEN;
+    const githubToken =
+      process.env.GITHUB_APP_TOKEN || process.env.GITHUB_TOKEN;
     if (!githubToken) {
-      app.log.warn('No GitHub token configured, skipping status update');
+      app.log.warn("No GitHub token configured, skipping status update");
       return;
     }
 
@@ -266,23 +276,27 @@ async function updateGitHubStatus(app: any, options: {
       {
         headers: {
           Authorization: `Bearer ${githubToken}`,
-          Accept: 'application/vnd.github.v3+json',
+          Accept: "application/vnd.github.v3+json",
         },
-      }
+      },
     );
   } catch (error) {
-    app.log.error('Failed to update GitHub status', { error });
+    app.log.error("Failed to update GitHub status", { error });
   }
 }
 
-async function addGitHubComment(app: any, options: {
-  owner: string;
-  repo: string;
-  issue: number;
-  body: string;
-}) {
+async function addGitHubComment(
+  app: any,
+  options: {
+    owner: string;
+    repo: string;
+    issue: number;
+    body: string;
+  },
+) {
   try {
-    const githubToken = process.env.GITHUB_APP_TOKEN || process.env.GITHUB_TOKEN;
+    const githubToken =
+      process.env.GITHUB_APP_TOKEN || process.env.GITHUB_TOKEN;
     if (!githubToken) {
       return;
     }
@@ -293,12 +307,12 @@ async function addGitHubComment(app: any, options: {
       {
         headers: {
           Authorization: `Bearer ${githubToken}`,
-          Accept: 'application/vnd.github.v3+json',
+          Accept: "application/vnd.github.v3+json",
         },
-      }
+      },
     );
   } catch (error) {
-    app.log.error('Failed to add GitHub comment', { error });
+    app.log.error("Failed to add GitHub comment", { error });
   }
 }
 
@@ -308,10 +322,7 @@ async function handleGitLabMergeRequest(app: any, payload: any) {
   const cygniProject = await prisma.project.findFirst({
     where: {
       repository: {
-        in: [
-          project.git_http_url,
-          project.git_ssh_url,
-        ],
+        in: [project.git_http_url, project.git_ssh_url],
       },
     },
   });
@@ -321,9 +332,9 @@ async function handleGitLabMergeRequest(app: any, payload: any) {
   }
 
   switch (mr.action) {
-    case 'open':
-    case 'reopen':
-    case 'update':
+    case "open":
+    case "reopen":
+    case "update":
       await createPreviewEnvironment(app, cygniProject, {
         number: mr.iid,
         head: {
@@ -339,8 +350,8 @@ async function handleGitLabMergeRequest(app: any, payload: any) {
       });
       break;
 
-    case 'close':
-    case 'merge':
+    case "close":
+    case "merge":
       await deletePreviewEnvironment(app, cygniProject, mr.iid);
       break;
   }
@@ -348,7 +359,7 @@ async function handleGitLabMergeRequest(app: any, payload: any) {
 
 async function handleGitLabPush(app: any, payload: any) {
   const { ref, after: commitSha, project } = payload;
-  
+
   if (ref !== `refs/heads/${project.default_branch}`) {
     return;
   }
@@ -356,10 +367,7 @@ async function handleGitLabPush(app: any, payload: any) {
   const cygniProject = await prisma.project.findFirst({
     where: {
       repository: {
-        in: [
-          project.git_http_url,
-          project.git_ssh_url,
-        ],
+        in: [project.git_http_url, project.git_ssh_url],
       },
     },
   });
@@ -381,12 +389,12 @@ function verifyGitHubSignature(payload: any, signature: string): boolean {
     return false;
   }
 
-  const hmac = crypto.createHmac('sha256', secret);
+  const hmac = crypto.createHmac("sha256", secret);
   hmac.update(JSON.stringify(payload));
-  const calculatedSignature = `sha256=${hmac.digest('hex')}`;
-  
+  const calculatedSignature = `sha256=${hmac.digest("hex")}`;
+
   return crypto.timingSafeEqual(
     Buffer.from(signature),
-    Buffer.from(calculatedSignature)
+    Buffer.from(calculatedSignature),
   );
 }

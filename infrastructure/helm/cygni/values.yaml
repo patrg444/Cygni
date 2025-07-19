@@ -4,10 +4,10 @@
 global:
   # Global image registry
   imageRegistry: ""
-  
+
   # Global image pull secrets
   imagePullSecrets: []
-  
+
   # Storage class for persistent volumes
   storageClass: ""
 
@@ -20,20 +20,20 @@ commonAnnotations: {}
 # API Service
 api:
   enabled: true
-  
+
   replicaCount: 2
-  
+
   image:
     repository: cygni/api
     pullPolicy: IfNotPresent
-    tag: ""  # Overrides the image tag whose default is the chart appVersion
-  
+    tag: "" # Overrides the image tag whose default is the chart appVersion
+
   service:
     type: ClusterIP
     port: 3000
     targetPort: 3000
     annotations: {}
-  
+
   ingress:
     enabled: false
     className: "nginx"
@@ -49,7 +49,7 @@ api:
       - secretName: api-cygni-tls
         hosts:
           - api.cygni.dev
-  
+
   resources:
     requests:
       cpu: 100m
@@ -57,24 +57,24 @@ api:
     limits:
       cpu: 500m
       memory: 512Mi
-  
+
   autoscaling:
     enabled: true
     minReplicas: 2
     maxReplicas: 10
     targetCPUUtilizationPercentage: 80
     targetMemoryUtilizationPercentage: 80
-  
+
   # Environment variables
   env:
     NODE_ENV: production
     LOG_LEVEL: info
-  
+
   # Environment variables from secrets
   envFrom:
     - secretRef:
         name: cygni-api-secrets
-  
+
   # Health checks
   livenessProbe:
     httpGet:
@@ -84,7 +84,7 @@ api:
     periodSeconds: 10
     timeoutSeconds: 5
     failureThreshold: 3
-  
+
   readinessProbe:
     httpGet:
       path: /ready
@@ -93,18 +93,18 @@ api:
     periodSeconds: 5
     timeoutSeconds: 3
     failureThreshold: 3
-  
+
   # Pod disruption budget
   podDisruptionBudget:
     enabled: true
     minAvailable: 1
-  
+
   # Security context
   podSecurityContext:
     runAsNonRoot: true
     runAsUser: 1001
     fsGroup: 1001
-  
+
   securityContext:
     allowPrivilegeEscalation: false
     readOnlyRootFilesystem: true
@@ -116,7 +116,7 @@ api:
 builder:
   enabled: false
   replicaCount: 1
-  
+
   image:
     repository: cygni/builder
     pullPolicy: IfNotPresent
@@ -126,7 +126,7 @@ builder:
 runtimeOrchestrator:
   enabled: false
   replicaCount: 1
-  
+
   image:
     repository: cygni/runtime-orchestrator
     pullPolicy: IfNotPresent
@@ -135,18 +135,18 @@ runtimeOrchestrator:
 # PostgreSQL Configuration
 postgresql:
   enabled: true
-  
+
   auth:
     database: cygni
     username: cygni
     # Password will be auto-generated if not set
     # existingSecret: cygni-postgresql-secret
-  
+
   primary:
     persistence:
       enabled: true
       size: 10Gi
-    
+
     resources:
       requests:
         cpu: 250m
@@ -154,7 +154,7 @@ postgresql:
       limits:
         cpu: 1000m
         memory: 1Gi
-  
+
   metrics:
     enabled: true
     serviceMonitor:
@@ -163,19 +163,19 @@ postgresql:
 # Redis Configuration
 redis:
   enabled: true
-  
+
   architecture: standalone
-  
+
   auth:
     enabled: true
     # Password will be auto-generated if not set
     # existingSecret: cygni-redis-secret
-  
+
   master:
     persistence:
       enabled: true
       size: 8Gi
-    
+
     resources:
       requests:
         cpu: 100m
@@ -183,7 +183,7 @@ redis:
       limits:
         cpu: 500m
         memory: 512Mi
-  
+
   metrics:
     enabled: true
     serviceMonitor:
@@ -192,17 +192,17 @@ redis:
 # MinIO Configuration
 minio:
   enabled: true
-  
+
   mode: standalone
-  
+
   rootUser: minioadmin
   # rootPassword will be auto-generated if not set
   # existingSecret: cygni-minio-secret
-  
+
   persistence:
     enabled: true
     size: 20Gi
-  
+
   resources:
     requests:
       cpu: 100m
@@ -210,7 +210,7 @@ minio:
     limits:
       cpu: 500m
       memory: 512Mi
-  
+
   metrics:
     serviceMonitor:
       enabled: true
@@ -225,7 +225,7 @@ serviceAccount:
 # Network Policies
 networkPolicy:
   enabled: true
-  
+
   # Allow ingress from
   ingress:
     - from:
@@ -235,16 +235,16 @@ networkPolicy:
         - podSelector:
             matchLabels:
               app.kubernetes.io/name: cygni
-  
+
   # Allow egress to
   egress:
     - to:
         - namespaceSelector: {}
       ports:
         - protocol: TCP
-          port: 53  # DNS
+          port: 53 # DNS
         - protocol: UDP
-          port: 53  # DNS
+          port: 53 # DNS
     - to:
         - podSelector:
             matchLabels:
@@ -274,12 +274,12 @@ podSecurityPolicy:
 # Monitoring
 monitoring:
   enabled: true
-  
+
   serviceMonitor:
     enabled: true
     interval: 30s
     path: /metrics
-    
+
   prometheusRule:
     enabled: true
     rules:
@@ -291,7 +291,7 @@ monitoring:
         annotations:
           summary: "High error rate on Cygni API"
           description: "Error rate is above 5% for 5 minutes"
-      
+
       - alert: CygniAPIPodDown
         expr: up{job="cygni-api"} == 0
         for: 1m
@@ -304,16 +304,16 @@ monitoring:
 # Backup
 backup:
   enabled: false
-  
+
   # Backup schedule (cron format)
   schedule: "0 2 * * *"
-  
+
   # S3 configuration for backups
   s3:
     bucket: ""
     region: us-east-1
     endpoint: ""
-    
+
   # Retention policy
   retention:
     days: 30

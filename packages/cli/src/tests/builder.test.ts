@@ -1,29 +1,29 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { buildProject, BuildConfig } from '../lib/builder';
-import fs from 'fs/promises';
-import * as frameworkDetector from '../utils/framework-detector';
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import { buildProject, BuildConfig } from "../lib/builder";
+import fs from "fs/promises";
+import * as frameworkDetector from "../utils/framework-detector";
 
-vi.mock('fs/promises');
-vi.mock('../utils/framework-detector');
+vi.mock("fs/promises");
+vi.mock("../utils/framework-detector");
 
 // Mock child_process
-vi.mock('child_process', () => ({
+vi.mock("child_process", () => ({
   exec: vi.fn((cmd: string, callback: any) => {
     // Default behavior - can be overridden in individual tests
-    if (cmd === 'git rev-parse HEAD') {
-      callback(null, { stdout: 'abc123def456\n' }, '');
-    } else if (cmd === 'git rev-parse --abbrev-ref HEAD') {
-      callback(null, { stdout: 'main\n' }, '');
+    if (cmd === "git rev-parse HEAD") {
+      callback(null, { stdout: "abc123def456\n" }, "");
+    } else if (cmd === "git rev-parse --abbrev-ref HEAD") {
+      callback(null, { stdout: "main\n" }, "");
     } else {
-      callback(new Error('Command not found'));
+      callback(new Error("Command not found"));
     }
-  })
+  }),
 }));
 
-describe('Builder', () => {
+describe("Builder", () => {
   const mockConfig: BuildConfig = {
-    name: 'test-app',
-    framework: 'nextjs',
+    name: "test-app",
+    framework: "nextjs",
   };
 
   beforeEach(() => {
@@ -34,78 +34,78 @@ describe('Builder', () => {
     vi.restoreAllMocks();
   });
 
-  describe('buildProject', () => {
-    it('should get git info successfully', async () => {
-      vi.mocked(fs.access).mockRejectedValue(new Error('No Dockerfile'));
+  describe("buildProject", () => {
+    it("should get git info successfully", async () => {
+      vi.mocked(fs.access).mockRejectedValue(new Error("No Dockerfile"));
 
       const result = await buildProject(mockConfig);
 
-      expect(result.commitSha).toBe('abc123def456');
-      expect(result.branch).toBe('main');
+      expect(result.commitSha).toBe("abc123def456");
+      expect(result.branch).toBe("main");
       expect(result.hasDockerfile).toBe(false);
     });
 
-    it('should handle non-git repository gracefully', async () => {
+    it("should handle non-git repository gracefully", async () => {
       // Mock exec to return error for git commands
-      const { exec } = await import('child_process');
+      const { exec } = await import("child_process");
       vi.mocked(exec).mockImplementation((cmd: any, callback: any) => {
-        callback(new Error('Not a git repository'));
+        callback(new Error("Not a git repository"));
       });
 
-      vi.mocked(fs.access).mockRejectedValue(new Error('No Dockerfile'));
+      vi.mocked(fs.access).mockRejectedValue(new Error("No Dockerfile"));
 
       const result = await buildProject(mockConfig);
 
       expect(result.commitSha).toMatch(/^[a-f0-9]{40}$/);
-      expect(result.branch).toBe('main');
+      expect(result.branch).toBe("main");
     });
 
-    it('should detect Dockerfile when present', async () => {
+    it("should detect Dockerfile when present", async () => {
       vi.mocked(fs.access).mockResolvedValueOnce(undefined); // Dockerfile exists
 
       const result = await buildProject(mockConfig);
 
       expect(result.hasDockerfile).toBe(true);
-      expect(result.dockerfilePath).toBe('Dockerfile');
+      expect(result.dockerfilePath).toBe("Dockerfile");
     });
 
-    it('should auto-detect framework when not specified', async () => {
-      vi.mocked(fs.access).mockRejectedValue(new Error('No Dockerfile'));
-      vi.mocked(frameworkDetector.detectFramework).mockResolvedValue('react');
+    it("should auto-detect framework when not specified", async () => {
+      vi.mocked(fs.access).mockRejectedValue(new Error("No Dockerfile"));
+      vi.mocked(frameworkDetector.detectFramework).mockResolvedValue("react");
 
       const configWithoutFramework = { ...mockConfig, framework: undefined };
       const result = await buildProject(configWithoutFramework);
 
-      expect(result.detectedFramework).toBe('react');
+      expect(result.detectedFramework).toBe("react");
       expect(frameworkDetector.detectFramework).toHaveBeenCalled();
     });
 
-    it('should run pre-build commands when specified', async () => {
+    it("should run pre-build commands when specified", async () => {
       let prebuildCommandRun = false;
-      
+
       // Mock exec to track prebuild command
-      const { exec } = await import('child_process');
+      const { exec } = await import("child_process");
       vi.mocked(exec).mockImplementation((cmd: any, callback: any) => {
-        if (cmd === 'git rev-parse HEAD') {
-          callback(null, { stdout: 'abc123def456\n' }, '');
-        } else if (cmd === 'git rev-parse --abbrev-ref HEAD') {
-          callback(null, { stdout: 'main\n' }, '');
-        } else if (cmd === 'npm run prebuild') {
+        if (cmd === "git rev-parse HEAD") {
+          callback(null, { stdout: "abc123def456\n" }, "");
+        } else if (cmd === "git rev-parse --abbrev-ref HEAD") {
+          callback(null, { stdout: "main\n" }, "");
+        } else if (cmd === "npm run prebuild") {
           prebuildCommandRun = true;
-          callback(null, { stdout: 'Prebuild complete\n' }, '');
+          callback(null, { stdout: "Prebuild complete\n" }, "");
         } else {
-          callback(new Error('Command not found'));
+          callback(new Error("Command not found"));
         }
       });
 
-      vi.mocked(fs.access).mockRejectedValue(new Error('No Dockerfile'));
+      vi.mocked(fs.access).mockRejectedValue(new Error("No Dockerfile"));
 
       const configWithPrebuild: BuildConfig = {
         ...mockConfig,
         services: {
           web: {
             build: {
-              command: 'npm run prebuild',
+              command: "npm run prebuild",
             },
           },
         },
@@ -116,26 +116,26 @@ describe('Builder', () => {
       expect(prebuildCommandRun).toBe(true);
     });
 
-    it('should set correct buildpack args for Next.js', async () => {
-      vi.mocked(fs.access).mockRejectedValue(new Error('No Dockerfile'));
+    it("should set correct buildpack args for Next.js", async () => {
+      vi.mocked(fs.access).mockRejectedValue(new Error("No Dockerfile"));
 
       const result = await buildProject(mockConfig);
 
       expect(result.buildArgs).toEqual({
-        NODE_ENV: 'production',
-        NEXT_TELEMETRY_DISABLED: '1',
+        NODE_ENV: "production",
+        NEXT_TELEMETRY_DISABLED: "1",
       });
     });
 
-    it('should check lowercase dockerfile variant', async () => {
+    it("should check lowercase dockerfile variant", async () => {
       vi.mocked(fs.access)
-        .mockRejectedValueOnce(new Error('No Dockerfile')) // Dockerfile
+        .mockRejectedValueOnce(new Error("No Dockerfile")) // Dockerfile
         .mockResolvedValueOnce(undefined); // dockerfile exists
 
       const result = await buildProject(mockConfig);
 
       expect(result.hasDockerfile).toBe(true);
-      expect(result.dockerfilePath).toBe('dockerfile');
+      expect(result.dockerfilePath).toBe("dockerfile");
     });
   });
 });

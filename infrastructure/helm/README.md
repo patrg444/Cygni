@@ -43,52 +43,52 @@ The following table lists the configurable parameters and their default values.
 
 ### Global Parameters
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `global.imageRegistry` | Global Docker image registry | `""` |
-| `global.imagePullSecrets` | Global Docker registry secret names | `[]` |
-| `global.storageClass` | Global storage class for PVCs | `""` |
+| Parameter                 | Description                         | Default |
+| ------------------------- | ----------------------------------- | ------- |
+| `global.imageRegistry`    | Global Docker image registry        | `""`    |
+| `global.imagePullSecrets` | Global Docker registry secret names | `[]`    |
+| `global.storageClass`     | Global storage class for PVCs       | `""`    |
 
 ### API Service
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `api.enabled` | Enable API service | `true` |
-| `api.replicaCount` | Number of API replicas | `2` |
-| `api.image.repository` | API image repository | `cygni/api` |
-| `api.image.tag` | API image tag | `""` (uses Chart appVersion) |
-| `api.service.type` | Kubernetes service type | `ClusterIP` |
-| `api.service.port` | Service port | `3000` |
-| `api.ingress.enabled` | Enable ingress | `false` |
-| `api.ingress.hosts[0].host` | Hostname for ingress | `api.cygni.dev` |
-| `api.resources.requests.cpu` | CPU request | `100m` |
-| `api.resources.requests.memory` | Memory request | `256Mi` |
+| Parameter                       | Description             | Default                      |
+| ------------------------------- | ----------------------- | ---------------------------- |
+| `api.enabled`                   | Enable API service      | `true`                       |
+| `api.replicaCount`              | Number of API replicas  | `2`                          |
+| `api.image.repository`          | API image repository    | `cygni/api`                  |
+| `api.image.tag`                 | API image tag           | `""` (uses Chart appVersion) |
+| `api.service.type`              | Kubernetes service type | `ClusterIP`                  |
+| `api.service.port`              | Service port            | `3000`                       |
+| `api.ingress.enabled`           | Enable ingress          | `false`                      |
+| `api.ingress.hosts[0].host`     | Hostname for ingress    | `api.cygni.dev`              |
+| `api.resources.requests.cpu`    | CPU request             | `100m`                       |
+| `api.resources.requests.memory` | Memory request          | `256Mi`                      |
 
 ### Database (PostgreSQL)
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `postgresql.enabled` | Deploy PostgreSQL | `true` |
-| `postgresql.auth.database` | Database name | `cygni` |
-| `postgresql.auth.username` | Database username | `cygni` |
-| `postgresql.primary.persistence.size` | PVC size | `10Gi` |
+| Parameter                             | Description       | Default |
+| ------------------------------------- | ----------------- | ------- |
+| `postgresql.enabled`                  | Deploy PostgreSQL | `true`  |
+| `postgresql.auth.database`            | Database name     | `cygni` |
+| `postgresql.auth.username`            | Database username | `cygni` |
+| `postgresql.primary.persistence.size` | PVC size          | `10Gi`  |
 
 ### Cache (Redis)
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `redis.enabled` | Deploy Redis | `true` |
-| `redis.architecture` | Redis architecture | `standalone` |
-| `redis.auth.enabled` | Enable Redis auth | `true` |
-| `redis.master.persistence.size` | PVC size | `8Gi` |
+| Parameter                       | Description        | Default      |
+| ------------------------------- | ------------------ | ------------ |
+| `redis.enabled`                 | Deploy Redis       | `true`       |
+| `redis.architecture`            | Redis architecture | `standalone` |
+| `redis.auth.enabled`            | Enable Redis auth  | `true`       |
+| `redis.master.persistence.size` | PVC size           | `8Gi`        |
 
 ### Object Storage (MinIO)
 
-| Parameter | Description | Default |
-|-----------|-------------|---------|
-| `minio.enabled` | Deploy MinIO | `true` |
-| `minio.mode` | MinIO mode | `standalone` |
-| `minio.persistence.size` | PVC size | `20Gi` |
+| Parameter                | Description  | Default      |
+| ------------------------ | ------------ | ------------ |
+| `minio.enabled`          | Deploy MinIO | `true`       |
+| `minio.mode`             | MinIO mode   | `standalone` |
+| `minio.persistence.size` | PVC size     | `20Gi`       |
 
 ## Production Deployment
 
@@ -101,7 +101,7 @@ global:
 
 api:
   replicaCount: 3
-  
+
   resources:
     requests:
       cpu: 500m
@@ -109,7 +109,7 @@ api:
     limits:
       cpu: 2000m
       memory: 2Gi
-  
+
   ingress:
     enabled: true
     className: nginx
@@ -199,16 +199,19 @@ kubectl delete pvc -l app.kubernetes.io/instance=cygni
 ## Troubleshooting
 
 ### Check pod status
+
 ```bash
 kubectl get pods -l app.kubernetes.io/instance=cygni
 ```
 
 ### View logs
+
 ```bash
 kubectl logs -l app.kubernetes.io/name=cygni,app.kubernetes.io/component=api
 ```
 
 ### Describe resources
+
 ```bash
 kubectl describe deployment cygni-api
 ```
@@ -216,16 +219,19 @@ kubectl describe deployment cygni-api
 ## Development
 
 ### Lint the chart
+
 ```bash
 helm lint ./cygni
 ```
 
 ### Dry run installation
+
 ```bash
 helm install cygni ./cygni --dry-run --debug
 ```
 
 ### Generate templates
+
 ```bash
 helm template cygni ./cygni
 ```

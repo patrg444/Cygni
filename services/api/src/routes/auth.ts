@@ -1,9 +1,9 @@
-import { FastifyPluginAsync } from 'fastify';
-import { z } from 'zod';
-import * as argon2 from 'argon2';
-import { nanoid } from 'nanoid';
-import { prisma } from '../utils/prisma';
-import { Role } from '../types/auth';
+import { FastifyPluginAsync } from "fastify";
+import { z } from "zod";
+import * as argon2 from "argon2";
+import { nanoid } from "nanoid";
+import { prisma } from "../utils/prisma";
+import { Role } from "../types/auth";
 
 const signupSchema = z.object({
   email: z.string().email(),
@@ -19,7 +19,7 @@ const loginSchema = z.object({
 
 export const authRoutes: FastifyPluginAsync = async (app) => {
   // Signup
-  app.post('/signup', async (request, reply) => {
+  app.post("/signup", async (request, reply) => {
     const body = signupSchema.parse(request.body);
 
     // Check if user exists
@@ -28,7 +28,7 @@ export const authRoutes: FastifyPluginAsync = async (app) => {
     });
 
     if (existingUser) {
-      return reply.status(400).send({ error: 'Email already registered' });
+      return reply.status(400).send({ error: "Email already registered" });
     }
 
     // Hash password
@@ -46,11 +46,14 @@ export const authRoutes: FastifyPluginAsync = async (app) => {
       });
 
       // Create organization
-      const orgSlug = body.organizationName
-        .toLowerCase()
-        .replace(/[^a-z0-9-]/g, '-')
-        .replace(/-+/g, '-')
-        .replace(/^-|-$/g, '') + '-' + nanoid(6);
+      const orgSlug =
+        body.organizationName
+          .toLowerCase()
+          .replace(/[^a-z0-9-]/g, "-")
+          .replace(/-+/g, "-")
+          .replace(/^-|-$/g, "") +
+        "-" +
+        nanoid(6);
 
       const organization = await tx.organization.create({
         data: {
@@ -72,10 +75,12 @@ export const authRoutes: FastifyPluginAsync = async (app) => {
     const token = await app.jwt.sign({
       sub: result.user.id,
       email: result.user.email,
-      organizations: [{
-        id: result.organization.id,
-        role: Role.owner,
-      }],
+      organizations: [
+        {
+          id: result.organization.id,
+          role: Role.owner,
+        },
+      ],
     });
 
     return {
@@ -94,7 +99,7 @@ export const authRoutes: FastifyPluginAsync = async (app) => {
   });
 
   // Login
-  app.post('/login', async (request, reply) => {
+  app.post("/login", async (request, reply) => {
     const body = loginSchema.parse(request.body);
 
     // Find user
@@ -110,13 +115,13 @@ export const authRoutes: FastifyPluginAsync = async (app) => {
     });
 
     if (!user) {
-      return reply.status(401).send({ error: 'Invalid credentials' });
+      return reply.status(401).send({ error: "Invalid credentials" });
     }
 
     // Verify password
     const validPassword = await argon2.verify(user.password, body.password);
     if (!validPassword) {
-      return reply.status(401).send({ error: 'Invalid credentials' });
+      return reply.status(401).send({ error: "Invalid credentials" });
     }
 
     // Generate JWT
@@ -146,37 +151,45 @@ export const authRoutes: FastifyPluginAsync = async (app) => {
   });
 
   // Refresh token
-  app.post('/refresh', { 
-    preHandler: app.authenticate 
-  }, async (request, _reply) => {
-    const user = request.auth!.user;
-    
-    // Get fresh organization data
-    const organizations = await prisma.organizationMember.findMany({
-      where: { userId: user.id },
-      include: { organization: true },
-    });
+  app.post(
+    "/refresh",
+    {
+      preHandler: app.authenticate,
+    },
+    async (request, _reply) => {
+      const user = request.auth!.user;
 
-    // Generate new token
-    const token = await app.jwt.sign({
-      sub: user.id,
-      email: user.email,
-      organizations: organizations.map((om: any) => ({
-        id: om.organization.id,
-        role: om.role,
-      })),
-    });
+      // Get fresh organization data
+      const organizations = await prisma.organizationMember.findMany({
+        where: { userId: user.id },
+        include: { organization: true },
+      });
 
-    return { token };
-  });
+      // Generate new token
+      const token = await app.jwt.sign({
+        sub: user.id,
+        email: user.email,
+        organizations: organizations.map((om: any) => ({
+          id: om.organization.id,
+          role: om.role,
+        })),
+      });
+
+      return { token };
+    },
+  );
 
   // Get current user
-  app.get('/me', { 
-    preHandler: app.authenticate 
-  }, async (request, _reply) => {
-    return {
-      user: request.auth!.user,
-      organizations: request.auth!.organizations,
-    };
-  });
+  app.get(
+    "/me",
+    {
+      preHandler: app.authenticate,
+    },
+    async (request, _reply) => {
+      return {
+        user: request.auth!.user,
+        organizations: request.auth!.organizations,
+      };
+    },
+  );
 };

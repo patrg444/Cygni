@@ -9,6 +9,7 @@ This document tracks the current implementation status of Cygni components and f
 ## Core Services
 
 ### ✅ API Service
+
 - **Status**: Implemented
 - **Location**: `/services/api`
 - **Features**:
@@ -20,6 +21,7 @@ This document tracks the current implementation status of Cygni components and f
   - Environment-based configuration
 
 ### 🚧 Auth Service
+
 - **Status**: Planned (using API auth for now)
 - **Location**: `/services/auth`
 - **Planned Features**:
@@ -28,6 +30,7 @@ This document tracks the current implementation status of Cygni components and f
   - MFA/2FA
 
 ### 🚧 Builder Service
+
 - **Status**: Not started
 - **Location**: `/services/builder`
 - **Planned Features**:
@@ -37,6 +40,7 @@ This document tracks the current implementation status of Cygni components and f
   - Multi-stage optimization
 
 ### 🚧 Runtime Orchestrator
+
 - **Status**: Not started
 - **Location**: `/services/runtime`
 - **Planned Features**:
@@ -48,6 +52,7 @@ This document tracks the current implementation status of Cygni components and f
 ## Packages
 
 ### ✅ CLI
+
 - **Status**: Implemented
 - **Location**: `/packages/cli`
 - **Features**:
@@ -59,6 +64,7 @@ This document tracks the current implementation status of Cygni components and f
   - Build caching
 
 ### ✅ SDK
+
 - **Status**: Implemented
 - **Location**: `/packages/sdk`
 - **Features**:
@@ -69,6 +75,7 @@ This document tracks the current implementation status of Cygni components and f
   - Real-time log streaming
 
 ### 🚧 Web Dashboard
+
 - **Status**: Not started
 - **Location**: `/packages/web`
 - **Planned Stack**:
@@ -79,6 +86,7 @@ This document tracks the current implementation status of Cygni components and f
 ## Infrastructure
 
 ### ✅ Docker
+
 - **Status**: Implemented
 - **Features**:
   - Multi-stage builds
@@ -87,6 +95,7 @@ This document tracks the current implementation status of Cygni components and f
   - Health checks
 
 ### ✅ Docker Compose
+
 - **Status**: Implemented
 - **Features**:
   - Development environment
@@ -95,6 +104,7 @@ This document tracks the current implementation status of Cygni components and f
   - Environment-based secrets
 
 ### ✅ Terraform (AWS)
+
 - **Status**: Implemented
 - **Location**: `/infrastructure/terraform`
 - **Modules**:
@@ -105,6 +115,7 @@ This document tracks the current implementation status of Cygni components and f
   - Compute (EKS placeholder)
 
 ### ✅ Helm Charts
+
 - **Status**: Implemented
 - **Location**: `/infrastructure/helm`
 - **Features**:
@@ -117,6 +128,7 @@ This document tracks the current implementation status of Cygni components and f
 ## DevOps & Quality
 
 ### ✅ CI/CD Pipeline
+
 - **Status**: Implemented
 - **Features**:
   - Multi-job GitHub Actions workflow
@@ -128,6 +140,7 @@ This document tracks the current implementation status of Cygni components and f
   - Node.js compatibility matrix (18, 20)
 
 ### ✅ Development Tools
+
 - **Status**: Implemented
 - **Features**:
   - pnpm workspaces
@@ -137,6 +150,7 @@ This document tracks the current implementation status of Cygni components and f
   - Automated secret generation
 
 ### 🚧 Testing
+
 - **Status**: Partial
 - **Completed**:
   - Test infrastructure setup
@@ -151,23 +165,27 @@ This document tracks the current implementation status of Cygni components and f
 ## Security Implementation
 
 ### ✅ Container Security
+
 - All containers run as non-root users
 - Minimal base images (Alpine)
 - Read-only root filesystems where possible
 - Capability dropping
 
 ### ✅ Secret Management
+
 - Environment-based configuration
 - Automated development secret generation
 - No hardcoded secrets
 - AWS SSM integration for production
 
 ### ✅ Network Security
+
 - Kubernetes NetworkPolicies
 - VPC with private subnets
 - Security groups with least privilege
 
 ### 🚧 Application Security
+
 - **Completed**:
   - JWT authentication
   - RBAC implementation
@@ -180,6 +198,7 @@ This document tracks the current implementation status of Cygni components and f
 ## Database Schema
 
 ### ✅ Core Models
+
 - User
 - Organization
 - OrganizationMember
@@ -191,6 +210,7 @@ This document tracks the current implementation status of Cygni components and f
 - Secret
 
 ### 🚧 Planned Models
+
 - ApiKey
 - AuditLog
 - Usage
@@ -201,6 +221,7 @@ This document tracks the current implementation status of Cygni components and f
 ## API Endpoints
 
 ### ✅ Implemented
+
 - Auth: `/auth/login`, `/auth/me`
 - Projects: Full CRUD + members
 - Deployments: Create, list, get
@@ -208,6 +229,7 @@ This document tracks the current implementation status of Cygni components and f
 - Health: `/health`, `/ready`
 
 ### 🚧 Planned
+
 - Organizations management
 - Environment variables
 - Secrets management
@@ -236,6 +258,7 @@ This document tracks the current implementation status of Cygni components and f
 ## Contributing
 
 To update this status:
+
 1. Make changes as you implement features
 2. Update the status (🚧 → ✅)
 3. Add any new known issues

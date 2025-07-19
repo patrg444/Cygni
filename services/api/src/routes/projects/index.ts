@@ -1,10 +1,10 @@
-import { FastifyPluginAsync } from 'fastify';
-import { listProjectsRoute } from './list';
-import { createProjectRoute } from './create';
-import { getProjectRoute } from './get';
-import { updateProjectRoute } from './update';
-import { deleteProjectRoute } from './delete';
-import { projectMembersRoutes } from './members';
+import { FastifyPluginAsync } from "fastify";
+import { listProjectsRoute } from "./list";
+import { createProjectRoute } from "./create";
+import { getProjectRoute } from "./get";
+import { updateProjectRoute } from "./update";
+import { deleteProjectRoute } from "./delete";
+import { projectMembersRoutes } from "./members";
 
 export const projectRoutes: FastifyPluginAsync = async (app) => {
   // Register all project routes

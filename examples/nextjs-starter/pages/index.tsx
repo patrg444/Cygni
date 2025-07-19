@@ -3,5 +3,5 @@ export default function Home() {
     <div>
       <h1>Welcome to Cygni Next.js Starter</h1>
     </div>
-  )
+  );
 }

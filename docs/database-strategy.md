@@ -1,11 +1,13 @@
 # Cygni Database Strategy
 
 ## Overview
+
 Cygni offers flexible database options to match different user needs and budgets.
 
 ## Database Providers
 
 ### 1. Cygni Managed (Default)
+
 - **What**: PostgreSQL on AWS RDS / GCP CloudSQL
 - **Pricing**: $0.02/hour for small (~$15/month)
 - **Features**:
@@ -16,11 +18,13 @@ Cygni offers flexible database options to match different user needs and budgets
   - Automatic SSL
 
 ### 2. Serverless Partners
+
 - **Neon**: Serverless Postgres with branching
 - **Turso**: Edge SQLite for read-heavy workloads
 - **PlanetScale**: Serverless MySQL with branching
 
 ### 3. Bring Your Own Database
+
 - Connect any database with a connection string
 - Full control over configuration
 - No Cygni management overhead
@@ -28,34 +32,37 @@ Cygni offers flexible database options to match different user needs and budgets
 ## Implementation
 
 ### Phase 1: Managed Postgres (Launch)
+
 ```yaml
 # cygni.yaml
 database:
   type: postgres
-  size: small  # 2 vCPU, 4GB RAM
+  size: small # 2 vCPU, 4GB RAM
   storage: 20GB
-  backups: 
+  backups:
     enabled: true
     retention: 7d
 ```
 
 Maps to:
+
 - **Dev/Preview**: Shared RDS instance with logical databases
 - **Production**: Dedicated RDS instance
 - **Connection pooling**: PgBouncer sidecar
 
 ### Phase 2: Partner Integration (Post-launch)
+
 ```typescript
 class DatabaseProviderFactory {
   static async create(config: DatabaseConfig) {
     switch (config.provider) {
-      case 'managed':
+      case "managed":
         return new ManagedPostgresProvider(config);
-      case 'neon':
+      case "neon":
         return new NeonProvider(config);
-      case 'turso':
+      case "turso":
         return new TursoProvider(config);
-      case 'external':
+      case "external":
         return new ExternalDatabaseProvider(config);
     }
   }
@@ -63,6 +70,7 @@ class DatabaseProviderFactory {
 ```
 
 ### Phase 3: Advanced Features
+
 - Database branching for preview environments
 - Automatic migrations
 - Query performance insights
@@ -71,20 +79,23 @@ class DatabaseProviderFactory {
 ## Cost Structure
 
 ### Managed Databases
-| Size | vCPU | RAM | Storage | Price/month |
-|------|------|-----|---------|-------------|
-| nano | 0.5 | 1GB | 10GB | $5 |
-| small | 2 | 4GB | 20GB | $15 |
-| medium | 4 | 8GB | 50GB | $35 |
-| large | 8 | 16GB | 100GB | $75 |
+
+| Size   | vCPU | RAM  | Storage | Price/month |
+| ------ | ---- | ---- | ------- | ----------- |
+| nano   | 0.5  | 1GB  | 10GB    | $5          |
+| small  | 2    | 4GB  | 20GB    | $15         |
+| medium | 4    | 8GB  | 50GB    | $35         |
+| large  | 8    | 16GB | 100GB   | $75         |
 
 ### Partner Databases
+
 - Pass-through pricing + 20% margin
 - Example: Neon $20/month → Cygni $24/month
 
 ## Migration Path
 
 Users can migrate between providers:
+
 ```bash
 # Export from managed
 cygni db export --format sql > backup.sql
@@ -103,6 +114,7 @@ cygni db import --provider neon --file backup.sql
 ## Technical Implementation
 
 ### Database Provisioner Service
+
 ```go
 type DatabaseProvisioner interface {
   Create(ctx context.Context, spec DatabaseSpec) (*Database, error)
@@ -127,6 +139,7 @@ func (p *RDSProvisioner) Create(ctx context.Context, spec DatabaseSpec) (*Databa
 ```
 
 ### Connection Management
+
 - Use PgBouncer for connection pooling
 - Automatic SSL certificate management
 - IP allowlisting for security
@@ -134,10 +147,10 @@ func (p *RDSProvisioner) Create(ctx context.Context, spec DatabaseSpec) (*Databa
 
 ## Comparison with Competitors
 
-| Feature | Cygni | Vercel | Railway | Render |
-|---------|-------|---------|---------|---------|
-| Managed Postgres | ✅ | Via partners | ✅ | ✅ |
-| Serverless DB | Phase 2 | ✅ (Neon) | ❌ | ❌ |
-| BYOD | ✅ | ✅ | ✅ | ✅ |
-| Branching | Phase 2 | ✅ | ❌ | ❌ |
-| Pricing | $5-75 | $20+ | $20+ | $15+ |
+| Feature          | Cygni   | Vercel       | Railway | Render |
+| ---------------- | ------- | ------------ | ------- | ------ |
+| Managed Postgres | ✅      | Via partners | ✅      | ✅     |
+| Serverless DB    | Phase 2 | ✅ (Neon)    | ❌      | ❌     |
+| BYOD             | ✅      | ✅           | ✅      | ✅     |
+| Branching        | Phase 2 | ✅           | ❌      | ❌     |
+| Pricing          | $5-75   | $20+         | $20+    | $15+   |

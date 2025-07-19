@@ -1,13 +1,13 @@
-import { nanoid } from 'nanoid';
-import { prisma } from '../utils/prisma';
-import { Role } from '../types/auth';
+import { nanoid } from "nanoid";
+import { prisma } from "../utils/prisma";
+import { Role } from "../types/auth";
 
 interface ListProjectsOptions {
   organizationId: string;
   limit: number;
   offset: number;
-  orderBy: 'createdAt' | 'updatedAt' | 'name';
-  order: 'asc' | 'desc';
+  orderBy: "createdAt" | "updatedAt" | "name";
+  order: "asc" | "desc";
 }
 
 interface CreateProjectInput {
@@ -43,20 +43,20 @@ class ProjectService {
         include: {
           environments: true,
           _count: {
-            select: { 
+            select: {
               deployments: true,
               builds: true,
-              members: true
-            }
-          }
+              members: true,
+            },
+          },
         },
         orderBy: { [orderBy]: order },
         take: limit,
         skip: offset,
       }),
       prisma.project.count({
-        where: { organizationId }
-      })
+        where: { organizationId },
+      }),
     ]);
 
     return {
@@ -64,7 +64,7 @@ class ProjectService {
       total,
       limit,
       offset,
-      hasMore: offset + projects.length < total
+      hasMore: offset + projects.length < total,
     };
   }
 
@@ -80,16 +80,16 @@ class ProjectService {
         repository: input.repository,
         environments: {
           create: [
-            { name: 'Production', slug: 'production' },
-            { name: 'Preview', slug: 'preview' },
-          ]
+            { name: "Production", slug: "production" },
+            { name: "Preview", slug: "preview" },
+          ],
         },
         members: {
           create: {
             userId: input.createdBy,
-            role: Role.owner
-          }
-        }
+            role: Role.owner,
+          },
+        },
       },
       include: {
         environments: true,
@@ -100,11 +100,11 @@ class ProjectService {
                 id: true,
                 email: true,
                 name: true,
-              }
-            }
-          }
-        }
-      }
+              },
+            },
+          },
+        },
+      },
     });
 
     return project;
@@ -122,17 +122,17 @@ class ProjectService {
                 id: true,
                 email: true,
                 name: true,
-              }
-            }
-          }
+              },
+            },
+          },
         },
         _count: {
-          select: { 
+          select: {
             deployments: true,
             builds: true,
-          }
-        }
-      }
+          },
+        },
+      },
     });
   }
 
@@ -143,19 +143,19 @@ class ProjectService {
       include: {
         environments: true,
         _count: {
-          select: { 
+          select: {
             deployments: true,
             builds: true,
-          }
-        }
-      }
+          },
+        },
+      },
     });
   }
 
   async deleteProject(projectId: string) {
     try {
       await prisma.project.delete({
-        where: { id: projectId }
+        where: { id: projectId },
       });
       return true;
     } catch (error) {
@@ -168,9 +168,9 @@ class ProjectService {
       where: {
         projectId,
         status: {
-          in: ['pending', 'deploying', 'active']
-        }
-      }
+          in: ["pending", "deploying", "active"],
+        },
+      },
     });
 
     return count > 0;
@@ -185,21 +185,23 @@ class ProjectService {
             id: true,
             email: true,
             name: true,
-          }
-        }
+          },
+        },
       },
-      orderBy: { createdAt: 'asc' }
+      orderBy: { createdAt: "asc" },
     });
   }
 
   async addProjectMember(input: AddProjectMemberInput) {
     // Find user by email
     const user = await prisma.user.findUnique({
-      where: { email: input.email }
+      where: { email: input.email },
     });
 
     if (!user) {
-      throw Object.assign(new Error('User not found'), { code: 'USER_NOT_FOUND' });
+      throw Object.assign(new Error("User not found"), {
+        code: "USER_NOT_FOUND",
+      });
     }
 
     // Check if already member
@@ -208,12 +210,14 @@ class ProjectService {
         userId_projectId: {
           userId: user.id,
           projectId: input.projectId,
-        }
-      }
+        },
+      },
     });
 
     if (existingMember) {
-      throw Object.assign(new Error('User is already a member'), { code: 'ALREADY_MEMBER' });
+      throw Object.assign(new Error("User is already a member"), {
+        code: "ALREADY_MEMBER",
+      });
     }
 
     return prisma.projectMember.create({
@@ -228,31 +232,33 @@ class ProjectService {
             id: true,
             email: true,
             name: true,
-          }
-        }
-      }
+          },
+        },
+      },
     });
   }
 
   async updateMemberRole(projectId: string, userId: string, role: Role) {
-    return prisma.projectMember.update({
-      where: {
-        userId_projectId: {
-          userId,
-          projectId,
-        }
-      },
-      data: { role },
-      include: {
-        user: {
-          select: {
-            id: true,
-            email: true,
-            name: true,
-          }
-        }
-      }
-    }).catch(() => null);
+    return prisma.projectMember
+      .update({
+        where: {
+          userId_projectId: {
+            userId,
+            projectId,
+          },
+        },
+        data: { role },
+        include: {
+          user: {
+            select: {
+              id: true,
+              email: true,
+              name: true,
+            },
+          },
+        },
+      })
+      .catch(() => null);
   }
 
   async removeProjectMember(projectId: string, userId: string) {
@@ -262,8 +268,8 @@ class ProjectService {
           userId_projectId: {
             userId,
             projectId,
-          }
-        }
+          },
+        },
       });
       return true;
     } catch {
@@ -276,7 +282,7 @@ class ProjectService {
       where: {
         projectId,
         role: Role.owner,
-      }
+      },
     });
 
     if (owners > 1) {
@@ -288,9 +294,9 @@ class ProjectService {
         userId_projectId: {
           userId,
           projectId,
-        }
+        },
       },
-      select: { role: true }
+      select: { role: true },
     });
 
     return userRole?.role === Role.owner;
@@ -299,10 +305,10 @@ class ProjectService {
   private generateSlug(name: string): string {
     const base = name
       .toLowerCase()
-      .replace(/[^a-z0-9-]/g, '-')
-      .replace(/-+/g, '-')
-      .replace(/^-|-$/g, '');
-    
+      .replace(/[^a-z0-9-]/g, "-")
+      .replace(/-+/g, "-")
+      .replace(/^-|-$/g, "");
+
     return `${base}-${nanoid(6)}`;
   }
 }

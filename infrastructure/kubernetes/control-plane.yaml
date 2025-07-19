@@ -19,28 +19,28 @@ spec:
         app: control-plane
     spec:
       containers:
-      - name: api
-        image: cloudexpress/control-plane:latest
-        ports:
-        - containerPort: 3000
-        env:
-        - name: DATABASE_URL
-          valueFrom:
-            secretKeyRef:
-              name: cloudexpress-secrets
-              key: database-url
-        - name: JWT_SECRET
-          valueFrom:
-            secretKeyRef:
-              name: cloudexpress-secrets
-              key: jwt-secret
-        resources:
-          requests:
-            cpu: 100m
-            memory: 256Mi
-          limits:
-            cpu: 500m
-            memory: 512Mi
+        - name: api
+          image: cloudexpress/control-plane:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: cloudexpress-secrets
+                  key: database-url
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: cloudexpress-secrets
+                  key: jwt-secret
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
 ---
 apiVersion: v1
 kind: Service
@@ -51,8 +51,8 @@ spec:
   selector:
     app: control-plane
   ports:
-  - port: 80
-    targetPort: 3000
+    - port: 80
+      targetPort: 3000
   type: ClusterIP
 ---
 apiVersion: networking.k8s.io/v1
@@ -65,17 +65,17 @@ metadata:
     cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
   tls:
-  - hosts:
-    - api.cloudexpress.io
-    secretName: api-tls
+    - hosts:
+        - api.cloudexpress.io
+      secretName: api-tls
   rules:
-  - host: api.cloudexpress.io
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: control-plane
-            port:
-              number: 80
+    - host: api.cloudexpress.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: control-plane
+                port:
+                  number: 80

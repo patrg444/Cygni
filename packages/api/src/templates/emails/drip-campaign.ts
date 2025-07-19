@@ -7,12 +7,12 @@ export interface EmailTemplate {
 export const dripCampaignTemplates: Record<string, EmailTemplate> = {
   // Email 1: Welcome (sent immediately)
   welcome: {
-    subject: 'Welcome to CloudExpress! 🚀',
+    subject: "Welcome to CloudExpress! 🚀",
     html: (data) => `
       <div style="font-family: -apple-system, sans-serif; max-width: 600px; margin: 0 auto; color: #1a1a1a;">
         <h1 style="color: #0070f3; font-size: 32px;">Welcome to CloudExpress!</h1>
         
-        <p style="font-size: 18px; line-height: 1.6;">Hi ${data.name || 'there'},</p>
+        <p style="font-size: 18px; line-height: 1.6;">Hi ${data.name || "there"},</p>
         
         <p style="font-size: 16px; line-height: 1.6;">
           You're #${data.position} on our early access list! We're building the developer cloud that 
@@ -52,12 +52,12 @@ export const dripCampaignTemplates: Record<string, EmailTemplate> = {
 
   // Email 2: Peak Feature Deep Dive (sent after 3 days)
   peakFeature: {
-    subject: 'CloudExpress Secret Sauce: Health Gates & Auto-Rollback 🛡️',
+    subject: "CloudExpress Secret Sauce: Health Gates & Auto-Rollback 🛡️",
     html: (data) => `
       <div style="font-family: -apple-system, sans-serif; max-width: 600px; margin: 0 auto; color: #1a1a1a;">
         <h1 style="color: #0070f3; font-size: 32px;">Never Ship a Bad Deploy Again</h1>
         
-        <p style="font-size: 16px; line-height: 1.6;">Hi ${data.name || 'there'},</p>
+        <p style="font-size: 16px; line-height: 1.6;">Hi ${data.name || "there"},</p>
         
         <p style="font-size: 16px; line-height: 1.6;">
           Remember that sinking feeling when you deploy on Friday afternoon and errors start spiking? 
@@ -119,12 +119,12 @@ export const dripCampaignTemplates: Record<string, EmailTemplate> = {
 
   // Email 3: Case Study (sent after 7 days)
   caseStudy: {
-    subject: 'How TechStartup cut cloud costs by 73% (real story)',
+    subject: "How TechStartup cut cloud costs by 73% (real story)",
     html: (data) => `
       <div style="font-family: -apple-system, sans-serif; max-width: 600px; margin: 0 auto; color: #1a1a1a;">
         <h1 style="color: #0070f3; font-size: 32px;">From $4,200 to $1,134/month</h1>
         
-        <p style="font-size: 16px; line-height: 1.6;">Hi ${data.name || 'there'},</p>
+        <p style="font-size: 16px; line-height: 1.6;">Hi ${data.name || "there"},</p>
         
         <p style="font-size: 16px; line-height: 1.6;">
           When Alex from TechStartup.io came to us, they were burning $4,200/month on AWS for a 
@@ -187,14 +187,14 @@ export const dripCampaignTemplates: Record<string, EmailTemplate> = {
 
   // Email 4: CTA - Deploy Your First App (sent after 14 days)
   deployNow: {
-    subject: '🎉 Your CloudExpress invite is here!',
+    subject: "🎉 Your CloudExpress invite is here!",
     html: (data) => `
       <div style="font-family: -apple-system, sans-serif; max-width: 600px; margin: 0 auto; color: #1a1a1a;">
         <div style="text-align: center; margin: 30px 0;">
           <h1 style="color: #0070f3; font-size: 48px; margin: 0;">You're in! 🎉</h1>
         </div>
         
-        <p style="font-size: 18px; line-height: 1.6;">Hi ${data.name || 'there'},</p>
+        <p style="font-size: 18px; line-height: 1.6;">Hi ${data.name || "there"},</p>
         
         <p style="font-size: 18px; line-height: 1.6;">
           Your CloudExpress early access is ready! You can now deploy your first app in under 5 minutes.

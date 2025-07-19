@@ -1,7 +1,7 @@
-import { BudgetMonitor } from '../../src/services/billing/budget-monitor';
-import { PrismaClient } from '@prisma/client';
+import { BudgetMonitor } from "../../src/services/billing/budget-monitor";
+import { PrismaClient } from "@prisma/client";
 
-describe('BudgetMonitor', () => {
+describe("BudgetMonitor", () => {
   let budgetMonitor: BudgetMonitor;
   let mockPrisma: any;
   let mockNotification: any;
@@ -11,20 +11,20 @@ describe('BudgetMonitor', () => {
     mockNotification = {
       send: jest.fn(),
     };
-    
+
     budgetMonitor = new BudgetMonitor(mockPrisma, mockNotification);
   });
 
-  describe('calculateCurrentUsage', () => {
-    it('should calculate usage correctly', async () => {
+  describe("calculateCurrentUsage", () => {
+    it("should calculate usage correctly", async () => {
       // Mock usage events
       mockPrisma.usageEvent.groupBy = jest.fn().mockResolvedValue([
-        { metricType: 'cpu_seconds', _sum: { quantity: 3600000 } },
-        { metricType: 'memory_gb_hours', _sum: { quantity: 1000 } },
-        { metricType: 'egress_gb', _sum: { quantity: 50 } },
+        { metricType: "cpu_seconds", _sum: { quantity: 3600000 } },
+        { metricType: "memory_gb_hours", _sum: { quantity: 1000 } },
+        { metricType: "egress_gb", _sum: { quantity: 50 } },
       ]);
 
-      const usage = await budgetMonitor.calculateCurrentUsage('project-123');
+      const usage = await budgetMonitor.calculateCurrentUsage("project-123");
 
       expect(usage.total).toBeCloseTo(45.5); // $36 + $5 + $4.50
       expect(usage.cpuSeconds).toBe(3600000);
@@ -33,28 +33,28 @@ describe('BudgetMonitor', () => {
     });
   });
 
-  describe('checkBudget', () => {
-    it('should enforce limit when exceeded', async () => {
+  describe("checkBudget", () => {
+    it("should enforce limit when exceeded", async () => {
       // Mock over-limit usage
       mockPrisma.usageEvent.groupBy = jest.fn().mockResolvedValue([
-        { metricType: 'cpu_seconds', _sum: { quantity: 1800000 } }, // $18
+        { metricType: "cpu_seconds", _sum: { quantity: 1800000 } }, // $18
       ]);
-      
+
       mockPrisma.deployment.findMany = jest.fn().mockResolvedValue([
-        { id: 'deploy-1', environment: { slug: 'production' } },
-        { id: 'deploy-2', environment: { slug: 'staging' } },
+        { id: "deploy-1", environment: { slug: "production" } },
+        { id: "deploy-2", environment: { slug: "staging" } },
       ]);
-      
+
       mockPrisma.project.update = jest.fn();
       mockPrisma.project.findUnique = jest.fn().mockResolvedValue({
-        id: 'project-123',
-        name: 'Test Project',
+        id: "project-123",
+        name: "Test Project",
         team: {
-          users: [{ id: 'user-1', email: 'test@example.com' }]
-        }
+          users: [{ id: "user-1", email: "test@example.com" }],
+        },
       });
 
-      const status = await budgetMonitor.checkBudget('project-123');
+      const status = await budgetMonitor.checkBudget("project-123");
 
       expect(status.isOverLimit).toBe(true);
       expect(status.used).toBeGreaterThan(10);
@@ -64,29 +64,29 @@ describe('BudgetMonitor', () => {
       expect(mockNotification.send).toHaveBeenCalled();
     });
 
-    it('should send warning at 80% usage', async () => {
+    it("should send warning at 80% usage", async () => {
       // Mock 85% usage
       mockPrisma.usageEvent.groupBy = jest.fn().mockResolvedValue([
-        { metricType: 'cpu_seconds', _sum: { quantity: 850000 } }, // $8.50
+        { metricType: "cpu_seconds", _sum: { quantity: 850000 } }, // $8.50
       ]);
 
       mockPrisma.project.findUnique = jest.fn().mockResolvedValue({
-        id: 'project-123',
-        name: 'Test Project',
+        id: "project-123",
+        name: "Test Project",
         team: {
-          users: [{ id: 'user-1', email: 'test@example.com' }]
-        }
+          users: [{ id: "user-1", email: "test@example.com" }],
+        },
       });
 
-      const status = await budgetMonitor.checkBudget('project-123');
+      const status = await budgetMonitor.checkBudget("project-123");
 
       expect(status.percentUsed).toBe(85);
       expect(status.isOverLimit).toBe(false);
       expect(mockNotification.send).toHaveBeenCalledWith(
         expect.objectContaining({
-          type: 'budget_alert',
-          severity: 'warning',
-        })
+          type: "budget_alert",
+          severity: "warning",
+        }),
       );
     });
   });

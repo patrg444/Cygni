@@ -1,16 +1,16 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from "@prisma/client";
 
 interface Notification {
   userId: string;
   type: string;
-  severity: 'info' | 'warning' | 'critical';
+  severity: "info" | "warning" | "critical";
   title: string;
   message: string;
   data?: any;
 }
 
 interface OpsAlert {
-  severity: 'error' | 'warning' | 'info';
+  severity: "error" | "warning" | "info";
   title: string;
   message: string;
   data?: any;
@@ -40,7 +40,7 @@ export class NotificationService {
       });
 
       // Send email based on severity
-      if (notification.severity === 'critical') {
+      if (notification.severity === "critical") {
         await this.sendEmail(notification);
       }
 
@@ -49,18 +49,19 @@ export class NotificationService {
 
       // Send to Slack if configured
       // await this.sendSlackNotification(notification);
-
     } catch (error) {
-      console.error('Failed to send notification:', error);
+      console.error("Failed to send notification:", error);
       // Don't throw - notifications shouldn't break the app
     }
   }
 
   async sendOpsAlert(alert: OpsAlert): Promise<void> {
-    console.error(`[OPS ALERT] ${alert.severity.toUpperCase()}: ${alert.title}`);
+    console.error(
+      `[OPS ALERT] ${alert.severity.toUpperCase()}: ${alert.title}`,
+    );
     console.error(alert.message);
     if (alert.data) {
-      console.error('Additional data:', alert.data);
+      console.error("Additional data:", alert.data);
     }
 
     // In production, this would:
@@ -71,6 +72,8 @@ export class NotificationService {
 
   private async sendEmail(notification: Notification): Promise<void> {
     // This would integrate with SendGrid or similar
-    console.log(`Would send email: ${notification.title} to user ${notification.userId}`);
+    console.log(
+      `Would send email: ${notification.title} to user ${notification.userId}`,
+    );
   }
 }

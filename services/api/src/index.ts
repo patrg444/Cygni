@@ -1,15 +1,15 @@
-import fastify from 'fastify';
-import cors from '@fastify/cors';
-import helmet from '@fastify/helmet';
-import jwt from '@fastify/jwt';
-import { config } from './config';
-import { logger } from './utils/logger';
-import { registerRoutes } from './routes';
-import { authenticateUser } from './middleware/auth';
-import { prisma } from './utils/prisma';
-import { initializeDevelopmentEnv } from './utils/dev-secrets';
+import fastify from "fastify";
+import cors from "@fastify/cors";
+import helmet from "@fastify/helmet";
+import jwt from "@fastify/jwt";
+import { config } from "./config";
+import { logger } from "./utils/logger";
+import { registerRoutes } from "./routes";
+import { authenticateUser } from "./middleware/auth";
+import { prisma } from "./utils/prisma";
+import { initializeDevelopmentEnv } from "./utils/dev-secrets";
 
-declare module 'fastify' {
+declare module "fastify" {
   interface FastifyInstance {
     authenticate: typeof authenticateUser;
   }
@@ -21,8 +21,8 @@ async function start() {
   const app = fastify({
     logger: logger,
     trustProxy: true,
-    requestIdHeader: 'x-request-id',
-    requestIdLogLabel: 'requestId',
+    requestIdHeader: "x-request-id",
+    requestIdLogLabel: "requestId",
     disableRequestLogging: false,
     bodyLimit: 1048576, // 1MB
   });
@@ -45,7 +45,7 @@ async function start() {
   });
 
   // Register auth decorator
-  app.decorate('authenticate', authenticateUser);
+  app.decorate("authenticate", authenticateUser);
 
   // Global error handler
   app.setErrorHandler((error, request, reply) => {
@@ -61,65 +61,65 @@ async function start() {
     // Handle validation errors
     if (error.validation) {
       return reply.status(400).send({
-        error: 'Validation Error',
+        error: "Validation Error",
         message: error.message,
         details: error.validation,
       });
     }
 
     // Handle JWT errors
-    if (error.name === 'JsonWebTokenError') {
+    if (error.name === "JsonWebTokenError") {
       return reply.status(401).send({
-        error: 'Invalid Token',
-        message: 'The provided token is invalid',
+        error: "Invalid Token",
+        message: "The provided token is invalid",
       });
     }
 
     // Handle Prisma errors
-    if (error.code === 'P2025') {
+    if (error.code === "P2025") {
       return reply.status(404).send({
-        error: 'Not Found',
-        message: 'The requested resource was not found',
+        error: "Not Found",
+        message: "The requested resource was not found",
       });
     }
 
-    if (error.code === 'P2002') {
+    if (error.code === "P2002") {
       return reply.status(409).send({
-        error: 'Conflict',
-        message: 'A resource with this identifier already exists',
+        error: "Conflict",
+        message: "A resource with this identifier already exists",
       });
     }
 
     // Default error response
     const statusCode = error.statusCode || 500;
-    const message = config.isProduction 
-      ? 'An error occurred processing your request'
+    const message = config.isProduction
+      ? "An error occurred processing your request"
       : error.message;
 
     return reply.status(statusCode).send({
-      error: error.name || 'Internal Server Error',
+      error: error.name || "Internal Server Error",
       message,
       ...(config.isDevelopment && { stack: error.stack }),
     });
   });
 
   // Health check
-  app.get('/health', async () => {
+  app.get("/health", async () => {
     // Check database connection
     const dbHealthy = await prisma.$queryRaw`SELECT 1`
       .then(() => true)
       .catch(() => false);
 
-    return { 
-      status: dbHealthy ? 'ok' : 'degraded',
+    return {
+      status: dbHealthy ? "ok" : "degraded",
       timestamp: new Date().toISOString(),
-      version: process.env.npm_package_version || 'unknown',
-      database: dbHealthy ? 'connected' : 'disconnected',
+      version: process.env.npm_package_version || "unknown",
+      database: dbHealthy ? "connected" : "disconnected",
     };
   });
 
   // Ready check (for k8s)
-  app.get('/ready', async (_request, reply) => {
+  app.get("/ready", async (_request, reply) => {
     const dbHealthy = await prisma.$queryRaw`SELECT 1`
       .then(() => true)
       .catch(() => false);
@@ -137,26 +137,26 @@ async function start() {
   // Graceful shutdown
   const closeGracefully = async (signal: string) => {
     app.log.info(`Received ${signal}, shutting down gracefully...`);
-    
+
     try {
       await app.close();
       await prisma.$disconnect();
-      app.log.info('Server closed successfully');
+      app.log.info("Server closed successfully");
       process.exit(0);
     } catch (err) {
-      app.log.error('Error during shutdown:', err);
+      app.log.error("Error during shutdown:", err);
       process.exit(1);
     }
   };
 
-  process.on('SIGTERM', () => closeGracefully('SIGTERM'));
-  process.on('SIGINT', () => closeGracefully('SIGINT'));
+  process.on("SIGTERM", () => closeGracefully("SIGTERM"));
+  process.on("SIGINT", () => closeGracefully("SIGINT"));
 
   // Start server
   try {
     const address = await app.listen({
       port: config.port,
-      host: '0.0.0.0',
+      host: "0.0.0.0",
     });
     app.log.info(`Server listening at ${address}`);
   } catch (err) {
@@ -166,6 +166,6 @@ async function start() {
 }
 
 start().catch((err) => {
-  logger.error('Failed to start server:', err);
+  logger.error("Failed to start server:", err);
   process.exit(1);
 });

@@ -1,12 +1,14 @@
 // import { PrismaClient } from '@prisma/client';
 
 // Set test environment
-process.env.NODE_ENV = 'test';
-process.env.JWT_SECRET = 'test-secret-key-for-testing-only';
-process.env.DATABASE_URL = process.env.DATABASE_URL || 'postgresql://test:test@localhost:5433/cygni_test';
+process.env.NODE_ENV = "test";
+process.env.JWT_SECRET = "test-secret-key-for-testing-only";
+process.env.DATABASE_URL =
+  process.env.DATABASE_URL ||
+  "postgresql://test:test@localhost:5433/cygni_test";
 
 // Mock Prisma for unit tests
-jest.mock('@prisma/client', () => {
+jest.mock("@prisma/client", () => {
   const mockPrismaClient = {
     $connect: jest.fn(),
     $disconnect: jest.fn(),
@@ -50,5 +52,5 @@ jest.mock('@prisma/client', () => {
 // Global test utilities
 (global as any).testHelpers = {
   generateTestEmail: () => `test-${Date.now()}@example.com`,
-  generateTestToken: () => 'test-jwt-token',
+  generateTestToken: () => "test-jwt-token",
 };

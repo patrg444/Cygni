@@ -7,13 +7,13 @@ interface EmailOptions {
 }
 
 export async function sendEmail(options: EmailOptions): Promise<void> {
-  const from = options.from || process.env.FROM_EMAIL || 'noreply@cygni.app';
-  
-  console.log('📧 Email would be sent:');
+  const from = options.from || process.env.FROM_EMAIL || "noreply@cygni.app";
+
+  console.log("📧 Email would be sent:");
   console.log(`  From: ${from}`);
   console.log(`  To: ${options.to}`);
   console.log(`  Subject: ${options.subject}`);
-  
+
   // In production, this would use SendGrid, AWS SES, or similar:
   /*
   const sgMail = require('@sendgrid/mail');
@@ -29,10 +29,10 @@ export async function sendEmail(options: EmailOptions): Promise<void> {
   
   await sgMail.send(msg);
   */
-  
+
   // For now, just log to console
-  if (process.env.NODE_ENV === 'development') {
-    console.log('  Preview: First 200 chars of HTML:');
-    console.log('  ' + options.html.substring(0, 200) + '...');
+  if (process.env.NODE_ENV === "development") {
+    console.log("  Preview: First 200 chars of HTML:");
+    console.log("  " + options.html.substring(0, 200) + "...");
   }
 }

@@ -41,6 +41,7 @@ cloudexpress init
 ```
 
 The CLI will:
+
 - Detect your framework automatically
 - Ask about services you need (database, auth, storage)
 - Create a `cloudexpress.yaml` configuration file
@@ -71,11 +72,11 @@ services:
     scaling:
       min: 1
       max: 10
-    
+
   database:
     type: postgres
     version: "15"
-    
+
   auth:
     enabled: true
     providers:

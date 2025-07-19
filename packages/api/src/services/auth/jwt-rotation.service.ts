@@ -1,7 +1,7 @@
-import { CronJob } from 'cron';
-import * as jwt from 'jsonwebtoken';
-import * as crypto from 'crypto';
-import { PrismaClient } from '@prisma/client';
+import { CronJob } from "cron";
+import * as jwt from "jsonwebtoken";
+import * as crypto from "crypto";
+import { PrismaClient } from "@prisma/client";
 
 interface JWKSKey {
   kid: string;
@@ -16,7 +16,10 @@ interface JWKSKey {
 
 export class JWTRotationService {
   private prisma: PrismaClient;
-  private keyHistory: Map<string, { privateKey: string; publicKey: string; expiresAt: Date }> = new Map();
+  private keyHistory: Map<
+    string,
+    { privateKey: string; publicKey: string; expiresAt: Date }
+  > = new Map();
   private readonly KEY_ROTATION_HOURS = 24;
   private readonly KEY_RETENTION_DAYS = 3;
 
@@ -35,7 +38,7 @@ export class JWTRotationService {
         },
       },
       orderBy: {
-        createdAt: 'desc',
+        createdAt: "desc",
       },
     });
 
@@ -55,24 +58,28 @@ export class JWTRotationService {
 
   // Rotate JWT signing keys
   async rotateKeys() {
-    console.log('Rotating JWT signing keys...');
+    console.log("Rotating JWT signing keys...");
 
     // Generate new RSA key pair
-    const keyPair = crypto.generateKeyPairSync('rsa', {
+    const keyPair = crypto.generateKeyPairSync("rsa", {
       modulusLength: 2048,
       publicKeyEncoding: {
-        type: 'spki',
-        format: 'pem',
+        type: "spki",
+        format: "pem",
       },
       privateKeyEncoding: {
-        type: 'pkcs8',
-        format: 'pem',
+        type: "pkcs8",
+        format: "pem",
       },
     });
 
-    const kid = crypto.randomBytes(16).toString('hex');
+    const kid = crypto.randomBytes(16).toString("hex");
     const expiresAt = new Date();
-    expiresAt.setHours(expiresAt.getHours() + this.KEY_ROTATION_HOURS + this.KEY_RETENTION_DAYS * 24);
+    expiresAt.setHours(
+      expiresAt.getHours() +
+        this.KEY_ROTATION_HOURS +
+        this.KEY_RETENTION_DAYS * 24,
+    );
 
     // Store in database
     await this.prisma.jwtKey.create({
@@ -80,7 +87,7 @@ export class JWTRotationService {
         kid,
         privateKey: keyPair.privateKey,
         publicKey: keyPair.publicKey,
-        algorithm: 'RS256',
+        algorithm: "RS256",
         expiresAt,
       },
     });
@@ -107,7 +114,7 @@ export class JWTRotationService {
       .sort((a, b) => b[1].expiresAt.getTime() - a[1].expiresAt.getTime());
 
     if (validKeys.length === 0) {
-      throw new Error('No valid JWT signing keys available');
+      throw new Error("No valid JWT signing keys available");
     }
 
     return {
@@ -121,9 +128,9 @@ export class JWTRotationService {
     const { kid, privateKey } = this.getCurrentKey();
 
     return jwt.sign(payload, privateKey, {
-      algorithm: 'RS256',
+      algorithm: "RS256",
       keyid: kid,
-      expiresIn: '24h',
+      expiresIn: "24h",
       ...options,
     });
   }
@@ -132,13 +139,13 @@ export class JWTRotationService {
   async verifyToken(token: string): Promise<any> {
     // Decode header to get kid
     const decoded = jwt.decode(token, { complete: true });
-    if (!decoded || typeof decoded === 'string') {
-      throw new Error('Invalid token format');
+    if (!decoded || typeof decoded === "string") {
+      throw new Error("Invalid token format");
     }
 
     const kid = decoded.header.kid;
     if (!kid) {
-      throw new Error('Token missing kid header');
+      throw new Error("Token missing kid header");
     }
 
     // Get public key for verification
@@ -150,7 +157,7 @@ export class JWTRotationService {
       });
 
       if (!dbKey || dbKey.expiresAt < new Date()) {
-        throw new Error('Token signed with unknown or expired key');
+        throw new Error("Token signed with unknown or expired key");
       }
 
       // Cache it
@@ -162,8 +169,8 @@ export class JWTRotationService {
     }
 
     // Verify token
-    return jwt.verify(token, key?.publicKey || '', {
-      algorithms: ['RS256'],
+    return jwt.verify(token, key?.publicKey || "", {
+      algorithms: ["RS256"],
     });
   }
 
@@ -184,12 +191,12 @@ export class JWTRotationService {
     for (const key of validKeys) {
       // Convert PEM to JWK format
       const publicKey = crypto.createPublicKey(key.publicKey);
-      const jwk = publicKey.export({ format: 'jwk' });
+      const jwk = publicKey.export({ format: "jwk" });
 
       keys.push({
         kid: key.kid,
-        kty: 'RSA',
-        use: 'sig',
+        kty: "RSA",
+        use: "sig",
         alg: key.algorithm,
         n: jwk.n as string,
         e: jwk.e as string,
@@ -204,7 +211,7 @@ export class JWTRotationService {
   // Clean up expired keys
   private async cleanupExpiredKeys() {
     const now = new Date();
-    
+
     // Remove from memory
     for (const [kid, key] of this.keyHistory.entries()) {
       if (key.expiresAt < now) {
@@ -226,21 +233,21 @@ export class JWTRotationService {
   startRotationJob() {
     // Run every 24 hours
     const job = new CronJob(
-      '0 0 * * *', // Midnight every day
+      "0 0 * * *", // Midnight every day
       async () => {
         try {
           await this.rotateKeys();
         } catch (error) {
-          console.error('JWT key rotation failed:', error);
+          console.error("JWT key rotation failed:", error);
           // Send alert to ops team
         }
       },
       null,
       true,
-      'UTC'
+      "UTC",
     );
 
-    console.log('JWT rotation job scheduled');
+    console.log("JWT rotation job scheduled");
     return job;
   }
 }
@@ -250,17 +257,17 @@ export function jwtMiddleware(jwtService: JWTRotationService) {
   return async (req: any, res: any, next: any) => {
     const authHeader = req.headers.authorization;
     if (!authHeader) {
-      return res.status(401).json({ error: 'No authorization header' });
+      return res.status(401).json({ error: "No authorization header" });
     }
 
-    const token = authHeader.replace('Bearer ', '');
-    
+    const token = authHeader.replace("Bearer ", "");
+
     try {
       const payload = await jwtService.verifyToken(token);
       req.user = payload;
       next();
     } catch (error) {
-      return res.status(401).json({ error: 'Invalid token' });
+      return res.status(401).json({ error: "Invalid token" });
     }
   };
 }

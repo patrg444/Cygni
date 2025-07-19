@@ -53,12 +53,14 @@ encrypt        = true
 ### 4. Deploy infrastructure
 
 For development:
+
 ```bash
 terraform plan -var-file=environments/development.tfvars
 terraform apply -var-file=environments/development.tfvars
 ```
 
 For production:
+
 ```bash
 terraform plan -var-file=environments/production.tfvars
 terraform apply -var-file=environments/production.tfvars
@@ -102,12 +104,14 @@ terraform output eks_cluster_name
 ## Cost Optimization
 
 Development environment uses:
+
 - Smaller instance types
 - Single NAT gateway
 - Shorter backup retention
 - No read replicas
 
 Production environment includes:
+
 - Multi-AZ RDS deployment
 - Read replicas
 - Enhanced monitoring

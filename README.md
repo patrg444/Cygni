@@ -24,6 +24,7 @@ Cygni aims to be the developer-first cloud platform that makes deploying full-st
 ## 🚧 Current Implementation Status
 
 ### ✅ Completed
+
 - **Infrastructure as Code**: Terraform modules for AWS (VPC, RDS, EKS, S3)
 - **Kubernetes Deployment**: Production-ready Helm charts
 - **API Service**: Core REST API with authentication and RBAC
@@ -33,12 +34,14 @@ Cygni aims to be the developer-first cloud platform that makes deploying full-st
 - **Docker**: Multi-stage builds with security hardening
 
 ### 🔄 In Progress
+
 - Runtime orchestrator for container management
 - Builder service for source-to-container
 - Web dashboard UI
 - Billing and metering integration
 
 ### 📋 Roadmap
+
 - [ ] Complete runtime orchestrator with Kubernetes CRDs
 - [ ] Implement builder service with buildpack support
 - [ ] Create web dashboard for project management
@@ -114,11 +117,13 @@ pnpm typecheck
 ## 🚢 Deployment
 
 ### Local Development
+
 ```bash
 docker-compose up
 ```
 
 ### Production (Kubernetes)
+
 ```bash
 # Install with Helm
 helm install cygni ./infrastructure/helm/cygni \
@@ -128,6 +133,7 @@ helm install cygni ./infrastructure/helm/cygni \
 ```
 
 ### Infrastructure (AWS)
+
 ```bash
 cd infrastructure/terraform
 terraform init
@@ -140,6 +146,7 @@ terraform apply -var-file=environments/production.tfvars
 We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 
 ### Development Setup
+
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
 3. Commit your changes (`git commit -m 'Add amazing feature'`)

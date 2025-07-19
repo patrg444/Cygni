@@ -73,6 +73,7 @@ The data plane runs the actual workloads and is built on Kubernetes.
    - Integrates with monitoring systems
 
 2. **CygniService CRD**
+
    ```yaml
    apiVersion: cygni.dev/v1
    kind: CygniService
@@ -87,8 +88,8 @@ The data plane runs the actual workloads and is built on Kubernetes.
        max: 10
        cpu: 70
      healthGates:
-       errorRate: 5  # percentage
-       latencyP95: 1000  # milliseconds
+       errorRate: 5 # percentage
+       latencyP95: 1000 # milliseconds
    ```
 
 3. **Ingress Management**
@@ -135,16 +136,19 @@ The data plane runs the actual workloads and is built on Kubernetes.
 ## Security Architecture
 
 ### Network Security
+
 - All internal communication over TLS
 - Network policies for pod-to-pod communication
 - WAF integration for public endpoints
 
 ### Secrets Management
+
 - Encrypted at rest using cloud KMS
 - Automatic rotation for platform secrets
 - Least-privilege access control
 
 ### Compliance
+
 - SOC2 Type II ready architecture
 - GDPR compliance through data residency options
 - Audit logging for all operations
@@ -159,6 +163,7 @@ The data plane runs the actual workloads and is built on Kubernetes.
 4. **Data Isolation**: Separate database schemas with row-level security
 
 ### Resource Management
+
 ```
 Project
 ├── Environments (prod, staging, preview)
@@ -171,11 +176,13 @@ Project
 ## Scaling Architecture
 
 ### Horizontal Scaling
+
 - Control plane services run in HA mode (3+ replicas)
 - Database with read replicas
 - Multi-region deployment support
 
 ### Auto-scaling
+
 - KEDA for advanced auto-scaling scenarios
 - Metrics: CPU, Memory, Request rate, Custom metrics
 - Scale-to-zero for development environments
@@ -183,17 +190,20 @@ Project
 ## Monitoring & Reliability
 
 ### Health Monitoring
+
 - Prometheus metrics for all services
 - Custom health gates per deployment
 - Automated alerting via PagerDuty/Slack
 
 ### Disaster Recovery
+
 - Automated backups every 6 hours
 - Point-in-time recovery for databases
 - Cross-region backup replication
 - RTO: 1 hour, RPO: 6 hours
 
 ### Chaos Engineering
+
 - Weekly "Failure Friday" tests
 - Automated chaos scenarios:
   - Pod failures
@@ -204,11 +214,13 @@ Project
 ## Cost Management
 
 ### Usage Tracking
+
 - Real-time resource usage monitoring
 - Per-service cost allocation
 - Predictive cost alerts
 
 ### Budget Enforcement
+
 - Hard limits with automatic scale-down
 - Warning at 80% budget utilization
 - Grace period for payment failures
@@ -216,6 +228,7 @@ Project
 ## Development Workflow
 
 ### Local Development
+
 ```bash
 # Start local environment
 docker-compose up
@@ -226,12 +239,14 @@ pnpm dev
 ```
 
 ### Testing Strategy
+
 - Unit tests for business logic
 - Integration tests for API endpoints
 - E2E tests on staging environment
 - Chaos tests in production
 
 ### CI/CD Pipeline
+
 - GitHub Actions for CI
 - Multi-stage Docker builds
 - Automated security scanning
@@ -240,12 +255,14 @@ pnpm dev
 ## Future Architecture Considerations
 
 ### Planned Enhancements
+
 1. **Edge Computing**: Deploy to edge locations for reduced latency
 2. **Serverless Functions**: Lambda/Cloud Functions integration
 3. **ML Workloads**: GPU support and ML-specific optimizations
 4. **Multi-Cloud**: Single control plane managing multiple clouds
 
 ### Extensibility
+
 - Plugin system for custom builders
 - Webhook integrations for external tools
 - API-first design for third-party integrations
@@ -253,24 +270,28 @@ pnpm dev
 ## Architecture Decision Records (ADRs)
 
 ### ADR-001: Microservices Architecture
+
 **Status**: Accepted  
 **Context**: Need to scale different components independently  
 **Decision**: Use microservices with clear bounded contexts  
 **Consequences**: More operational complexity but better scalability
 
 ### ADR-002: Kubernetes as Data Plane
+
 **Status**: Accepted  
 **Context**: Need portable, scalable container orchestration  
 **Decision**: Use Kubernetes with custom CRDs  
 **Consequences**: Steeper learning curve but industry-standard platform
 
 ### ADR-003: Go for Runtime Orchestrator
+
 **Status**: Accepted  
 **Context**: Need performant, type-safe Kubernetes controller  
 **Decision**: Use Go with controller-runtime  
 **Consequences**: Better performance, native Kubernetes integration
 
 ### ADR-004: Usage-Based Billing
+
 **Status**: Accepted  
 **Context**: Fair pricing model that scales with usage  
 **Decision**: Integrate Stripe with metered billing  

@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   # PostgreSQL database with health checks and security hardening
@@ -73,8 +73,8 @@ services:
     env_file:
       - .env.development
     ports:
-      - "${MINIO_PORT:-9000}:9000"   # API
-      - "${MINIO_CONSOLE_PORT:-9001}:9001"   # Console
+      - "${MINIO_PORT:-9000}:9000" # API
+      - "${MINIO_CONSOLE_PORT:-9001}:9001" # Console
     environment:
       MINIO_BROWSER_REDIRECT_URL: http://localhost:${MINIO_CONSOLE_PORT:-9001}
     command: server /data --console-address ":9001"
@@ -98,7 +98,7 @@ services:
 
   # API service with proper health checks and dependencies
   api:
-    build: 
+    build:
       context: ./services/api
       dockerfile: Dockerfile
       target: runner
@@ -127,7 +127,15 @@ services:
     networks:
       - cygni-network
     healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/health"]
+      test:
+        [
+          "CMD",
+          "wget",
+          "--no-verbose",
+          "--tries=1",
+          "--spider",
+          "http://localhost:3000/health",
+        ]
       interval: 30s
       timeout: 10s
       retries: 3

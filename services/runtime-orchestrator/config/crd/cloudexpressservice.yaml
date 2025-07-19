@@ -5,164 +5,165 @@ metadata:
 spec:
   group: cloudx.io
   versions:
-  - name: v1
-    served: true
-    storage: true
-    schema:
-      openAPIV3Schema:
-        type: object
-        properties:
-          spec:
-            type: object
-            required:
-            - image
-            properties:
-              image:
-                type: string
-                description: Container image to deploy
-              ports:
-                type: array
-                items:
-                  type: integer
-                  format: int32
-                description: Ports exposed by the service
-              envFrom:
-                type: string
-                description: Environment variables from secrets
-              env:
-                type: object
-                additionalProperties:
+    - name: v1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              required:
+                - image
+              properties:
+                image:
                   type: string
-                description: Environment variables
-              serviceType:
-                type: string
-                enum: ["web", "worker", "cron"]
-                default: "web"
-                description: Type of service
-              command:
-                type: array
-                items:
+                  description: Container image to deploy
+                ports:
+                  type: array
+                  items:
+                    type: integer
+                    format: int32
+                  description: Ports exposed by the service
+                envFrom:
                   type: string
-                description: Command override
-              args:
-                type: array
-                items:
+                  description: Environment variables from secrets
+                env:
+                  type: object
+                  additionalProperties:
+                    type: string
+                  description: Environment variables
+                serviceType:
                   type: string
-                description: Args override
-              autoscale:
-                type: object
-                properties:
-                  min:
-                    type: integer
-                    format: int32
-                    minimum: 1
-                    default: 1
-                  max:
-                    type: integer
-                    format: int32
-                    minimum: 1
-                  cpu:
-                    type: integer
-                    format: int32
-                    minimum: 1
-                    maximum: 100
-                    default: 70
-                  rps:
-                    type: integer
-                    format: int32
-                    minimum: 1
-              resources:
-                type: object
-                properties:
-                  cpu:
+                  enum: ["web", "worker", "cron"]
+                  default: "web"
+                  description: Type of service
+                command:
+                  type: array
+                  items:
                     type: string
-                    pattern: '^(\d+m|\d+(\.\d+)?)$'
-                  memory:
+                  description: Command override
+                args:
+                  type: array
+                  items:
                     type: string
-                    pattern: '^(\d+Mi|\d+Gi)$'
-                  cpuLimit:
-                    type: string
-                    pattern: '^(\d+m|\d+(\.\d+)?)$'
-                  memoryLimit:
-                    type: string
-                    pattern: '^(\d+Mi|\d+Gi)$'
-              healthCheck:
-                type: object
-                properties:
-                  path:
-                    type: string
-                    default: "/health"
-                  port:
-                    type: integer
-                    format: int32
-                  initialDelaySeconds:
-                    type: integer
-                    format: int32
-                    default: 30
-                  periodSeconds:
-                    type: integer
-                    format: int32
-                    default: 10
-          status:
-            type: object
-            properties:
-              phase:
-                type: string
-                enum: ["Pending", "Deploying", "Running", "Failed", "Terminating"]
-              readyReplicas:
-                type: integer
-                format: int32
-              replicas:
-                type: integer
-                format: int32
-              currentImage:
-                type: string
-              previousImage:
-                type: string
-              lastUpdateTime:
-                type: string
-                format: date-time
-              message:
-                type: string
-              deploymentId:
-                type: string
-              endpoint:
-                type: string
-              conditions:
-                type: array
-                items:
+                  description: Args override
+                autoscale:
                   type: object
                   properties:
-                    type:
+                    min:
+                      type: integer
+                      format: int32
+                      minimum: 1
+                      default: 1
+                    max:
+                      type: integer
+                      format: int32
+                      minimum: 1
+                    cpu:
+                      type: integer
+                      format: int32
+                      minimum: 1
+                      maximum: 100
+                      default: 70
+                    rps:
+                      type: integer
+                      format: int32
+                      minimum: 1
+                resources:
+                  type: object
+                  properties:
+                    cpu:
                       type: string
-                    status:
+                      pattern: '^(\d+m|\d+(\.\d+)?)$'
+                    memory:
                       type: string
-                    reason:
+                      pattern: '^(\d+Mi|\d+Gi)$'
+                    cpuLimit:
                       type: string
-                    message:
+                      pattern: '^(\d+m|\d+(\.\d+)?)$'
+                    memoryLimit:
                       type: string
-                    lastTransitionTime:
+                      pattern: '^(\d+Mi|\d+Gi)$'
+                healthCheck:
+                  type: object
+                  properties:
+                    path:
                       type: string
-                      format: date-time
-    subresources:
-      status: {}
-    additionalPrinterColumns:
-    - name: Image
-      type: string
-      jsonPath: .spec.image
-    - name: Phase
-      type: string
-      jsonPath: .status.phase
-    - name: Ready
-      type: string
-      jsonPath: .status.readyReplicas
-    - name: Age
-      type: date
-      jsonPath: .metadata.creationTimestamp
+                      default: "/health"
+                    port:
+                      type: integer
+                      format: int32
+                    initialDelaySeconds:
+                      type: integer
+                      format: int32
+                      default: 30
+                    periodSeconds:
+                      type: integer
+                      format: int32
+                      default: 10
+            status:
+              type: object
+              properties:
+                phase:
+                  type: string
+                  enum:
+                    ["Pending", "Deploying", "Running", "Failed", "Terminating"]
+                readyReplicas:
+                  type: integer
+                  format: int32
+                replicas:
+                  type: integer
+                  format: int32
+                currentImage:
+                  type: string
+                previousImage:
+                  type: string
+                lastUpdateTime:
+                  type: string
+                  format: date-time
+                message:
+                  type: string
+                deploymentId:
+                  type: string
+                endpoint:
+                  type: string
+                conditions:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      type:
+                        type: string
+                      status:
+                        type: string
+                      reason:
+                        type: string
+                      message:
+                        type: string
+                      lastTransitionTime:
+                        type: string
+                        format: date-time
+      subresources:
+        status: {}
+      additionalPrinterColumns:
+        - name: Image
+          type: string
+          jsonPath: .spec.image
+        - name: Phase
+          type: string
+          jsonPath: .status.phase
+        - name: Ready
+          type: string
+          jsonPath: .status.readyReplicas
+        - name: Age
+          type: date
+          jsonPath: .metadata.creationTimestamp
   scope: Namespaced
   names:
     plural: cloudexpressservices
     singular: cloudexpressservice
     kind: CygniService
     shortNames:
-    - cxs
+      - cxs

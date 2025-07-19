@@ -27,20 +27,20 @@ spec:
   pollingInterval: 30
   cooldownPeriod: 300
   triggers:
-  - type: prometheus
-    metadata:
-      serverAddress: http://prometheus-kube-prometheus-prometheus.monitoring.svc.cluster.local:9090
-      metricName: http_requests_per_second
-      query: |
-        sum(rate(cloudexpress_http_requests_total{namespace="{{ .Namespace }}",service="{{ .ServiceName }}"}[30s]))
-      threshold: "75"  # Target 75 RPS per pod
-  - type: prometheus
-    metadata:
-      serverAddress: http://prometheus-kube-prometheus-prometheus.monitoring.svc.cluster.local:9090
-      metricName: cpu_utilization
-      query: |
-        avg(container_cpu_usage_seconds_total{namespace="{{ .Namespace }}",pod=~"{{ .ServiceName }}-.*"})
-      threshold: "0.7"  # Fallback to CPU at 70%
+    - type: prometheus
+      metadata:
+        serverAddress: http://prometheus-kube-prometheus-prometheus.monitoring.svc.cluster.local:9090
+        metricName: http_requests_per_second
+        query: |
+          sum(rate(cloudexpress_http_requests_total{namespace="{{ .Namespace }}",service="{{ .ServiceName }}"}[30s]))
+        threshold: "75" # Target 75 RPS per pod
+    - type: prometheus
+      metadata:
+        serverAddress: http://prometheus-kube-prometheus-prometheus.monitoring.svc.cluster.local:9090
+        metricName: cpu_utilization
+        query: |
+          avg(container_cpu_usage_seconds_total{namespace="{{ .Namespace }}",pod=~"{{ .ServiceName }}-.*"})
+        threshold: "0.7" # Fallback to CPU at 70%
 ---
 # TriggerAuthentication for secure Prometheus access (if needed)
 apiVersion: keda.sh/v1alpha1
@@ -50,6 +50,6 @@ metadata:
   namespace: cloudexpress-system
 spec:
   secretTargetRef:
-  - parameter: bearerToken
-    name: prometheus-token
-    key: token
+    - parameter: bearerToken
+      name: prometheus-token
+      key: token

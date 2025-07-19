@@ -1,6 +1,6 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from "@prisma/client";
 // import { KubernetesService } from '../kubernetes/kubernetes.service';
-import { NotificationService } from '../notification/notification.service';
+import { NotificationService } from "../notification/notification.service";
 
 export interface BudgetStatus {
   used: number;
@@ -30,38 +30,38 @@ interface PricingRates {
 }
 
 export class BudgetMonitor {
-  private readonly FREE_TIER_LIMIT = 10.00; // $10 USD
+  private readonly FREE_TIER_LIMIT = 10.0; // $10 USD
   private readonly WARNING_THRESHOLD = 0.8; // Warn at 80% usage
-  
+
   // Pricing per unit
   private readonly pricing: PricingRates = {
-    cpuSecond: 0.00001,      // $0.036/hour for 1 vCPU
-    memoryGBHour: 0.005,     // $0.005/GB-hour
-    storageGBHour: 0.0001,   // $0.0001/GB-hour
-    egressGB: 0.09,          // $0.09/GB egress
-    request: 0.0000002,      // $0.20 per million requests
+    cpuSecond: 0.00001, // $0.036/hour for 1 vCPU
+    memoryGBHour: 0.005, // $0.005/GB-hour
+    storageGBHour: 0.0001, // $0.0001/GB-hour
+    egressGB: 0.09, // $0.09/GB egress
+    request: 0.0000002, // $0.20 per million requests
   };
 
   constructor(
     private prisma: PrismaClient,
     // private k8sService: KubernetesService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
   ) {}
 
   async checkBudget(projectId: string): Promise<BudgetStatus> {
     const usage = await this.calculateCurrentUsage(projectId);
     const percentUsed = (usage.total / this.FREE_TIER_LIMIT) * 100;
-    
+
     // Check if over limit
     if (usage.total >= this.FREE_TIER_LIMIT) {
       await this.enforceFreeTierLimit(projectId);
-      await this.sendBudgetAlert(projectId, usage, 'exceeded');
+      await this.sendBudgetAlert(projectId, usage, "exceeded");
     }
     // Check if approaching limit
     else if (percentUsed >= this.WARNING_THRESHOLD * 100) {
-      await this.sendBudgetAlert(projectId, usage, 'warning');
+      await this.sendBudgetAlert(projectId, usage, "warning");
     }
-    
+
     return {
       used: usage.total,
       limit: this.FREE_TIER_LIMIT,
@@ -76,10 +76,10 @@ export class BudgetMonitor {
     // Get current billing period (month)
     const now = new Date();
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-    
+
     // Aggregate usage events
     const usageEvents = await this.prisma.usageEvent.groupBy({
-      by: ['metricType'],
+      by: ["metricType"],
       where: {
         projectId,
         timestamp: {
@@ -105,25 +105,25 @@ export class BudgetMonitor {
     for (const event of usageEvents) {
       // Convert Decimal to number
       const quantity = Number(event._sum.quantity || 0);
-      
+
       switch (event.metricType) {
-        case 'cpu_seconds':
+        case "cpu_seconds":
           metrics.cpuSeconds = quantity;
           metrics.total += quantity * this.pricing.cpuSecond;
           break;
-        case 'memory_gb_hours':
+        case "memory_gb_hours":
           metrics.memoryGBHours = quantity;
           metrics.total += quantity * this.pricing.memoryGBHour;
           break;
-        case 'storage_gb_hours':
+        case "storage_gb_hours":
           metrics.storageGBHours = quantity;
           metrics.total += quantity * this.pricing.storageGBHour;
           break;
-        case 'egress_gb':
+        case "egress_gb":
           metrics.egressGB = quantity;
           metrics.total += quantity * this.pricing.egressGB;
           break;
-        case 'requests':
+        case "requests":
           metrics.requests = quantity;
           metrics.total += quantity * this.pricing.request;
           break;
@@ -131,7 +131,10 @@ export class BudgetMonitor {
     }
 
     // Calculate daily rate based on days elapsed
-    const daysElapsed = Math.max(1, (now.getTime() - startOfMonth.getTime()) / (1000 * 60 * 60 * 24));
+    const daysElapsed = Math.max(
+      1,
+      (now.getTime() - startOfMonth.getTime()) / (1000 * 60 * 60 * 24),
+    );
     metrics.dailyRate = metrics.total / daysElapsed;
 
     return metrics;
@@ -142,7 +145,7 @@ export class BudgetMonitor {
     const services = await this.prisma.deployment.findMany({
       where: {
         projectId,
-        status: 'active',
+        status: "active",
       },
       select: {
         id: true,
@@ -157,7 +160,7 @@ export class BudgetMonitor {
 
     // Scale down all non-production services to zero
     for (const service of services) {
-      if (service.environment.slug !== 'production') {
+      if (service.environment.slug !== "production") {
         // await this.k8sService.scaleDeployment(service.id, 0);
         console.log(`Would scale down ${service.id} to 0`);
       } else {
@@ -171,7 +174,7 @@ export class BudgetMonitor {
     await this.prisma.project.update({
       where: { id: projectId },
       data: {
-        status: 'budget_exceeded',
+        status: "budget_exceeded",
         budgetExceededAt: new Date(),
       },
     });
@@ -180,7 +183,7 @@ export class BudgetMonitor {
   private async sendBudgetAlert(
     projectId: string,
     usage: UsageMetrics,
-    type: 'warning' | 'exceeded'
+    type: "warning" | "exceeded",
   ) {
     const project = await this.prisma.project.findUnique({
       where: { id: projectId },
@@ -195,17 +198,21 @@ export class BudgetMonitor {
 
     if (!project) return;
 
-    const message = type === 'exceeded'
-      ? `Your project "${project.name}" has exceeded the free tier limit of $${this.FREE_TIER_LIMIT}. Services have been scaled down to prevent additional charges.`
-      : `Your project "${project.name}" has used ${(usage.total / this.FREE_TIER_LIMIT * 100).toFixed(0)}% of the free tier limit.`;
+    const message =
+      type === "exceeded"
+        ? `Your project "${project.name}" has exceeded the free tier limit of $${this.FREE_TIER_LIMIT}. Services have been scaled down to prevent additional charges.`
+        : `Your project "${project.name}" has used ${((usage.total / this.FREE_TIER_LIMIT) * 100).toFixed(0)}% of the free tier limit.`;
 
     // Send notifications to all team members
     for (const user of project.team.users) {
       await this.notificationService.send({
         userId: user.id,
-        type: 'budget_alert',
-        severity: type === 'exceeded' ? 'critical' : 'warning',
-        title: type === 'exceeded' ? 'Free Tier Limit Exceeded' : 'Approaching Free Tier Limit',
+        type: "budget_alert",
+        severity: type === "exceeded" ? "critical" : "warning",
+        title:
+          type === "exceeded"
+            ? "Free Tier Limit Exceeded"
+            : "Approaching Free Tier Limit",
         message,
         data: {
           projectId,
@@ -213,8 +220,13 @@ export class BudgetMonitor {
             total: usage.total,
             limit: this.FREE_TIER_LIMIT,
             breakdown: {
-              compute: (usage.cpuSeconds * this.pricing.cpuSecond + usage.memoryGBHours * this.pricing.memoryGBHour).toFixed(2),
-              storage: (usage.storageGBHours * this.pricing.storageGBHour).toFixed(2),
+              compute: (
+                usage.cpuSeconds * this.pricing.cpuSecond +
+                usage.memoryGBHours * this.pricing.memoryGBHour
+              ).toFixed(2),
+              storage: (
+                usage.storageGBHours * this.pricing.storageGBHour
+              ).toFixed(2),
               network: (usage.egressGB * this.pricing.egressGB).toFixed(2),
               requests: (usage.requests * this.pricing.request).toFixed(2),
             },
@@ -224,16 +236,19 @@ export class BudgetMonitor {
     }
   }
 
-  private projectExceedTime(dailyRate: number, currentUsage: number): Date | undefined {
+  private projectExceedTime(
+    dailyRate: number,
+    currentUsage: number,
+  ): Date | undefined {
     if (dailyRate <= 0) return undefined;
-    
+
     const remainingBudget = this.FREE_TIER_LIMIT - currentUsage;
     if (remainingBudget <= 0) return new Date(); // Already exceeded
-    
+
     const daysUntilExceed = remainingBudget / dailyRate;
     const exceedDate = new Date();
     exceedDate.setDate(exceedDate.getDate() + daysUntilExceed);
-    
+
     return exceedDate;
   }
 
@@ -242,7 +257,7 @@ export class BudgetMonitor {
     const projects = await this.prisma.project.findMany({
       where: {
         status: {
-          not: 'budget_exceeded',
+          not: "budget_exceeded",
         },
       },
     });
@@ -251,21 +266,29 @@ export class BudgetMonitor {
       try {
         await this.checkBudget(project.id);
       } catch (error) {
-        console.error(`Failed to check budget for project ${project.id}:`, error);
+        console.error(
+          `Failed to check budget for project ${project.id}:`,
+          error,
+        );
       }
     }
   }
 
   // Get budget status for UI
-  async getBudgetStatusForUI(projectId: string): Promise<BudgetStatus & { breakdown: any }> {
+  async getBudgetStatusForUI(
+    projectId: string,
+  ): Promise<BudgetStatus & { breakdown: any }> {
     const status = await this.checkBudget(projectId);
     const usage = await this.calculateCurrentUsage(projectId);
-    
+
     return {
       ...status,
       breakdown: {
         compute: {
-          cost: (usage.cpuSeconds * this.pricing.cpuSecond + usage.memoryGBHours * this.pricing.memoryGBHour).toFixed(2),
+          cost: (
+            usage.cpuSeconds * this.pricing.cpuSecond +
+            usage.memoryGBHours * this.pricing.memoryGBHour
+          ).toFixed(2),
           cpuHours: (usage.cpuSeconds / 3600).toFixed(2),
           memoryGBHours: usage.memoryGBHours.toFixed(2),
         },

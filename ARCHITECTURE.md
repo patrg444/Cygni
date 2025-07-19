@@ -1,6 +1,7 @@
 # Cygni Architecture
 
 ## Table of Contents
+
 1. [Overview](#overview)
 2. [System Architecture](#system-architecture)
 3. [Project Structure](#project-structure)
@@ -56,26 +57,26 @@ graph TB
     CLI --> NGINX
     WEB --> NGINX
     API_CLIENT --> NGINX
-    
+
     NGINX --> API
     NGINX --> AUTH
-    
+
     API --> AUTH
     API --> BUILDER
     API --> WEBHOOK
     API --> PG
     API --> REDIS
     API --> STRIPE
-    
+
     BUILDER --> REGISTRY
     BUILDER --> S3
-    
+
     WEBHOOK --> GIT
-    
+
     ORCH --> K8S
     ORCH --> APPS
     ORCH --> MONITORING
-    
+
     API --> ORCH
 ```
 
@@ -139,6 +140,7 @@ Cygni/
 ## Service Architecture
 
 ### API Service
+
 ```mermaid
 graph LR
     subgraph "API Service"
@@ -146,19 +148,19 @@ graph LR
         MW[Middleware]
         SVC[Services]
         DB[Database]
-        
+
         ROUTES --> MW
         MW --> SVC
         SVC --> DB
     end
-    
+
     subgraph "Routes"
         AUTH_R[/auth]
         PROJ_R[/projects]
         DEPLOY_R[/deployments]
         BUILD_R[/builds]
     end
-    
+
     subgraph "Services"
         AUTH_S[AuthService]
         PROJ_S[ProjectService]
@@ -168,6 +170,7 @@ graph LR
 ```
 
 ### Runtime Orchestrator
+
 ```mermaid
 graph TB
     subgraph "Runtime Orchestrator"
@@ -176,7 +179,7 @@ graph TB
         SCALER[Auto Scaler]
         DEPLOY[Deployment Manager]
     end
-    
+
     subgraph "Kubernetes Resources"
         CRD[CygniService CRD]
         DEPLOY_K[Deployments]
@@ -184,12 +187,12 @@ graph TB
         ING_K[Ingresses]
         HPA[HPA/KEDA]
     end
-    
+
     CTRL --> CRD
     CTRL --> HEALTH
     CTRL --> SCALER
     CTRL --> DEPLOY
-    
+
     DEPLOY --> DEPLOY_K
     DEPLOY --> SVC_K
     DEPLOY --> ING_K
@@ -199,6 +202,7 @@ graph TB
 ## Data Flow
 
 ### Deployment Flow
+
 ```mermaid
 sequenceDiagram
     participant User
@@ -208,7 +212,7 @@ sequenceDiagram
     participant Registry
     participant Orchestrator
     participant K8s
-    
+
     User->>CLI: cygni deploy
     CLI->>API: POST /deployments
     API->>Builder: Trigger build
@@ -223,6 +227,7 @@ sequenceDiagram
 ```
 
 ### Request Flow
+
 ```mermaid
 graph LR
     USER[User Request] --> CDN[CloudFront/CDN]
@@ -232,7 +237,7 @@ graph LR
     SVC --> POD1[Pod 1]
     SVC --> POD2[Pod 2]
     SVC --> PODN[Pod N]
-    
+
     POD1 --> DB[(Database)]
     POD1 --> CACHE[(Redis)]
     POD1 --> STORAGE[(S3)]
@@ -241,37 +246,39 @@ graph LR
 ## Deployment Architecture
 
 ### Multi-Region Setup
+
 ```mermaid
 graph TB
     subgraph "Global"
         ROUTE53[Route53/DNS]
         CF[CloudFront]
     end
-    
+
     subgraph "Region 1 (Primary)"
         LB1[Load Balancer]
         K8S1[EKS/GKE Cluster]
         RDS1[(RDS Primary)]
         CACHE1[(ElastiCache)]
     end
-    
+
     subgraph "Region 2 (Secondary)"
         LB2[Load Balancer]
         K8S2[EKS/GKE Cluster]
         RDS2[(RDS Replica)]
         CACHE2[(ElastiCache)]
     end
-    
+
     ROUTE53 --> CF
     CF --> LB1
     CF --> LB2
-    
+
     K8S1 --> RDS1
     K8S2 --> RDS2
     RDS1 -.->|Replication| RDS2
 ```
 
 ### Kubernetes Architecture
+
 ```mermaid
 graph TB
     subgraph "Kubernetes Cluster"
@@ -281,32 +288,32 @@ graph TB
             AUTH[Auth Service]
             BUILDER[Builder Service]
         end
-        
+
         subgraph "cygni-apps"
             APP1[User App 1]
             APP2[User App 2]
             APPN[User App N]
         end
-        
+
         subgraph "monitoring"
             PROM[Prometheus]
             GRAF[Grafana]
             LOKI[Loki]
         end
-        
+
         subgraph "ingress-nginx"
             INGRESS[Nginx Controller]
         end
     end
-    
+
     INGRESS --> API
     INGRESS --> APP1
     INGRESS --> APP2
-    
+
     CTRL --> APP1
     CTRL --> APP2
     CTRL --> APPN
-    
+
     PROM --> APP1
     PROM --> APP2
     PROM --> API
@@ -315,6 +322,7 @@ graph TB
 ## Technology Stack
 
 ### Core Technologies
+
 - **Languages**: TypeScript (Node.js), Go
 - **Frameworks**: Fastify, Next.js, controller-runtime
 - **Database**: PostgreSQL (Prisma ORM)
@@ -324,6 +332,7 @@ graph TB
 - **Cloud**: AWS/GCP/Azure agnostic
 
 ### Infrastructure
+
 - **CI/CD**: GitHub Actions
 - **Monitoring**: Prometheus + Grafana
 - **Logging**: Loki
@@ -331,6 +340,7 @@ graph TB
 - **Security**: Trivy, OWASP, CodeQL
 
 ### Development Tools
+
 - **Package Manager**: pnpm (workspaces)
 - **Build Tool**: Turbo
 - **Testing**: Jest, Go testing
@@ -359,7 +369,7 @@ graph TB
         SECRETS[Secrets Management]
         SCAN[Security Scanning]
     end
-    
+
     subgraph "Implementation"
         CF_WAF[CloudFront + WAF]
         CERT[Cert-Manager]
@@ -368,7 +378,7 @@ graph TB
         VAULT[K8s Secrets]
         TRIVY[Trivy Scanner]
     end
-    
+
     WAF --> CF_WAF
     TLS --> CERT
     AUTH --> JWT

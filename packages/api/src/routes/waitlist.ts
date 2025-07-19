@@ -1,7 +1,7 @@
-import { Router, Request, Response } from 'express';
-import { z } from 'zod';
-import { PrismaClient } from '@prisma/client';
-import { sendEmail } from '../services/email/email.service';
+import { Router, Request, Response } from "express";
+import { z } from "zod";
+import { PrismaClient } from "@prisma/client";
+import { sendEmail } from "../services/email/email.service";
 
 const router = Router();
 const prisma = new PrismaClient();
@@ -13,27 +13,31 @@ const waitlistSchema = z.object({
 });
 
 // POST /api/waitlist - Add email to waitlist
-router.post('/waitlist', async (req: Request, res: Response) => {
+router.post("/waitlist", async (req: Request, res: Response) => {
   try {
-    const { email, source = 'landing', referrer } = waitlistSchema.parse(req.body);
-    
+    const {
+      email,
+      source = "landing",
+      referrer,
+    } = waitlistSchema.parse(req.body);
+
     // Check if already on waitlist
     const existing = await prisma.waitlist.findUnique({
       where: { email },
     });
-    
+
     if (existing) {
-      return res.json({ 
-        success: true, 
-        message: 'Already on waitlist',
-        position: existing.position 
+      return res.json({
+        success: true,
+        message: "Already on waitlist",
+        position: existing.position,
       });
     }
-    
+
     // Get current position
     const count = await prisma.waitlist.count();
     const position = count + 1;
-    
+
     // Add to waitlist
     await prisma.waitlist.create({
       data: {
@@ -43,16 +47,16 @@ router.post('/waitlist', async (req: Request, res: Response) => {
         position,
         metadata: {
           ip: req.ip,
-          userAgent: req.headers['user-agent'],
+          userAgent: req.headers["user-agent"],
           timestamp: new Date().toISOString(),
         },
       },
     });
-    
+
     // Send welcome email
     await sendEmail({
       to: email,
-      subject: 'Welcome to CloudExpress Early Access!',
+      subject: "Welcome to CloudExpress Early Access!",
       html: `
         <div style="font-family: -apple-system, sans-serif; max-width: 600px; margin: 0 auto;">
           <h1 style="color: #0070f3;">Welcome to CloudExpress! 🚀</h1>
@@ -82,40 +86,41 @@ router.post('/waitlist', async (req: Request, res: Response) => {
         </div>
       `,
     });
-    
+
     // Log for analytics
-    console.log(`New waitlist signup: ${email} (position: ${position}, source: ${source})`);
-    
-    res.json({ 
-      success: true, 
+    console.log(
+      `New waitlist signup: ${email} (position: ${position}, source: ${source})`,
+    );
+
+    res.json({
+      success: true,
       position,
-      message: `You're #${position} on the waitlist!` 
+      message: `You're #${position} on the waitlist!`,
     });
-    
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return res.status(400).json({ 
-        success: false, 
-        error: 'Invalid email address' 
+      return res.status(400).json({
+        success: false,
+        error: "Invalid email address",
       });
     }
-    
-    console.error('Waitlist error:', error);
-    res.status(500).json({ 
-      success: false, 
-      error: 'Failed to join waitlist' 
+
+    console.error("Waitlist error:", error);
+    res.status(500).json({
+      success: false,
+      error: "Failed to join waitlist",
     });
   }
 });
 
 // GET /api/waitlist/stats - Get waitlist statistics (internal)
-router.get('/waitlist/stats', async (req: Request, res: Response) => {
+router.get("/waitlist/stats", async (req: Request, res: Response) => {
   // Simple auth check (replace with proper auth)
   const authHeader = req.headers.authorization;
   if (authHeader !== `Bearer ${process.env.ADMIN_API_KEY}`) {
-    return res.status(401).json({ error: 'Unauthorized' });
+    return res.status(401).json({ error: "Unauthorized" });
   }
-  
+
   const total = await prisma.waitlist.count();
   const today = await prisma.waitlist.count({
     where: {
@@ -124,14 +129,14 @@ router.get('/waitlist/stats', async (req: Request, res: Response) => {
       },
     },
   });
-  
+
   const bySources = await prisma.waitlist.groupBy({
-    by: ['source'],
+    by: ["source"],
     _count: true,
   });
-  
+
   const recentSignups = await prisma.waitlist.findMany({
-    orderBy: { createdAt: 'desc' },
+    orderBy: { createdAt: "desc" },
     take: 10,
     select: {
       email: true,
@@ -140,7 +145,7 @@ router.get('/waitlist/stats', async (req: Request, res: Response) => {
       createdAt: true,
     },
   });
-  
+
   res.json({
     total,
     today,

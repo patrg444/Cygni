@@ -1,77 +1,82 @@
-import { FastifyRequest, FastifyReply } from 'fastify';
-import { Role, JWTPayload, AuthContext } from '../types/auth';
-import { prisma } from '../utils/prisma';
+import { FastifyRequest, FastifyReply } from "fastify";
+import { Role, JWTPayload, AuthContext } from "../types/auth";
+import { prisma } from "../utils/prisma";
 
-declare module 'fastify' {
+declare module "fastify" {
   interface FastifyRequest {
     auth?: AuthContext;
   }
 }
 
-export async function authenticateUser(request: FastifyRequest, reply: FastifyReply) {
+export async function authenticateUser(
+  request: FastifyRequest,
+  reply: FastifyReply,
+) {
   try {
-    const token = request.headers.authorization?.replace('Bearer ', '');
-    
+    const token = request.headers.authorization?.replace("Bearer ", "");
+
     if (!token) {
-      return reply.status(401).send({ error: 'No token provided' });
+      return reply.status(401).send({ error: "No token provided" });
     }
 
     const payload = await request.server.jwt.verify<JWTPayload>(token);
-    
+
     // Load user and organizations from database
     const user = await getUserById(payload.sub);
     if (!user) {
-      return reply.status(401).send({ error: 'User not found' });
+      return reply.status(401).send({ error: "User not found" });
     }
 
     const organizations = await getUserOrganizations(user.id);
-    
+
     request.auth = {
       user,
       organizations,
     };
   } catch (error) {
-    return reply.status(401).send({ error: 'Invalid token' });
+    return reply.status(401).send({ error: "Invalid token" });
   }
 }
 
 export function requireRole(allowedRoles: Role[]) {
   return async (request: FastifyRequest, reply: FastifyReply) => {
     if (!request.auth) {
-      return reply.status(401).send({ error: 'Not authenticated' });
+      return reply.status(401).send({ error: "Not authenticated" });
     }
 
     const { organizationId, projectId } = request.params as any;
 
     if (organizationId) {
       const orgRole = request.auth.organizations.find(
-        org => org.organization.id === organizationId
+        (org) => org.organization.id === organizationId,
       )?.role;
 
       if (!orgRole || !allowedRoles.includes(orgRole)) {
-        return reply.status(403).send({ error: 'Insufficient permissions' });
+        return reply.status(403).send({ error: "Insufficient permissions" });
       }
 
       request.auth.currentOrganization = request.auth.organizations.find(
-        org => org.organization.id === organizationId
+        (org) => org.organization.id === organizationId,
       )?.organization;
     }
 
     if (projectId) {
       const project = await getProjectById(projectId);
       if (!project || project.organizationId !== organizationId) {
-        return reply.status(404).send({ error: 'Project not found' });
+        return reply.status(404).send({ error: "Project not found" });
       }
 
       const projectRole = await getProjectRole(request.auth.user.id, projectId);
-      
+
       // Inherit organization role if no specific project role
-      const effectiveRole = projectRole || request.auth.organizations.find(
-        org => org.organization.id === project.organizationId
-      )?.role;
+      const effectiveRole =
+        projectRole ||
+        request.auth.organizations.find(
+          (org) => org.organization.id === project.organizationId,
+        )?.role;
 
       if (!effectiveRole || !allowedRoles.includes(effectiveRole)) {
-        return reply.status(403).send({ error: 'Insufficient permissions' });
+        return reply.status(403).send({ error: "Insufficient permissions" });
       }
 
       request.auth.currentProject = project;
@@ -93,15 +98,24 @@ const ROLE_PERMISSIONS = {
 } as const;
 
 // Generate permission check functions
-export const canManageOrganization = (role: Role) => ROLE_PERMISSIONS.manageOrganization.includes(role as any);
-export const canManageProject = (role: Role) => ROLE_PERMISSIONS.manageProject.includes(role as any);
-export const canManageEnvironment = (role: Role) => ROLE_PERMISSIONS.manageEnvironment.includes(role as any);
-export const canManageSecrets = (role: Role) => ROLE_PERMISSIONS.manageSecrets.includes(role as any);
-export const canManageBilling = (role: Role) => ROLE_PERMISSIONS.manageBilling.includes(role as any);
-export const canTriggerDeployment = (role: Role) => ROLE_PERMISSIONS.triggerDeployment.includes(role as any);
-export const canViewDeployments = (role: Role) => ROLE_PERMISSIONS.viewDeployments.includes(role as any);
-export const canViewLogs = (role: Role) => ROLE_PERMISSIONS.viewLogs.includes(role as any);
-export const canViewMetrics = (role: Role) => ROLE_PERMISSIONS.viewMetrics.includes(role as any);
+export const canManageOrganization = (role: Role) =>
+  ROLE_PERMISSIONS.manageOrganization.includes(role as any);
+export const canManageProject = (role: Role) =>
+  ROLE_PERMISSIONS.manageProject.includes(role as any);
+export const canManageEnvironment = (role: Role) =>
+  ROLE_PERMISSIONS.manageEnvironment.includes(role as any);
+export const canManageSecrets = (role: Role) =>
+  ROLE_PERMISSIONS.manageSecrets.includes(role as any);
+export const canManageBilling = (role: Role) =>
+  ROLE_PERMISSIONS.manageBilling.includes(role as any);
+export const canTriggerDeployment = (role: Role) =>
+  ROLE_PERMISSIONS.triggerDeployment.includes(role as any);
+export const canViewDeployments = (role: Role) =>
+  ROLE_PERMISSIONS.viewDeployments.includes(role as any);
+export const canViewLogs = (role: Role) =>
+  ROLE_PERMISSIONS.viewLogs.includes(role as any);
+export const canViewMetrics = (role: Role) =>
+  ROLE_PERMISSIONS.viewMetrics.includes(role as any);
 
 // Prisma database queries
 async function getUserById(id: string) {
@@ -153,7 +167,10 @@ async function getProjectById(id: string) {
   });
 }
 
-async function getProjectRole(userId: string, projectId: string): Promise<Role | null> {
+async function getProjectRole(
+  userId: string,
+  projectId: string,
+): Promise<Role | null> {
   const member = await prisma.projectMember.findUnique({
     where: {
       userId_projectId: {
@@ -163,6 +180,6 @@ async function getProjectRole(userId: string, projectId: string): Promise<Role |
     },
     select: { role: true },
   });
-  
+
   return member?.role as Role | null;
 }

@@ -7,7 +7,7 @@ on:
     branches: [main, develop]
 
 env:
-  NODE_VERSION: '20'
+  NODE_VERSION: "20"
 
 jobs:
   # Lint and type check
@@ -16,18 +16,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-          
+          cache: "npm"
+
       - name: Install dependencies
         run: npm install
-        
+
       - name: Run linter
         run: pnpm run lint
-        
+
       - name: Run type check
         run: pnpm run typecheck
 
@@ -37,18 +37,18 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node: ['18', '20']
+        node: ["18", "20"]
     steps:
       - uses: actions/checkout@v4
-      
+
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
-          cache: 'npm'
-          
+          cache: "npm"
+
       - name: Install dependencies
         run: npm install
-        
+
       - name: Run unit tests
         run: pnpm run test
 
@@ -70,7 +70,7 @@ jobs:
           --health-retries 5
         ports:
           - 5432:5432
-          
+
       redis:
         image: redis:7.2-alpine
         options: >-
@@ -80,39 +80,39 @@ jobs:
           --health-retries 5
         ports:
           - 6379:6379
-          
+
     steps:
       - uses: actions/checkout@v4
-      
+
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-          
+          cache: "npm"
+
       - name: Install dependencies
         run: npm install
-        
+
       - name: Build API
         run: |
           cd services/api
           pnpm build
         env:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/cygni_test
-          
+
       - name: Setup test database
         run: |
           cd services/api
           npx prisma migrate deploy
         env:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/cygni_test
-          
+
       - name: Run API health check
         run: |
           cd services/api
           # Start API in background
           NODE_ENV=test pnpm start &
           API_PID=$!
-          
+
           # Wait for API to be ready
           echo "Waiting for API to start..."
           for i in {1..30}; do
@@ -127,15 +127,15 @@ jobs:
             fi
             sleep 1
           done
-          
+
           # Run health checks
           echo "Running health checks..."
           curl -f http://localhost:3000/health || exit 1
           curl -f http://localhost:3000/ready || exit 1
-          
+
           # Run integration tests
           pnpm run test
-          
+
           # Cleanup
           kill $API_PID
         env:
@@ -154,10 +154,10 @@ jobs:
         service: [api]
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-        
+
       - name: Build Docker image
         uses: docker/build-push-action@v5
         with:
@@ -168,7 +168,7 @@ jobs:
           tags: cygni/${{ matrix.service }}:test
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          
+
       - name: Run Docker health check
         if: matrix.service == 'api'
         run: |
@@ -182,7 +182,7 @@ jobs:
             -e JWT_SECRET=test-secret-min-32-chars-for-testing \
             --add-host=host.docker.internal:host-gateway \
             cygni/api:test
-          
+
           # Wait for container to be healthy
           echo "Waiting for container health..."
           for i in {1..30}; do
@@ -197,7 +197,7 @@ jobs:
             fi
             sleep 1
           done
-          
+
           # Cleanup
           docker stop cygni-api-test
           docker rm cygni-api-test
@@ -208,21 +208,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
-          scan-type: 'fs'
-          scan-ref: '.'
-          format: 'sarif'
-          output: 'trivy-results.sarif'
-          severity: 'CRITICAL,HIGH'
-          
+          scan-type: "fs"
+          scan-ref: "."
+          format: "sarif"
+          output: "trivy-results.sarif"
+          severity: "CRITICAL,HIGH"
+
       - name: Upload Trivy scan results
         uses: github/codeql-action/upload-sarif@v3
         if: always() && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
         with:
-          sarif_file: 'trivy-results.sarif'
+          sarif_file: "trivy-results.sarif"
 
   # All checks passed
   ci-success:

@@ -51,22 +51,30 @@ After each test:
 ### Failure Scenarios
 
 #### Health Gate Failure
+
 Simulates a deployment that starts returning errors above the configured threshold.
+
 - Sets max error rate to 0.01% (impossible to maintain)
 - Should trigger automatic rollback within 2-5 minutes
 
 #### High Latency
+
 Tests response to performance degradation.
+
 - Sets P95 latency threshold to 10ms (very low)
 - Validates performance-based rollbacks
 
 #### Pod Failure
+
 Simulates infrastructure failures.
+
 - Forcefully deletes a running pod
 - Tests pod recovery and session handling
 
 #### Resource Pressure
+
 Creates memory/CPU pressure scenarios.
+
 - Reduces resource limits dramatically
 - Tests autoscaling and OOM handling
 
@@ -79,7 +87,7 @@ Add to your CI pipeline for automated chaos testing:
 name: Chaos Testing
 on:
   schedule:
-    - cron: '0 10 * * 5' # Every Friday at 10 AM
+    - cron: "0 10 * * 5" # Every Friday at 10 AM
 jobs:
   chaos-test:
     runs-on: ubuntu-latest
@@ -98,6 +106,7 @@ jobs:
 ### Monitoring During Tests
 
 Key metrics to watch:
+
 - Error rates and latency percentiles
 - Pod restarts and evictions
 - Rollback triggers and duration
@@ -107,6 +116,7 @@ Key metrics to watch:
 ### Safety Controls
 
 The script includes safety mechanisms:
+
 - Automatic cleanup after tests
 - Timeout limits to prevent indefinite failures
 - Clear logging of all actions taken
@@ -115,6 +125,7 @@ The script includes safety mechanisms:
 ## Contributing
 
 When adding new chaos scenarios:
+
 1. Document the failure mode being tested
 2. Add safety controls and cleanup
 3. Include success criteria

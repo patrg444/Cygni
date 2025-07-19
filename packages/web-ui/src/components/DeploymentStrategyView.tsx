@@ -1,18 +1,18 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { cn } from '@/lib/utils';
+import { useState } from "react";
+import { cn } from "@/lib/utils";
 import {
   MixIcon,
   UpdateIcon,
   CheckCircledIcon,
   CrossCircledIcon,
   InfoCircledIcon,
-} from '@radix-ui/react-icons';
+} from "@radix-ui/react-icons";
 
 interface DeploymentStrategy {
-  type: 'rolling' | 'canary' | 'blue-green';
-  status: 'idle' | 'in-progress' | 'completed' | 'failed';
+  type: "rolling" | "canary" | "blue-green";
+  status: "idle" | "in-progress" | "completed" | "failed";
   config?: {
     maxUnavailable?: number;
     maxSurge?: number;
@@ -53,9 +53,9 @@ export function DeploymentStrategyView({
 
   const renderStrategyIcon = () => {
     switch (strategy.type) {
-      case 'canary':
+      case "canary":
         return <MixIcon className="w-5 h-5" />;
-      case 'blue-green':
+      case "blue-green":
         return <UpdateIcon className="w-5 h-5" />;
       default:
         return <UpdateIcon className="w-5 h-5 animate-spin" />;
@@ -63,12 +63,12 @@ export function DeploymentStrategyView({
   };
 
   const renderStrategyProgress = () => {
-    if (!strategy.progress || strategy.status === 'idle') return null;
+    if (!strategy.progress || strategy.status === "idle") return null;
 
     switch (strategy.type) {
-      case 'canary':
+      case "canary":
         return <CanaryProgress strategy={strategy} />;
-      case 'blue-green':
+      case "blue-green":
         return <BlueGreenProgress strategy={strategy} />;
       default:
         return <RollingProgress strategy={strategy} />;
@@ -80,27 +80,29 @@ export function DeploymentStrategyView({
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">
-          <div className={cn(
-            "p-2 rounded-lg",
-            strategy.status === 'in-progress' && "bg-blue-100 text-blue-600",
-            strategy.status === 'completed' && "bg-green-100 text-green-600",
-            strategy.status === 'failed' && "bg-red-100 text-red-600",
-            strategy.status === 'idle' && "bg-gray-100 text-gray-600"
-          )}>
+          <div
+            className={cn(
+              "p-2 rounded-lg",
+              strategy.status === "in-progress" && "bg-blue-100 text-blue-600",
+              strategy.status === "completed" && "bg-green-100 text-green-600",
+              strategy.status === "failed" && "bg-red-100 text-red-600",
+              strategy.status === "idle" && "bg-gray-100 text-gray-600",
+            )}
+          >
             {renderStrategyIcon()}
           </div>
           <div>
             <h3 className="font-semibold text-lg capitalize">
-              {strategy.type.replace('-', ' ')} Deployment
+              {strategy.type.replace("-", " ")} Deployment
             </h3>
             <p className="text-sm text-gray-600">{serviceName}</p>
           </div>
         </div>
 
         {/* Action buttons */}
-        {strategy.status === 'in-progress' && (
+        {strategy.status === "in-progress" && (
           <div className="flex gap-2">
-            {strategy.type === 'canary' && (
+            {strategy.type === "canary" && (
               <>
                 <button
                   onClick={onPromote}
@@ -135,42 +137,48 @@ export function DeploymentStrategyView({
         className="mt-4 text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1"
       >
         <InfoCircledIcon className="w-4 h-4" />
-        {showDetails ? 'Hide' : 'Show'} deployment details
+        {showDetails ? "Hide" : "Show"} deployment details
       </button>
 
       {/* Configuration details */}
       {showDetails && strategy.config && (
         <div className="mt-4 p-4 bg-gray-50 rounded-lg space-y-2 text-sm">
           <div className="font-medium text-gray-700 mb-2">Configuration</div>
-          {strategy.type === 'canary' && (
+          {strategy.type === "canary" && (
             <>
               <div className="flex justify-between">
                 <span className="text-gray-600">Traffic steps:</span>
                 <span className="font-medium">
-                  {strategy.config.canarySteps?.join('% → ')}%
+                  {strategy.config.canarySteps?.join("% → ")}%
                 </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">Observation time:</span>
-                <span className="font-medium">{strategy.config.observationTime}</span>
+                <span className="font-medium">
+                  {strategy.config.observationTime}
+                </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">Auto-promote:</span>
                 <span className="font-medium">
-                  {strategy.config.autoPromote ? 'Enabled' : 'Disabled'}
+                  {strategy.config.autoPromote ? "Enabled" : "Disabled"}
                 </span>
               </div>
             </>
           )}
-          {strategy.type === 'rolling' && (
+          {strategy.type === "rolling" && (
             <>
               <div className="flex justify-between">
                 <span className="text-gray-600">Max unavailable:</span>
-                <span className="font-medium">{strategy.config.maxUnavailable || 0}</span>
+                <span className="font-medium">
+                  {strategy.config.maxUnavailable || 0}
+                </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">Max surge:</span>
-                <span className="font-medium">{strategy.config.maxSurge || '25%'}</span>
+                <span className="font-medium">
+                  {strategy.config.maxSurge || "25%"}
+                </span>
               </div>
             </>
           )}
@@ -186,7 +194,7 @@ function CanaryProgress({ strategy }: { strategy: DeploymentStrategy }) {
 
   const steps = config?.canarySteps || [10, 25, 50, 75, 100];
   const currentStepIndex = Math.floor(
-    (progress.currentTrafficSplit?.canary || 0) / (100 / steps.length)
+    (progress.currentTrafficSplit?.canary || 0) / (100 / steps.length),
   );
 
   return (
@@ -210,9 +218,8 @@ function CanaryProgress({ strategy }: { strategy: DeploymentStrategy }) {
             className="bg-blue-500 flex items-center justify-center text-white text-sm font-medium transition-all duration-500"
             style={{ width: `${progress.currentTrafficSplit?.canary || 0}%` }}
           >
-            {progress.currentTrafficSplit?.canary > 0 && 
-              `${progress.currentTrafficSplit?.canary}% Canary`
-            }
+            {progress.currentTrafficSplit?.canary > 0 &&
+              `${progress.currentTrafficSplit?.canary}% Canary`}
           </div>
         </div>
       </div>
@@ -234,7 +241,7 @@ function CanaryProgress({ strategy }: { strategy: DeploymentStrategy }) {
                     "w-full h-2 rounded-full transition-colors",
                     index < currentStepIndex && "bg-green-500",
                     index === currentStepIndex && "bg-blue-500",
-                    index > currentStepIndex && "bg-gray-200"
+                    index > currentStepIndex && "bg-gray-200",
                   )}
                 />
                 {index < steps.length - 1 && (
@@ -252,7 +259,8 @@ function CanaryProgress({ strategy }: { strategy: DeploymentStrategy }) {
       {/* Time estimate */}
       {progress.estimatedCompletion && (
         <div className="text-sm text-gray-600">
-          Estimated completion: {new Date(progress.estimatedCompletion).toLocaleTimeString()}
+          Estimated completion:{" "}
+          {new Date(progress.estimatedCompletion).toLocaleTimeString()}
         </div>
       )}
     </div>
@@ -263,7 +271,12 @@ function BlueGreenProgress({ strategy }: { strategy: DeploymentStrategy }) {
   const { progress } = strategy;
   if (!progress) return null;
 
-  const stages = ['Preparing Green', 'Testing Green', 'Switching Traffic', 'Complete'];
+  const stages = [
+    "Preparing Green",
+    "Testing Green",
+    "Switching Traffic",
+    "Complete",
+  ];
   const currentStage = progress.currentStep - 1;
 
   return (
@@ -274,15 +287,17 @@ function BlueGreenProgress({ strategy }: { strategy: DeploymentStrategy }) {
             key={index}
             className={cn(
               "flex-1 text-center",
-              index <= currentStage ? "text-blue-600" : "text-gray-400"
+              index <= currentStage ? "text-blue-600" : "text-gray-400",
             )}
           >
-            <div className={cn(
-              "w-10 h-10 rounded-full mx-auto mb-2 flex items-center justify-center",
-              index < currentStage && "bg-green-100",
-              index === currentStage && "bg-blue-100",
-              index > currentStage && "bg-gray-100"
-            )}>
+            <div
+              className={cn(
+                "w-10 h-10 rounded-full mx-auto mb-2 flex items-center justify-center",
+                index < currentStage && "bg-green-100",
+                index === currentStage && "bg-blue-100",
+                index > currentStage && "bg-gray-100",
+              )}
+            >
               {index < currentStage ? (
                 <CheckCircledIcon className="w-6 h-6 text-green-600" />
               ) : index === currentStage ? (

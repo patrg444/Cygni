@@ -4,16 +4,16 @@ on:
   push:
     branches: [main, develop]
     paths:
-      - 'packages/api/**'
-      - '.github/workflows/api-ci.yml'
+      - "packages/api/**"
+      - ".github/workflows/api-ci.yml"
   pull_request:
     branches: [main]
     paths:
-      - 'packages/api/**'
+      - "packages/api/**"
 
 env:
-  NODE_VERSION: '18'
-  AWS_REGION: 'us-east-1'
+  NODE_VERSION: "18"
+  AWS_REGION: "us-east-1"
 
 jobs:
   # Stage 1: Compile & Lint
@@ -21,22 +21,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: "npm"
           cache-dependency-path: packages/api/package-lock.json
-      
+
       - name: Install dependencies
         working-directory: packages/api
         run: npm ci
-      
+
       - name: Compile TypeScript
         working-directory: packages/api
         run: npm run build
-      
+
       - name: Run linter
         working-directory: packages/api
         run: npm run lint
@@ -47,22 +47,22 @@ jobs:
     needs: compile-lint
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: "npm"
           cache-dependency-path: packages/api/package-lock.json
-      
+
       - name: Install dependencies
         working-directory: packages/api
         run: npm ci
-      
+
       - name: Run unit tests
         working-directory: packages/api
         run: npm test -- --testPathPattern=unit
-      
+
       - name: Upload coverage
         uses: codecov/codecov-action@v3
         with:
@@ -86,7 +86,7 @@ jobs:
           --health-retries 5
         ports:
           - 5432:5432
-      
+
       redis:
         image: redis:7
         options: >-
@@ -96,21 +96,21 @@ jobs:
           --health-retries 5
         ports:
           - 6379:6379
-    
+
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: "npm"
           cache-dependency-path: packages/api/package-lock.json
-      
+
       - name: Install dependencies
         working-directory: packages/api
         run: npm ci
-      
+
       - name: Setup test environment
         working-directory: packages/api
         run: |
@@ -118,7 +118,7 @@ jobs:
           echo "DATABASE_URL=postgresql://test:test@localhost:5432/cloudexpress_test" >> .env.test
           echo "REDIS_URL=redis://localhost:6379" >> .env.test
           echo "JWT_SECRET=test-secret-key-for-ci" >> .env.test
-      
+
       - name: Run Prisma migrations
         working-directory: packages/api
         env:
@@ -126,7 +126,7 @@ jobs:
         run: |
           npx prisma generate
           npx prisma db push --skip-generate
-      
+
       - name: Run E2E tests
         working-directory: packages/api
         env:
@@ -153,23 +153,23 @@ jobs:
           --health-retries 5
         ports:
           - 5432:5432
-    
+
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: "npm"
           cache-dependency-path: packages/api/package-lock.json
-      
+
       - name: Install dependencies
         working-directory: packages/api
         run: |
           npm ci
           npm install -g newman
-      
+
       - name: Start API server
         working-directory: packages/api
         env:
@@ -181,7 +181,7 @@ jobs:
           npx prisma db push --skip-generate
           npm run dev &
           sleep 10
-      
+
       - name: Run Newman tests
         working-directory: packages/api
         run: |
@@ -190,7 +190,7 @@ jobs:
             --env-var "adminApiKey=test-admin-key" \
             --reporters cli,json \
             --reporter-json-export newman-results.json
-      
+
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v3
@@ -204,19 +204,19 @@ jobs:
     needs: compile-lint
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
-          scan-type: 'fs'
-          scan-ref: 'packages/api'
-          format: 'sarif'
-          output: 'trivy-results.sarif'
-      
+          scan-type: "fs"
+          scan-ref: "packages/api"
+          format: "sarif"
+          output: "trivy-results.sarif"
+
       - name: Upload Trivy scan results
         uses: github/codeql-action/upload-sarif@v2
         with:
-          sarif_file: 'trivy-results.sarif'
+          sarif_file: "trivy-results.sarif"
 
   # Stage 6: Build & Push Container
   build-container:
@@ -225,21 +225,21 @@ jobs:
     if: github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
-      
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
-      
+
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
-      
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
@@ -259,17 +259,17 @@ jobs:
     environment: staging
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Configure kubectl
         run: |
           aws eks update-kubeconfig --name cloudexpress-staging --region ${{ env.AWS_REGION }}
-      
+
       - name: Deploy to staging
         run: |
           kubectl set image deployment/api-server \
             api=${{ steps.login-ecr.outputs.registry }}/cloudexpress-api:${{ github.sha }} \
             -n staging
-          
+
           kubectl rollout status deployment/api-server -n staging
 
   # Stage 8: Staging Smoke Tests
@@ -279,21 +279,21 @@ jobs:
     if: github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Install Newman
         run: npm install -g newman
-      
+
       - name: Run smoke tests against staging
         run: |
           newman run packages/api/cloudexpress.postman_collection.json \
             --env-var "baseUrl=https://staging-api.cloudexpress.app" \
             --folder "Health Check" \
             --folder "Authentication"
-      
+
       - name: Notify on failure
         if: failure()
         uses: 8398a7/action-slack@v3
         with:
           status: ${{ job.status }}
-          text: 'Staging smoke tests failed! Rolling back...'
+          text: "Staging smoke tests failed! Rolling back..."
           webhook_url: ${{ secrets.SLACK_WEBHOOK }}
