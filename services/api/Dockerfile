@@ -6,42 +6,46 @@ FROM base AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-# Copy dependency files
-COPY services/api/package.json ./
+# Copy workspace files and API package
+COPY pnpm-workspace.yaml ./
+COPY package.json ./
 COPY pnpm-lock.yaml ./
-COPY services/api/prisma ./prisma/
+COPY services/api/package.json ./services/api/
+COPY services/api/prisma ./services/api/prisma/
 
 # Install pnpm
 RUN npm install -g pnpm@8
 
-# Install dependencies
-RUN pnpm install --frozen-lockfile
+# Install only production dependencies for the API service
+RUN pnpm install --frozen-lockfile --filter @cloudexpress/services-api --prod
 
 # Generate Prisma client
-RUN pnpm prisma generate
+RUN cd services/api && pnpm prisma generate
 
 # Rebuild the source code only when needed
 FROM base AS builder
 WORKDIR /app
 
-# Copy package files first
-COPY services/api/package.json ./
+# Copy workspace files
+COPY pnpm-workspace.yaml ./
+COPY package.json ./
 COPY pnpm-lock.yaml ./
-COPY services/api/tsconfig.json ./
+COPY services/api/package.json ./services/api/
+COPY services/api/tsconfig.json ./services/api/
 
-# Install all dependencies including devDependencies
+# Install all dependencies including devDependencies for building
 RUN npm install -g pnpm@8
-RUN pnpm install --frozen-lockfile
+RUN pnpm install --frozen-lockfile --filter @cloudexpress/services-api
 
-# Copy source files and prisma
-COPY services/api/src ./src
-COPY services/api/prisma ./prisma
+# Copy source files
+COPY services/api/src ./services/api/src
+COPY services/api/prisma ./services/api/prisma
 
 # Generate Prisma client
-RUN pnpm prisma generate
+RUN cd services/api && pnpm prisma generate
 
 # Build the application
-RUN pnpm build
+RUN cd services/api && pnpm build
 
 # Production image, copy all the files and run
 FROM base AS runner
@@ -52,10 +56,11 @@ RUN addgroup -g 1001 -S nodejs
 RUN adduser -S nodejs -u 1001
 
 # Copy necessary files
-COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/services/api/dist ./dist
 COPY --from=deps /app/node_modules ./node_modules
-COPY --from=builder /app/package.json ./package.json
-COPY --from=builder /app/prisma ./prisma
+COPY --from=deps /app/services/api/node_modules ./services/api/node_modules
+COPY --from=builder /app/services/api/package.json ./package.json
+COPY --from=builder /app/services/api/prisma ./prisma
 
 # Set environment
 ENV NODE_ENV=production
