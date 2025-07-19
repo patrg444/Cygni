@@ -344,7 +344,192 @@ export const deploymentRoutes: FastifyPluginAsync = async (app) => {
     },
   );
 
-  // Rollback deployment
+  // Unified rollback endpoint
+  app.post(
+    "/rollback",
+    {
+      preHandler: [
+        app.authenticate,
+        requireRole([Role.owner, Role.admin, Role.developer]),
+      ],
+    },
+    async (request, _reply) => {
+      const rollbackSchema = z.object({
+        deploymentId: z.string().optional(),
+        projectId: z.string().optional(),
+        projectSlug: z.string().optional(),
+        environment: z.string(),
+      });
+
+      const body = rollbackSchema.parse(request.body);
+
+      // Determine project based on input
+      let project: any;
+      let projectId: string;
+
+      if (body.deploymentId) {
+        // Rollback specific deployment
+        const deployment = await prisma.deployment.findUnique({
+          where: { id: body.deploymentId },
+          include: { project: true },
+        });
+        if (!deployment) {
+          return _reply.status(404).send({ error: "Deployment not found" });
+        }
+        project = deployment.project;
+        projectId = deployment.projectId;
+      } else if (body.projectId) {
+        // Rollback by project ID
+        project = await prisma.project.findUnique({
+          where: { id: body.projectId },
+        });
+        if (!project) {
+          return _reply.status(404).send({ error: "Project not found" });
+        }
+        projectId = project.id;
+      } else if (body.projectSlug) {
+        // Rollback by project slug
+        project = await prisma.project.findUnique({
+          where: { slug: body.projectSlug },
+        });
+        if (!project) {
+          return _reply.status(404).send({ error: "Project not found" });
+        }
+        projectId = project.id;
+      } else {
+        return _reply.status(400).send({ 
+          error: "Must provide either deploymentId, projectId, or projectSlug" 
+        });
+      }
+
+      // Verify environment exists
+      const environment = await prisma.environment.findFirst({
+        where: {
+          projectId,
+          slug: body.environment,
+        },
+      });
+
+      if (!environment) {
+        return _reply.status(404).send({ error: "Environment not found" });
+      }
+
+      // Get active deployment
+      const activeDeployment = await prisma.deployment.findFirst({
+        where: {
+          projectId,
+          environmentId: environment.id,
+          status: DeploymentStatus.active,
+        },
+        include: {
+          build: true,
+        },
+        orderBy: { createdAt: "desc" },
+      });
+
+      if (!activeDeployment) {
+        return _reply
+          .status(404)
+          .send({ error: "No active deployment found in this environment" });
+      }
+
+      // Get previous successful deployment
+      const previousDeployment = await prisma.deployment.findFirst({
+        where: {
+          projectId,
+          environmentId: environment.id,
+          status: DeploymentStatus.active,
+          createdAt: {
+            lt: activeDeployment.createdAt,
+          },
+        },
+        include: {
+          build: true,
+        },
+        orderBy: { createdAt: "desc" },
+      });
+
+      if (!previousDeployment) {
+        return _reply
+          .status(400)
+          .send({ error: "No previous deployment available for rollback" });
+      }
+
+      // Trigger rollback in orchestrator
+      const namespace = getNamespaceForEnvironment(
+        environment.slug,
+        project.slug,
+      );
+
+      try {
+        await axios.post(
+          `${ORCHESTRATOR_URL}/api/services/${namespace}/${project.slug}/rollback`,
+          {
+            targetImage: previousDeployment.build.imageUrl,
+          },
+        );
+
+        // Create new deployment record for the rollback
+        const rollbackDeployment = await prisma.deployment.create({
+          data: {
+            projectId,
+            buildId: previousDeployment.buildId,
+            environmentId: environment.id,
+            userId: request.auth!.user.id,
+            status: DeploymentStatus.deploying,
+            metadata: {
+              type: "rollback",
+              rollbackFrom: activeDeployment.id,
+              rollbackTo: previousDeployment.id,
+              previousImage: activeDeployment.build.imageUrl,
+              targetImage: previousDeployment.build.imageUrl,
+            },
+          },
+          include: {
+            build: true,
+            environment: true,
+            project: true,
+          },
+        });
+
+        // Send webhook notification
+        const webhookService = new WebhookService();
+        await webhookService.sendDeploymentEvent({
+          projectId,
+          event: "deployment.rollback",
+          deployment: rollbackDeployment,
+        });
+
+        // Start monitoring rollback status
+        monitorDeploymentStatus(app, rollbackDeployment.id);
+
+        return {
+          deployment: rollbackDeployment,
+          rolledBackFrom: {
+            id: activeDeployment.id,
+            buildId: activeDeployment.buildId,
+            createdAt: activeDeployment.createdAt,
+          },
+          rolledBackTo: {
+            id: previousDeployment.id,
+            buildId: previousDeployment.buildId,
+            createdAt: previousDeployment.createdAt,
+          },
+        };
+      } catch (error) {
+        app.log.error("Failed to rollback deployment", {
+          error,
+          projectId,
+          environment: environment.slug,
+        });
+        return _reply
+          .status(500)
+          .send({ error: "Failed to initiate rollback" });
+      }
+    },
+  );
+
+  // Rollback deployment (DEPRECATED - use /rollback instead)
   app.post(
     "/deployments/:deploymentId/rollback",
     {
@@ -420,7 +605,7 @@ export const deploymentRoutes: FastifyPluginAsync = async (app) => {
     },
   );
 
-  // One-shot rollback for project/environment
+  // One-shot rollback for project/environment (DEPRECATED - use /rollback instead)
   app.post(
     "/projects/:projectId/environments/:environment/rollback",
     {
@@ -552,7 +737,7 @@ export const deploymentRoutes: FastifyPluginAsync = async (app) => {
     },
   );
 
-  // One-shot rollback by project slug and environment
+  // One-shot rollback by project slug and environment (DEPRECATED - use /rollback instead)
   app.post(
     "/rollback/:projectSlug/:environment",
     {

@@ -2,6 +2,35 @@
 
 This guide provides one-liners for generating secure secrets for all Cygni services.
 
+## Automated Secret Generation
+
+### One-Command Setup
+
+Generate all required secrets for a new environment:
+
+```bash
+# Development environment
+./scripts/init-dev-secrets.sh
+
+# Production environment (interactive)
+./scripts/generate-secrets.sh --env production
+
+# Non-interactive with output to file
+./scripts/generate-secrets.sh --env production --output .env.production
+```
+
+### CI/CD Integration
+
+For automated deployments:
+
+```yaml
+# GitHub Actions example
+- name: Generate secrets
+  run: |
+    echo "DATABASE_PASSWORD=$(openssl rand -hex 16)" >> $GITHUB_ENV
+    echo "JWT_SECRET=$(openssl rand -hex 32)" >> $GITHUB_ENV
+```
+
 ## Quick Reference
 
 ### Database Passwords
