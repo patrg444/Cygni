@@ -219,18 +219,27 @@ importers:
       '@radix-ui/react-dropdown-menu':
         specifier: ^2.0.0
         version: 2.1.15(@types/react-dom@18.3.7)(@types/react@18.3.23)(react-dom@18.3.1)(react@18.3.1)
+      '@radix-ui/react-icons':
+        specifier: ^1.3.0
+        version: 1.3.2(react@18.3.1)
       '@radix-ui/react-tabs':
         specifier: ^1.0.0
         version: 1.1.12(@types/react-dom@18.3.7)(@types/react@18.3.23)(react-dom@18.3.1)(react@18.3.1)
       '@tanstack/react-query':
         specifier: ^4.0.0
         version: 4.40.1(react-dom@18.3.1)(react@18.3.1)
+      '@tanstack/react-query-devtools':
+        specifier: ^4.0.0
+        version: 4.40.1(@tanstack/react-query@4.40.1)(react-dom@18.3.1)(react@18.3.1)
       axios:
         specifier: ^1.4.0
         version: 1.10.0
       clsx:
         specifier: ^2.0.0
         version: 2.1.1
+      date-fns:
+        specifier: ^2.30.0
+        version: 2.30.0
       next:
         specifier: ^14.0.0
         version: 14.0.0(react-dom@18.3.1)(react@18.3.1)
@@ -2871,6 +2880,14 @@ packages:
       react-dom: 18.3.1(react@18.3.1)
     dev: false
 
+  /@radix-ui/react-icons@1.3.2(react@18.3.1):
+    resolution: {integrity: sha512-fyQIhGDhzfc9pK2kH6Pl9c4BDJGfMkPqkyIgYDthyNYoNg3wVhoJMMh19WS4Up/1KMPFVpNsT2q3WmXn2N1m6g==}
+    peerDependencies:
+      react: ^16.x || ^17.x || ^18.x || ^19.0.0 || ^19.0.0-rc
+    dependencies:
+      react: 18.3.1
+    dev: false
+
   /@radix-ui/react-id@1.1.1(@types/react@18.3.23)(react@18.3.1):
     resolution: {integrity: sha512-kGkGegYIdQsOb4XjsfM97rXsiHaBwco+hFI66oO4s9LU+PLAC5oJ7khdOVFxkhsmlbpUqDAvXw11CluXP+jkHg==}
     peerDependencies:
@@ -3883,8 +3900,30 @@ packages:
       tslib: 2.8.1
     dev: false
 
+  /@tanstack/match-sorter-utils@8.19.4:
+    resolution: {integrity: sha512-Wo1iKt2b9OT7d+YGhvEPD3DXvPv2etTusIMhMUoG7fbhmxcXCtIjJDEygy91Y2JFlwGyjqiBPRozme7UD8hoqg==}
+    engines: {node: '>=12'}
+    dependencies:
+      remove-accents: 0.5.0
+    dev: false
+
   /@tanstack/query-core@4.40.0:
     resolution: {integrity: sha512-7MJTtZkCSuehMC7IxMOCGsLvHS3jHx4WjveSrGsG1Nc1UQLjaFwwkpLA2LmPfvOAxnH4mszMOBFD6LlZE+aB+Q==}
+    dev: false
+
+  /@tanstack/react-query-devtools@4.40.1(@tanstack/react-query@4.40.1)(react-dom@18.3.1)(react@18.3.1):
+    resolution: {integrity: sha512-g8g2CCDt91CNhkLsKLVXVBVQSUubExnBdprwwjY5FFM+ZBjv1WfCpGiX1UOezgjVhNxqoi1Is+iMYShdOMoI8Q==}
+    peerDependencies:
+      '@tanstack/react-query': ^4.40.1
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      '@tanstack/match-sorter-utils': 8.19.4
+      '@tanstack/react-query': 4.40.1(react-dom@18.3.1)(react@18.3.1)
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+      superjson: 1.13.3
+      use-sync-external-store: 1.5.0(react@18.3.1)
     dev: false
 
   /@tanstack/react-query@4.40.1(react-dom@18.3.1)(react@18.3.1):
@@ -5375,6 +5414,13 @@ packages:
   /cookie@0.7.2:
     resolution: {integrity: sha512-yki5XnKuf750l50uGTllt6kKILY4nQ1eNIQatoXEByZ5dWgnKqbnqmTrBE5B4N7lrMJKQ2ytWMiTO2o0v6Ew/w==}
     engines: {node: '>= 0.6'}
+    dev: false
+
+  /copy-anything@3.0.5:
+    resolution: {integrity: sha512-yCEafptTtb4bk7GLEQoM8KVJpxAfdBJYaXyzQEgQQQgYrZiDp8SJmGKlYza6CYjEDNstAdNdKA3UuoULlEbS6w==}
+    engines: {node: '>=12.13'}
+    dependencies:
+      is-what: 4.1.16
     dev: false
 
   /core-util-is@1.0.2:
@@ -7258,6 +7304,11 @@ packages:
       call-bound: 1.0.4
       get-intrinsic: 1.3.0
     dev: true
+
+  /is-what@4.1.16:
+    resolution: {integrity: sha512-ZhMwEosbFJkA0YhFnNDgTM4ZxDRsS6HqTo7qsZM08fehyRYIYa0yHu5R6mgo1n/8MgaPBXiPimPD77baVFYg+A==}
+    engines: {node: '>=12.13'}
+    dev: false
 
   /isarray@2.0.5:
     resolution: {integrity: sha512-xHjhDr3cNBK0BzdUJSPXZntQUx/mwMS5Rw4A7lPJ90XGAO6ISP/ePDNuo0vhqOZU+UD5JoodwCAAoZQd3FeAKw==}
@@ -9220,6 +9271,10 @@ packages:
       set-function-name: 2.0.2
     dev: true
 
+  /remove-accents@0.5.0:
+    resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
+    dev: false
+
   /request@2.88.2:
     resolution: {integrity: sha512-MsvtOrfG9ZcrOwAW+Qi+F6HbD0CWXEh9ou77uOb7FM2WPhwT7smM833PzanhJLsgXjN89Ir6V2PczXNnMpwKhw==}
     engines: {node: '>= 6'}
@@ -9900,6 +9955,13 @@ packages:
       pirates: 4.0.7
       ts-interface-checker: 0.1.13
     dev: true
+
+  /superjson@1.13.3:
+    resolution: {integrity: sha512-mJiVjfd2vokfDxsQPOwJ/PtanO87LhpYY88ubI5dUB1Ab58Txbyje3+jpm+/83R/fevaq/107NNhtYBLuoTrFg==}
+    engines: {node: '>=10'}
+    dependencies:
+      copy-anything: 3.0.5
+    dev: false
 
   /supports-color@7.2.0:
     resolution: {integrity: sha512-qpCAvRl9stuOHveKsn7HncJRvv501qIacKzQlO/+Lwxc9+0q2wLyv4Dfvt80/DPn2pqOBsJdDiogXGR9+OvwRw==}
