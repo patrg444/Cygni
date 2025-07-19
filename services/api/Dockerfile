@@ -1,49 +1,46 @@
-# ---------- base image ----------
-FROM node:20-slim AS base          # use Debian slim, avoids Prisma/OpenSSL pain
+# ---------- base ----------
+FROM node:20-slim AS base
 WORKDIR /app
 
-# ---------- deps layer ----------
+# ---------- deps ----------
 FROM base AS deps
-# Workspace descriptors first (for cache)
+# copy lock & manifests first (cache!)
 COPY pnpm-workspace.yaml pnpm-lock.yaml package.json ./
-# API package manifest (namespaced path keeps cache small)
 COPY services/api/package.json services/api/
 
 RUN npm i -g pnpm@8
-# Install ONLY deps for the API package (no dev deps yet)
 RUN pnpm install --frozen-lockfile \
-      --filter ./services/api \
-      --prod \
+      --filter ./services/api --prod \
       --ignore-scripts
 
-# ---------- builder layer ----------
+# ---------- builder ----------
 FROM base AS builder
+# copy lock & manifests first
 COPY pnpm-workspace.yaml pnpm-lock.yaml package.json ./
 COPY services/api/package.json services/api/
 
 RUN npm i -g pnpm@8
-# Install ALL deps including dev deps for building
+# Install ALL deps including dev deps
 RUN pnpm install --frozen-lockfile \
       --filter ./services/api
 
 # Copy source code
 COPY services/api/ services/api/
 
-# Generate Prisma client *before* tsc build
+# Generate Prisma client and build
 RUN pnpm --filter ./services/api prisma generate
-
-# Build TS → JS
 RUN pnpm --filter ./services/api build
 
-# ---------- runtime layer ----------
+# ---------- runner ----------
 FROM base AS runner
 RUN useradd -u 1001 -r -s /bin/false app
 
 WORKDIR /app
-COPY --from=builder /app/services/api/dist ./dist
-COPY --from=deps /app/services/api/node_modules ./node_modules
-COPY --from=builder /app/services/api/package.json ./
-COPY --from=builder /app/services/api/prisma ./prisma
+
+COPY --from=builder /app/services/api/dist            ./dist
+COPY --from=deps /app/services/api/node_modules       ./node_modules
+COPY --from=builder /app/services/api/package.json    ./
+COPY --from=builder /app/services/api/prisma          ./prisma
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
