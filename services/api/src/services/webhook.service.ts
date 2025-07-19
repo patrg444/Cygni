@@ -8,7 +8,8 @@ export interface WebhookPayload {
     | "deployment.created"
     | "deployment.updated"
     | "deployment.failed"
-    | "deployment.succeeded";
+    | "deployment.succeeded"
+    | "deployment.rollback";
   timestamp: string;
   deployment: {
     id: string;
@@ -18,7 +19,7 @@ export interface WebhookPayload {
     buildId: string;
     userId: string;
     createdAt: Date;
-    metadata?: any;
+    metadata?: Record<string, unknown>;
   };
   project?: {
     id: string;
@@ -37,14 +38,89 @@ export interface WebhookPayload {
   };
 }
 
+export interface DeploymentEventPayload {
+  projectId: string;
+  event: WebhookPayload['event'];
+  deployment: {
+    id: string;
+    projectId: string;
+    environmentId: string;
+    status: DeploymentStatus;
+    buildId: string;
+    userId: string;
+    createdAt: Date;
+    metadata?: Record<string, unknown>;
+    environment?: {
+      id: string;
+      name: string;
+      slug: string;
+    };
+    build?: {
+      id: string;
+      imageUrl?: string;
+    };
+    project?: {
+      id: string;
+      name: string;
+      slug: string;
+    };
+  };
+}
+
 export class WebhookService {
+  async sendDeploymentEvent(payload: DeploymentEventPayload): Promise<void> {
+    const { projectId, event, deployment } = payload;
+    
+    // Get project with webhooks
+    const project = await prisma.project.findUnique({
+      where: { id: projectId },
+      include: {
+        webhooks: {
+          where: { active: true },
+        },
+      },
+    });
+
+    if (!project || project.webhooks.length === 0) return;
+
+    const webhookPayload: WebhookPayload = {
+      event: event,
+      timestamp: new Date().toISOString(),
+      deployment: {
+        id: deployment.id,
+        projectId: deployment.projectId,
+        environmentId: deployment.environmentId,
+        status: deployment.status,
+        buildId: deployment.buildId,
+        userId: deployment.userId,
+        createdAt: deployment.createdAt,
+        metadata: deployment.metadata,
+      },
+      project: {
+        id: project.id,
+        name: project.name,
+        slug: project.slug,
+      },
+      environment: deployment.environment ? {
+        id: deployment.environment.id,
+        name: deployment.environment.name,
+        slug: deployment.environment.slug,
+      } : undefined,
+    };
+
+    // Send to all active webhooks
+    for (const webhook of project.webhooks) {
+      await WebhookService.sendWebhook(webhook.url, webhookPayload, webhook.secret || undefined);
+    }
+  }
+
   private static async sendWebhook(
     url: string,
     payload: WebhookPayload,
     secret?: string,
   ) {
     try {
-      const headers: any = {
+      const headers: Record<string, string> = {
         "Content-Type": "application/json",
         "X-Cygni-Event": payload.event,
         "X-Cygni-Timestamp": payload.timestamp,
@@ -72,14 +148,14 @@ export class WebhookService {
       });
 
       return { success: true, status: response.status };
-    } catch (error: any) {
+    } catch (error) {
       logger.error("Failed to send webhook", {
         url,
         event: payload.event,
-        error: error.message,
+        error: error instanceof Error ? error.message : String(error),
       });
 
-      return { success: false, error: error.message };
+      return { success: false, error: error instanceof Error ? error.message : String(error) };
     }
   }
 
@@ -220,7 +296,12 @@ export class WebhookService {
     }
   }
 
-  private static async sendSlackNotification(deployment: any, action: string) {
+  private static async sendSlackNotification(deployment: {
+    project: { name: string };
+    environment: { name: string };
+    user: { name?: string; email: string };
+    status: string;
+  }, action: string) {
     const slackWebhookUrl = process.env.SLACK_WEBHOOK_URL;
     if (!slackWebhookUrl) return;
 
@@ -278,7 +359,13 @@ export class WebhookService {
     }
   }
 
-  static async updateGitHubStatus(deployment: any) {
+  static async updateGitHubStatus(deployment: {
+    project: { repository?: string; slug: string };
+    environment: { name: string; slug: string };
+    status: DeploymentStatus;
+    build: { commitSha?: string };
+    id: string;
+  }) {
     // Check if project has GitHub integration
     const githubToken = process.env.GITHUB_TOKEN;
     if (

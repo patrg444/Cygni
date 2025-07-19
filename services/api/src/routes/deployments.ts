@@ -12,7 +12,7 @@ const createDeploymentSchema = z.object({
   projectId: z.string(),
   buildId: z.string(),
   environment: z.string(),
-  metadata: z.record(z.any()).optional(),
+  metadata: z.record(z.unknown()).optional(),
 });
 
 const ORCHESTRATOR_URL =
@@ -113,7 +113,7 @@ export const deploymentRoutes: FastifyPluginAsync = async (app) => {
           data: {
             status: DeploymentStatus.failed,
             metadata: {
-              ...(deployment.metadata as any),
+              ...(deployment.metadata as Record<string, unknown>),
               error: "Failed to create service in orchestrator",
             },
           },
@@ -208,7 +208,7 @@ export const deploymentRoutes: FastifyPluginAsync = async (app) => {
         includePrevious?: boolean;
       };
 
-      const where: any = { projectId };
+      const where: { projectId: string; status?: DeploymentStatus; environmentId?: string } = { projectId };
 
       if (environment) {
         const env = await prisma.environment.findFirst({
@@ -300,7 +300,7 @@ export const deploymentRoutes: FastifyPluginAsync = async (app) => {
         offset?: number;
       };
 
-      const where: any = { projectId };
+      const where: { projectId: string; status?: DeploymentStatus; environmentId?: string } = { projectId };
 
       if (environment) {
         const env = await prisma.environment.findFirst({
@@ -364,7 +364,7 @@ export const deploymentRoutes: FastifyPluginAsync = async (app) => {
       const body = rollbackSchema.parse(request.body);
 
       // Determine project based on input
-      let project: any;
+      let project: { id: string; slug: string } | null = null;
       let projectId: string;
 
       if (body.deploymentId) {
@@ -389,7 +389,7 @@ export const deploymentRoutes: FastifyPluginAsync = async (app) => {
         projectId = project.id;
       } else if (body.projectSlug) {
         // Rollback by project slug
-        project = await prisma.project.findUnique({
+        project = await prisma.project.findFirst({
           where: { slug: body.projectSlug },
         });
         if (!project) {
@@ -946,8 +946,8 @@ export const deploymentRoutes: FastifyPluginAsync = async (app) => {
           },
         });
 
-        const logs = response.data.data.result.flatMap((stream: any) =>
-          stream.values.map((value: any) => ({
+        const logs = response.data.data.result.flatMap((stream: { values: [string, string][]; stream: unknown }) =>
+          stream.values.map((value: [string, string]) => ({
             timestamp: new Date(parseInt(value[0]) / 1000000),
             message: value[1],
             stream: stream.stream,
@@ -976,7 +976,7 @@ function getNamespaceForEnvironment(
   }
 }
 
-async function monitorDeploymentStatus(app: any, deploymentId: string) {
+async function monitorDeploymentStatus(app: { log: { info: (msg: string, data?: unknown) => void } }, deploymentId: string) {
   // Poll orchestrator for deployment status
   const checkStatus = async () => {
     try {
@@ -1032,7 +1032,7 @@ async function monitorDeploymentStatus(app: any, deploymentId: string) {
           data: {
             status: newStatus,
             metadata: {
-              ...(deployment.metadata as any),
+              ...(deployment.metadata as Record<string, unknown>),
               endpoint: status.data.endpoint,
               lastChecked: new Date().toISOString(),
             },
