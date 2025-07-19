@@ -1,0 +1,54 @@
+%%{init: {'theme':'dark', 'sequence': {'showSequenceNumbers': true}}}%%
+sequenceDiagram
+    autonumber
+    
+    participant Dev as Developer
+    participant Git as GitHub
+    participant Hook as Webhook
+    participant API as API Service
+    participant Auth as Auth Service
+    participant Build as Builder Service
+    participant Reg as Container Registry
+    participant Orch as Runtime Orchestrator
+    participant K8s as Kubernetes
+    participant App as User Application
+    
+    Dev->>Git: git push
+    Git->>Hook: Webhook trigger
+    Hook->>API: POST /webhooks/github
+    
+    Note over API,Auth: Validate webhook signature
+    API->>Auth: Verify webhook
+    Auth-->>API: Valid ✓
+    
+    API->>Build: Start build job
+    activate Build
+    Build->>Build: Clone repository
+    Build->>Build: Build container
+    Build->>Reg: Push image
+    Build-->>API: Build complete
+    deactivate Build
+    
+    API->>API: Create deployment record
+    API->>Orch: Create CygniService CR
+    
+    activate Orch
+    Orch->>K8s: Create Deployment
+    Orch->>K8s: Create Service
+    Orch->>K8s: Create Ingress
+    
+    loop Health Check
+        Orch->>K8s: Check pod status
+        K8s-->>Orch: Status update
+    end
+    
+    Orch->>Orch: Health gates pass ✓
+    Orch-->>API: Deployment active
+    deactivate Orch
+    
+    API-->>Hook: Success response
+    Hook-->>Git: Update commit status
+    Git-->>Dev: Deployment complete
+    
+    Note over Dev,App: Application is now live!
+    Dev->>App: Access application

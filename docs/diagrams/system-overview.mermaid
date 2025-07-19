@@ -1,0 +1,93 @@
+%%{init: {'theme':'dark'}}%%
+graph TB
+    subgraph "Developers"
+        DEV[Developer]
+        GIT[Git Push]
+    end
+
+    subgraph "Cygni Platform"
+        subgraph "Entry Points"
+            CLI[CLI Tool<br/>cygni deploy]
+            WEB[Web Dashboard<br/>app.cygni.dev]
+            API[API/SDK<br/>api.cygni.dev]
+        end
+
+        subgraph "Control Plane"
+            AUTH_SVC[Auth Service<br/>JWT/OAuth]
+            API_SVC[API Service<br/>Projects/Deployments]
+            BUILD_SVC[Builder Service<br/>Container Builds]
+            WEBHOOK[Webhook Handler<br/>Git Integration]
+        end
+
+        subgraph "Data Plane"
+            ORCH[Runtime Orchestrator<br/>K8s Controller]
+            subgraph "User Apps"
+                APP1[App Instance 1]
+                APP2[App Instance 2]
+                APP3[App Instance N]
+            end
+        end
+
+        subgraph "Infrastructure"
+            K8S[Kubernetes<br/>EKS/GKE/AKS]
+            DB[(PostgreSQL<br/>RDS/CloudSQL)]
+            CACHE[(Redis<br/>ElastiCache)]
+            STORAGE[(S3/GCS<br/>Build Artifacts)]
+            REGISTRY[Container Registry<br/>ECR/GCR]
+        end
+    end
+
+    subgraph "External Services"
+        STRIPE[Stripe<br/>Billing]
+        GITHUB[GitHub/GitLab<br/>Source Code]
+        MONITORING[Monitoring<br/>Prometheus/Grafana]
+    end
+
+    %% User flows
+    DEV --> CLI
+    DEV --> WEB
+    DEV --> GIT
+    
+    GIT --> WEBHOOK
+    
+    %% Entry point connections
+    CLI --> API_SVC
+    WEB --> API_SVC
+    API --> API_SVC
+    
+    %% Control plane flow
+    API_SVC --> AUTH_SVC
+    API_SVC --> BUILD_SVC
+    API_SVC --> DB
+    API_SVC --> CACHE
+    API_SVC --> STRIPE
+    
+    WEBHOOK --> API_SVC
+    
+    BUILD_SVC --> STORAGE
+    BUILD_SVC --> REGISTRY
+    
+    %% Deployment flow
+    API_SVC --> ORCH
+    ORCH --> K8S
+    K8S --> APP1
+    K8S --> APP2
+    K8S --> APP3
+    
+    %% Monitoring
+    APP1 --> MONITORING
+    APP2 --> MONITORING
+    APP3 --> MONITORING
+    
+    %% Styling
+    classDef userNode fill:#2563eb,stroke:#1d4ed8,color:#fff
+    classDef controlPlane fill:#7c3aed,stroke:#6d28d9,color:#fff
+    classDef dataPlane fill:#059669,stroke:#047857,color:#fff
+    classDef infrastructure fill:#ea580c,stroke:#dc2626,color:#fff
+    classDef external fill:#64748b,stroke:#475569,color:#fff
+    
+    class DEV,GIT userNode
+    class CLI,WEB,API,AUTH_SVC,API_SVC,BUILD_SVC,WEBHOOK controlPlane
+    class ORCH,APP1,APP2,APP3 dataPlane
+    class K8S,DB,CACHE,STORAGE,REGISTRY infrastructure
+    class STRIPE,GITHUB,MONITORING external
