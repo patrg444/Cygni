@@ -1,6 +1,6 @@
 import fs from 'fs/promises';
 import path from 'path';
-import { parse as parseYaml } from 'js-yaml';
+import * as yaml from 'js-yaml';
 
 export interface CygniConfig {
   name: string;
@@ -37,7 +37,7 @@ export async function loadConfig(dir: string = '.'): Promise<CygniConfig> {
       if (filename.endsWith('.json')) {
         return JSON.parse(content);
       } else {
-        return parseYaml(content) as CygniConfig;
+        return yaml.load(content) as CygniConfig;
       }
     } catch (error) {
       // File doesn't exist or parse error, continue
@@ -82,8 +82,8 @@ export function createProjectConfig(name: string, framework?: string): CygniConf
   };
 }
 
-function getFrameworkDefaults(framework: string): CygniConfig['services']['web'] {
-  const defaults: Record<string, CygniConfig['services']['web']> = {
+function getFrameworkDefaults(framework: string) {
+  const defaults: Record<string, NonNullable<CygniConfig['services']>['web']> = {
     'next': {
       build: { command: 'npm run build' },
       start: { command: 'npm run start', port: 3000 }

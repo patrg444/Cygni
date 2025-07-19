@@ -16,20 +16,21 @@ interface KanikoBuildOptions {
 export class KanikoBuilder {
   private k8sApi: k8s.BatchV1Api;
   private k8sCore: k8s.CoreV1Api;
+  private kc: k8s.KubeConfig;
   private ecrClient: ECRClient;
   private namespace = 'cygni-builds';
   private ecrRegistry: string;
 
   constructor() {
-    const kc = new k8s.KubeConfig();
+    this.kc = new k8s.KubeConfig();
     if (process.env.NODE_ENV === 'production') {
-      kc.loadFromCluster();
+      this.kc.loadFromCluster();
     } else {
-      kc.loadFromDefault();
+      this.kc.loadFromDefault();
     }
 
-    this.k8sApi = kc.makeApiClient(k8s.BatchV1Api);
-    this.k8sCore = kc.makeApiClient(k8s.CoreV1Api);
+    this.k8sApi = this.kc.makeApiClient(k8s.BatchV1Api);
+    this.k8sCore = this.kc.makeApiClient(k8s.CoreV1Api);
     this.ecrClient = new ECRClient({ region: process.env.AWS_REGION || 'us-east-1' });
     this.ecrRegistry = process.env.ECR_REGISTRY || '';
   }
@@ -187,7 +188,8 @@ export class KanikoBuilder {
 
   async getBuildStatus(buildId: string): Promise<BuildStatus> {
     try {
-      const job = await this.k8sApi.readNamespacedJobStatus(buildId, this.namespace);
+      const response = await this.k8sApi.readNamespacedJobStatus(buildId, this.namespace);
+      const job = response.body;
       
       if (job.status?.succeeded) {
         return BuildStatus.SUCCESS;
@@ -220,8 +222,11 @@ export class KanikoBuilder {
       }
 
       const pod = pods.body.items[0];
+      if (!pod.metadata?.name) {
+        return 'Pod metadata not available';
+      }
       const logs = await this.k8sCore.readNamespacedPodLog(
-        pod.metadata!.name!,
+        pod.metadata.name,
         this.namespace,
         'kaniko',
         false,
@@ -241,7 +246,7 @@ export class KanikoBuilder {
   }
 
   async streamBuildLogs(buildId: string, onLog: (log: string) => void): Promise<void> {
-    const stream = new k8s.Log(this.k8sCore.kc);
+    const stream = new k8s.Log(this.kc);
     
     const pods = await this.k8sCore.listNamespacedPod(
       this.namespace,
@@ -257,14 +262,13 @@ export class KanikoBuilder {
     }
 
     const pod = pods.body.items[0];
+    if (!pod.metadata?.name) {
+      throw new Error('Pod metadata not available');
+    }
     const logStream = await stream.log(
       this.namespace,
-      pod.metadata!.name!,
-      'kaniko',
-      {
-        follow: true,
-        tailLines: 100,
-      }
+      pod.metadata.name,
+      'kaniko'
     );
 
     logStream.on('data', (chunk: Buffer) => {
