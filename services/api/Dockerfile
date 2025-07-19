@@ -1,36 +1,57 @@
-FROM node:20-alpine
+# syntax=docker/dockerfile:1
+FROM node:20-alpine AS base
 
-# Install pnpm
-RUN corepack enable && corepack prepare pnpm@8.15.0 --activate
-
-# Set working directory
+# Install dependencies only when needed
+FROM base AS deps
+RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-# Copy workspace files first
-COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
+# Install pnpm
+RUN npm install -g pnpm@8
 
-# Copy service package.json
-COPY services/api/package.json ./services/api/
+# Copy dependency files
+COPY pnpm-workspace.yaml package.json pnpm-lock.yaml ./
+COPY services/api/package.json services/api/
 
 # Install dependencies
 RUN pnpm install --frozen-lockfile
 
-# Copy API source
-COPY services/api ./services/api
+# Rebuild the source code only when needed
+FROM base AS builder
+WORKDIR /app
+RUN npm install -g pnpm@8
 
-# Build API
+# Copy dependency files
+COPY pnpm-workspace.yaml package.json pnpm-lock.yaml ./
+COPY services/api/package.json services/api/
+
+# Install all dependencies
+RUN pnpm install --frozen-lockfile
+
+# Copy source files
+COPY services/api services/api
+
+# Build
 WORKDIR /app/services/api
-RUN pnpm run prisma generate
-RUN pnpm run build
+RUN pnpm prisma generate
+RUN pnpm build
 
-# Create non-root user
-RUN adduser -D -u 1001 app
+# Production image, copy all the files and run
+FROM base AS runtime
+WORKDIR /app
 
-# Change ownership
-RUN chown -R app:app /app
+# Create user
+RUN addgroup -g 1001 -S nodejs
+RUN adduser -S nodejs -u 1001
 
-# Switch to non-root user
-USER app
+# Copy built application
+COPY --from=builder /app/services/api/dist ./dist
+COPY --from=builder /app/services/api/node_modules ./node_modules
+COPY --from=builder /app/services/api/package.json ./package.json
+COPY --from=builder /app/services/api/prisma ./prisma
+
+# Set user
+USER nodejs
 
 # Environment
 ENV NODE_ENV=production
