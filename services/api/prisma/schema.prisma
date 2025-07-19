@@ -61,6 +61,7 @@ model Project {
   deployments  Deployment[]
   builds       Build[]
   secrets      Secret[]
+  webhooks     Webhook[]
 
   @@unique([organizationId, slug])
 }
@@ -176,4 +177,17 @@ enum BuildStatus {
   success
   failed
   cancelled
+}
+
+model Webhook {
+  id        String   @id @default(cuid())
+  projectId String
+  url       String
+  secret    String?
+  events    String[] @default(["deployment.created", "deployment.updated", "deployment.failed", "deployment.succeeded"])
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  project Project @relation(fields: [projectId], references: [id])
 }

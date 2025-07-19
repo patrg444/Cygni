@@ -2,6 +2,7 @@ import fastify from "fastify";
 import cors from "@fastify/cors";
 import helmet from "@fastify/helmet";
 import jwt from "@fastify/jwt";
+import rateLimit from "@fastify/rate-limit";
 import { config } from "./config";
 import { logger } from "./utils/logger";
 import { registerRoutes } from "./routes";
@@ -41,6 +42,30 @@ async function start() {
     secret: config.jwt.secret,
     sign: {
       expiresIn: config.jwt.expiresIn,
+    },
+  });
+
+  // Rate limiting configuration
+  await app.register(rateLimit, {
+    global: true,
+    max: 100, // 100 requests
+    timeWindow: "1 minute",
+    cache: 10000, // Cache up to 10k IPs
+    allowList: ["127.0.0.1"], // Whitelist localhost
+    redis: config.redis.url ? config.redis.url : undefined, // Use Redis if available
+    skipOnError: true, // Don't block requests if rate limiter fails
+    keyGenerator: (request) => {
+      // Use authenticated user ID if available, otherwise IP
+      return request.auth?.user?.id || request.ip;
+    },
+    errorResponseBuilder: (request, context) => {
+      return {
+        error: "Too Many Requests",
+        message: `Rate limit exceeded. You have made ${context.current} requests. Please retry after ${context.ttl} ms.`,
+        statusCode: 429,
+        date: Date.now(),
+        expiresIn: context.ttl,
+      };
     },
   });
 

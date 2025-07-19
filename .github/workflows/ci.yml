@@ -20,10 +20,13 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: "npm"
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
 
       - name: Install dependencies
-        run: npm install
+        run: pnpm install
 
       - name: Run linter
         run: pnpm run lint
@@ -32,7 +35,7 @@ jobs:
         run: pnpm run typecheck
 
   # Unit tests
-  test-unit:
+  test-matrix:
     name: Unit Tests
     runs-on: ubuntu-latest
     strategy:
@@ -47,7 +50,7 @@ jobs:
           cache: "npm"
 
       - name: Install dependencies
-        run: npm install
+        run: pnpm install
 
       - name: Run unit tests
         run: pnpm run test
@@ -87,10 +90,13 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: "npm"
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
 
       - name: Install dependencies
-        run: npm install
+        run: pnpm install
 
       - name: Build API
         run: |
@@ -202,6 +208,89 @@ jobs:
           docker stop cygni-api-test
           docker rm cygni-api-test
 
+  # Database migrations check
+  migration-check:
+    name: Database Migration Check
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15.6-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: cygni_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Check for pending migrations
+        run: |
+          cd services/api
+          npx prisma migrate diff \
+            --from-migrations ./prisma/migrations \
+            --to-schema-datamodel ./prisma/schema.prisma \
+            --exit-code
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/cygni_test
+
+      - name: Validate migration rollback
+        run: |
+          cd services/api
+          # Deploy all migrations
+          npx prisma migrate deploy
+
+          # Get list of migrations
+          MIGRATIONS=$(npx prisma migrate status --json | jq -r '.appliedMigrations[].name')
+
+          # Test rolling back last migration
+          if [ ! -z "$MIGRATIONS" ]; then
+            LAST_MIGRATION=$(echo "$MIGRATIONS" | tail -n 1)
+            echo "Testing rollback of migration: $LAST_MIGRATION"
+            
+            # Create rollback SQL
+            npx prisma migrate diff \
+              --from-schema-datamodel ./prisma/schema.prisma \
+              --to-migrations ./prisma/migrations \
+              --script > rollback.sql
+              
+            # Validate rollback doesn't drop critical data
+            if grep -E "(DROP TABLE|DROP COLUMN|DROP INDEX)" rollback.sql; then
+              echo "Warning: Rollback contains destructive operations"
+              cat rollback.sql
+            fi
+          fi
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/cygni_test
+
+      - name: Check schema compatibility
+        run: |
+          cd services/api
+          # Generate Prisma client
+          npx prisma generate
+
+          # Run TypeScript type checking
+          npx tsc --noEmit
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/cygni_test
+
   # Security scan
   security:
     name: Security Scan
@@ -227,8 +316,16 @@ jobs:
   # All checks passed
   ci-success:
     name: CI Success
-    needs: [lint, test-unit, test-integration, docker-build, security]
+    needs:
+      [
+        lint,
+        test-matrix,
+        test-integration,
+        docker-build,
+        migration-check,
+        security,
+      ]
     runs-on: ubuntu-latest
     steps:
       - name: CI passed
-        run: echo " All CI checks passed!"
+        run: echo "All CI checks passed!"

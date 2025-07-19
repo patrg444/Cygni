@@ -6,6 +6,7 @@ import { requireRole } from "../middleware/auth";
 import { Role } from "../types/auth";
 import { DeploymentStatus } from "@prisma/client";
 import axios from "axios";
+import { WebhookService } from "../services/webhook.service";
 
 const createDeploymentSchema = z.object({
   projectId: z.string(),
@@ -123,6 +124,11 @@ export const deploymentRoutes: FastifyPluginAsync = async (app) => {
 
       // Start monitoring deployment status
       monitorDeploymentStatus(app, deployment.id);
+
+      // Send webhook notification
+      WebhookService.notifyDeploymentCreated(deployment.id).catch((err) =>
+        app.log.error("Failed to send deployment webhook", { error: err }),
+      );
 
       return deployment;
     },
@@ -834,6 +840,8 @@ async function monitorDeploymentStatus(app: any, deploymentId: string) {
       }
 
       if (newStatus !== deployment.status) {
+        const oldStatus = deployment.status;
+
         await prisma.deployment.update({
           where: { id: deploymentId },
           data: {
@@ -845,6 +853,32 @@ async function monitorDeploymentStatus(app: any, deploymentId: string) {
             },
           },
         });
+
+        // Send webhook notification for status change
+        WebhookService.notifyDeploymentStatusChange(
+          deploymentId,
+          oldStatus,
+          newStatus,
+        ).catch((err) =>
+          app.log.error("Failed to send deployment status webhook", {
+            error: err,
+          }),
+        );
+
+        // Update GitHub status
+        const fullDeployment = await prisma.deployment.findUnique({
+          where: { id: deploymentId },
+          include: {
+            build: true,
+            project: true,
+            environment: true,
+          },
+        });
+        if (fullDeployment) {
+          WebhookService.updateGitHubStatus(fullDeployment).catch((err) =>
+            app.log.error("Failed to update GitHub status", { error: err }),
+          );
+        }
       }
 
       // Continue monitoring if still deploying

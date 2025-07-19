@@ -9,6 +9,7 @@ import { loginCommand } from "./commands/login";
 import { logsCommand } from "./commands/logs";
 import { statusCommand } from "./commands/status";
 import { secretsCommand } from "./commands/secrets";
+import { periodicUpdateCheck, autoUpdate } from "./utils/update-check";
 
 program
   .name("cygni")
@@ -28,6 +29,15 @@ program.exitOverride();
 
 async function main() {
   try {
+    // Check for auto-update
+    const updated = await autoUpdate();
+    if (updated) {
+      process.exit(0);
+    }
+
+    // Check for updates periodically
+    await periodicUpdateCheck();
+
     await program.parseAsync(process.argv);
   } catch (error: any) {
     if (error.code === "commander.help") {
