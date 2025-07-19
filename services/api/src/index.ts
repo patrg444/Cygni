@@ -6,6 +6,7 @@ import { config } from './config';
 import { logger } from './utils/logger';
 import { registerRoutes } from './routes';
 import { authenticateUser } from './middleware/auth';
+import { prisma } from './utils/prisma';
 
 declare module 'fastify' {
   interface FastifyInstance {
@@ -17,6 +18,10 @@ async function start() {
   const app = fastify({
     logger: logger,
     trustProxy: true,
+    requestIdHeader: 'x-request-id',
+    requestIdLogLabel: 'requestId',
+    disableRequestLogging: false,
+    bodyLimit: 1048576, // 1MB
   });
 
   // Register plugins
@@ -31,29 +36,133 @@ async function start() {
 
   await app.register(jwt, {
     secret: config.jwt.secret,
+    sign: {
+      expiresIn: config.jwt.expiresIn,
+    },
   });
 
   // Register auth decorator
   app.decorate('authenticate', authenticateUser);
 
+  // Global error handler
+  app.setErrorHandler((error, request, reply) => {
+    app.log.error({
+      err: error,
+      request: {
+        method: request.method,
+        url: request.url,
+        headers: request.headers,
+      },
+    });
+
+    // Handle validation errors
+    if (error.validation) {
+      return reply.status(400).send({
+        error: 'Validation Error',
+        message: error.message,
+        details: error.validation,
+      });
+    }
+
+    // Handle JWT errors
+    if (error.name === 'JsonWebTokenError') {
+      return reply.status(401).send({
+        error: 'Invalid Token',
+        message: 'The provided token is invalid',
+      });
+    }
+
+    // Handle Prisma errors
+    if (error.code === 'P2025') {
+      return reply.status(404).send({
+        error: 'Not Found',
+        message: 'The requested resource was not found',
+      });
+    }
+
+    if (error.code === 'P2002') {
+      return reply.status(409).send({
+        error: 'Conflict',
+        message: 'A resource with this identifier already exists',
+      });
+    }
+
+    // Default error response
+    const statusCode = error.statusCode || 500;
+    const message = config.isProduction 
+      ? 'An error occurred processing your request'
+      : error.message;
+
+    return reply.status(statusCode).send({
+      error: error.name || 'Internal Server Error',
+      message,
+      ...(config.isDevelopment && { stack: error.stack }),
+    });
+  });
+
   // Health check
   app.get('/health', async () => {
-    return { status: 'ok', timestamp: new Date().toISOString() };
+    // Check database connection
+    const dbHealthy = await prisma.$queryRaw`SELECT 1`
+      .then(() => true)
+      .catch(() => false);
+
+    return { 
+      status: dbHealthy ? 'ok' : 'degraded',
+      timestamp: new Date().toISOString(),
+      version: process.env.npm_package_version || 'unknown',
+      database: dbHealthy ? 'connected' : 'disconnected',
+    };
+  });
+
+  // Ready check (for k8s)
+  app.get('/ready', async (request, reply) => {
+    const dbHealthy = await prisma.$queryRaw`SELECT 1`
+      .then(() => true)
+      .catch(() => false);
+
+    if (!dbHealthy) {
+      return reply.status(503).send({ ready: false });
+    }
+
+    return { ready: true };
   });
 
   // Register application routes
   await registerRoutes(app);
 
+  // Graceful shutdown
+  const closeGracefully = async (signal: string) => {
+    app.log.info(`Received ${signal}, shutting down gracefully...`);
+    
+    try {
+      await app.close();
+      await prisma.$disconnect();
+      app.log.info('Server closed successfully');
+      process.exit(0);
+    } catch (err) {
+      app.log.error('Error during shutdown:', err);
+      process.exit(1);
+    }
+  };
+
+  process.on('SIGTERM', () => closeGracefully('SIGTERM'));
+  process.on('SIGINT', () => closeGracefully('SIGINT'));
+
   // Start server
   try {
-    await app.listen({
+    const address = await app.listen({
       port: config.port,
       host: '0.0.0.0',
     });
+    app.log.info(`Server listening at ${address}`);
   } catch (err) {
     app.log.error(err);
     process.exit(1);
   }
 }
 
-start();
+start().catch((err) => {
+  logger.error('Failed to start server:', err);
+  process.exit(1);
+});

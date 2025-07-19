@@ -1,5 +1,6 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
 import { Role, JWTPayload, AuthContext } from '../types/auth';
+import { prisma } from '../utils/prisma';
 
 declare module 'fastify' {
   interface FastifyRequest {
@@ -78,44 +79,80 @@ export function requireRole(allowedRoles: Role[]) {
   };
 }
 
-// Role hierarchy helpers
-export function canManageProject(role: Role): boolean {
-  return [Role.OWNER, Role.ADMIN, Role.DEVELOPER].includes(role);
-}
+// Role permission matrix - single source of truth
+const ROLE_PERMISSIONS = {
+  manageOrganization: [Role.OWNER],
+  manageProject: [Role.OWNER, Role.ADMIN, Role.DEVELOPER],
+  manageEnvironment: [Role.OWNER, Role.ADMIN],
+  manageSecrets: [Role.OWNER, Role.ADMIN],
+  manageBilling: [Role.OWNER],
+  triggerDeployment: [Role.OWNER, Role.ADMIN, Role.DEVELOPER],
+  viewDeployments: [Role.OWNER, Role.ADMIN, Role.DEVELOPER, Role.VIEWER],
+  viewLogs: [Role.OWNER, Role.ADMIN, Role.DEVELOPER, Role.VIEWER],
+  viewMetrics: [Role.OWNER, Role.ADMIN, Role.DEVELOPER, Role.VIEWER],
+} as const;
 
-export function canManageEnvironment(role: Role): boolean {
-  return [Role.OWNER, Role.ADMIN].includes(role);
-}
+// Generate permission check functions
+export const canManageOrganization = (role: Role) => ROLE_PERMISSIONS.manageOrganization.includes(role);
+export const canManageProject = (role: Role) => ROLE_PERMISSIONS.manageProject.includes(role);
+export const canManageEnvironment = (role: Role) => ROLE_PERMISSIONS.manageEnvironment.includes(role);
+export const canManageSecrets = (role: Role) => ROLE_PERMISSIONS.manageSecrets.includes(role);
+export const canManageBilling = (role: Role) => ROLE_PERMISSIONS.manageBilling.includes(role);
+export const canTriggerDeployment = (role: Role) => ROLE_PERMISSIONS.triggerDeployment.includes(role);
+export const canViewDeployments = (role: Role) => ROLE_PERMISSIONS.viewDeployments.includes(role);
+export const canViewLogs = (role: Role) => ROLE_PERMISSIONS.viewLogs.includes(role);
+export const canViewMetrics = (role: Role) => ROLE_PERMISSIONS.viewMetrics.includes(role);
 
-export function canViewLogs(role: Role): boolean {
-  return Object.values(Role).includes(role); // All roles can view logs
-}
-
-export function canManageSecrets(role: Role): boolean {
-  return [Role.OWNER, Role.ADMIN].includes(role);
-}
-
-export function canTriggerDeployment(role: Role): boolean {
-  return [Role.OWNER, Role.ADMIN, Role.DEVELOPER].includes(role);
-}
-
-// Placeholder functions - implement with Prisma
+// Prisma database queries
 async function getUserById(id: string) {
-  // TODO: Implement with Prisma
-  return null;
+  return await prisma.user.findUnique({
+    where: { id },
+    select: {
+      id: true,
+      email: true,
+      name: true,
+      createdAt: true,
+    },
+  });
 }
 
 async function getUserOrganizations(userId: string) {
-  // TODO: Implement with Prisma
-  return [];
+  return await prisma.organizationMember.findMany({
+    where: { userId },
+    include: {
+      organization: {
+        select: {
+          id: true,
+          name: true,
+          slug: true,
+        },
+      },
+    },
+  });
 }
 
 async function getProjectById(id: string) {
-  // TODO: Implement with Prisma
-  return null;
+  return await prisma.project.findUnique({
+    where: { id },
+    select: {
+      id: true,
+      organizationId: true,
+      name: true,
+      slug: true,
+    },
+  });
 }
 
-async function getProjectRole(userId: string, projectId: string) {
-  // TODO: Implement with Prisma
-  return null;
+async function getProjectRole(userId: string, projectId: string): Promise<Role | null> {
+  const member = await prisma.projectMember.findUnique({
+    where: {
+      userId_projectId: {
+        userId,
+        projectId,
+      },
+    },
+    select: { role: true },
+  });
+  
+  return member?.role as Role | null;
 }
