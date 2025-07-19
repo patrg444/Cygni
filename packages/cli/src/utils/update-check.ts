@@ -100,7 +100,7 @@ export async function autoUpdate(): Promise<boolean> {
   );
 
   try {
-    await execAsync(updateInfo.updateCommand, { timeout: 30000 });
+    await execAsync(updateInfo.updateCommand);
     console.log(
       chalk.green("✓ Update successful! Please restart your command."),
     );
