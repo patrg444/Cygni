@@ -43,27 +43,29 @@ WORKDIR /app
 # Install pnpm for production
 RUN npm install -g pnpm@8
 
-# Create user
-RUN addgroup -g 1001 -S nodejs
-RUN adduser -S nodejs -u 1001
-
 # Copy package files
 COPY --from=builder /app/pnpm-workspace.yaml ./
 COPY --from=builder /app/package.json ./
 COPY --from=builder /app/pnpm-lock.yaml ./
 COPY --from=builder /app/services/api/package.json ./services/api/
 
-# Install production dependencies only
+# Install production dependencies only (without devDependencies)
 RUN pnpm install --prod --frozen-lockfile
 
 # Copy built application
 COPY --from=builder /app/services/api/dist ./services/api/dist
 COPY --from=builder /app/services/api/prisma ./services/api/prisma
 
-# Generate Prisma client
-WORKDIR /app/services/api
-RUN pnpm prisma generate
+# Copy generated Prisma client
+COPY --from=builder /app/node_modules/.pnpm/@prisma+client@5.22.0_prisma@5.22.0/node_modules/@prisma/client ./node_modules/.pnpm/@prisma+client@5.22.0_prisma@5.22.0/node_modules/@prisma/client
+COPY --from=builder /app/node_modules/.pnpm/@prisma+client@5.22.0_prisma@5.22.0/node_modules/.prisma ./node_modules/.pnpm/@prisma+client@5.22.0_prisma@5.22.0/node_modules/.prisma
 
+# Create user
+RUN addgroup -g 1001 -S nodejs
+RUN adduser -S nodejs -u 1001
+
+# Change to app directory
+WORKDIR /app/services/api
 
 # Set user
 USER nodejs
