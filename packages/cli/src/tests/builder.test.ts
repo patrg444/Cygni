@@ -48,8 +48,10 @@ describe("Builder", () => {
     it("should handle non-git repository gracefully", async () => {
       // Mock exec to return error for git commands
       const { exec } = await import("child_process");
-      vi.mocked(exec).mockImplementation((cmd: any, callback: any) => {
-        callback(new Error("Not a git repository"));
+      vi.mocked(exec).mockImplementation((cmd, _options, callback) => {
+        const cb = typeof _options === 'function' ? _options : callback;
+        cb?.(new Error("Not a git repository"), '', '');
+        return {} as any;
       });
 
       vi.mocked(fs.access).mockRejectedValue(new Error("No Dockerfile"));
@@ -85,17 +87,20 @@ describe("Builder", () => {
 
       // Mock exec to track prebuild command
       const { exec } = await import("child_process");
-      vi.mocked(exec).mockImplementation((cmd: any, callback: any) => {
-        if (cmd === "git rev-parse HEAD") {
-          callback(null, { stdout: "abc123def456\n" }, "");
-        } else if (cmd === "git rev-parse --abbrev-ref HEAD") {
-          callback(null, { stdout: "main\n" }, "");
-        } else if (cmd === "npm run prebuild") {
+      vi.mocked(exec).mockImplementation((cmd, _options, callback) => {
+        const cb = typeof _options === 'function' ? _options : callback;
+        const cmdStr = typeof cmd === 'string' ? cmd : '';
+        if (cmdStr === "git rev-parse HEAD") {
+          cb?.(null, "abc123def456\n", "");
+        } else if (cmdStr === "git rev-parse --abbrev-ref HEAD") {
+          cb?.(null, "main\n", "");
+        } else if (cmdStr === "npm run prebuild") {
           prebuildCommandRun = true;
-          callback(null, { stdout: "Prebuild complete\n" }, "");
+          cb?.(null, "Prebuild complete\n", "");
         } else {
-          callback(new Error("Command not found"));
+          cb?.(new Error("Command not found"), '', '');
         }
+        return {} as any;
       });
 
       vi.mocked(fs.access).mockRejectedValue(new Error("No Dockerfile"));

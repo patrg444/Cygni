@@ -28,6 +28,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      - name: Generate Prisma client
+        run: |
+          cd services/api
+          npx prisma generate
+
       - name: Run linter
         run: pnpm run lint
 
@@ -104,6 +109,7 @@ jobs:
       - name: Build API
         run: |
           cd services/api
+          npx prisma generate
           pnpm build
         env:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/cygni_test
@@ -244,9 +250,10 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Check for pending migrations
+      - name: Generate Prisma client and check migrations
         run: |
           cd services/api
+          npx prisma generate
           npx prisma migrate diff \
             --from-migrations ./prisma/migrations \
             --to-schema-datamodel ./prisma/schema.prisma \
