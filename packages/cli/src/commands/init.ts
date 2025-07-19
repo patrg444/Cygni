@@ -2,7 +2,6 @@ import { Command } from 'commander';
 import { input, select, confirm } from '@inquirer/prompts';
 import chalk from 'chalk';
 import ora from 'ora';
-import fs from 'fs/promises';
 import path from 'path';
 import { detectFramework } from '../utils/framework-detector';
 import { createProjectConfig, saveConfig } from '../utils/config';
@@ -37,21 +36,21 @@ export const initCommand = new Command('init')
       ],
     });
 
-    // Ask about services
-    const needsDatabase = await confirm({
-      message: 'Do you need a database?',
-      default: true,
-    });
+    // Ask about services (for future use)
+    // const needsDatabase = await confirm({
+    //   message: 'Do you need a database?',
+    //   default: true,
+    // });
 
-    const needsAuth = await confirm({
-      message: 'Do you need authentication?',
-      default: true,
-    });
+    // const needsAuth = await confirm({
+    //   message: 'Do you need authentication?',
+    //   default: true,
+    // });
 
-    const needsStorage = await confirm({
-      message: 'Do you need file storage?',
-      default: false,
-    });
+    // const needsStorage = await confirm({
+    //   message: 'Do you need file storage?',
+    //   default: false,
+    // });
 
     // Create configuration
     const spinner = ora('Creating CloudExpress configuration...').start();
