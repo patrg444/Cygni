@@ -93,15 +93,15 @@ const ROLE_PERMISSIONS = {
 } as const;
 
 // Generate permission check functions
-export const canManageOrganization = (role: Role) => ROLE_PERMISSIONS.manageOrganization.includes(role);
-export const canManageProject = (role: Role) => ROLE_PERMISSIONS.manageProject.includes(role);
-export const canManageEnvironment = (role: Role) => ROLE_PERMISSIONS.manageEnvironment.includes(role);
-export const canManageSecrets = (role: Role) => ROLE_PERMISSIONS.manageSecrets.includes(role);
-export const canManageBilling = (role: Role) => ROLE_PERMISSIONS.manageBilling.includes(role);
-export const canTriggerDeployment = (role: Role) => ROLE_PERMISSIONS.triggerDeployment.includes(role);
-export const canViewDeployments = (role: Role) => ROLE_PERMISSIONS.viewDeployments.includes(role);
-export const canViewLogs = (role: Role) => ROLE_PERMISSIONS.viewLogs.includes(role);
-export const canViewMetrics = (role: Role) => ROLE_PERMISSIONS.viewMetrics.includes(role);
+export const canManageOrganization = (role: Role) => ROLE_PERMISSIONS.manageOrganization.includes(role as any);
+export const canManageProject = (role: Role) => ROLE_PERMISSIONS.manageProject.includes(role as any);
+export const canManageEnvironment = (role: Role) => ROLE_PERMISSIONS.manageEnvironment.includes(role as any);
+export const canManageSecrets = (role: Role) => ROLE_PERMISSIONS.manageSecrets.includes(role as any);
+export const canManageBilling = (role: Role) => ROLE_PERMISSIONS.manageBilling.includes(role as any);
+export const canTriggerDeployment = (role: Role) => ROLE_PERMISSIONS.triggerDeployment.includes(role as any);
+export const canViewDeployments = (role: Role) => ROLE_PERMISSIONS.viewDeployments.includes(role as any);
+export const canViewLogs = (role: Role) => ROLE_PERMISSIONS.viewLogs.includes(role as any);
+export const canViewMetrics = (role: Role) => ROLE_PERMISSIONS.viewMetrics.includes(role as any);
 
 // Prisma database queries
 async function getUserById(id: string) {

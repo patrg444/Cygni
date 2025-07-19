@@ -305,8 +305,10 @@ export class CygniClient {
 
   // Streaming logs (for follow mode)
   streamLogs(deploymentId: string, onLog: (log: string) => void): () => void {
+    const auth = this.client.defaults.headers['Authorization'];
+    const token = typeof auth === 'string' ? auth.replace('Bearer ', '') : '';
     const eventSource = new EventSource(
-      `${this.client.defaults.baseURL}/deployments/${deploymentId}/logs/stream?token=${this.client.defaults.headers['Authorization']?.replace('Bearer ', '')}`
+      `${this.client.defaults.baseURL}/deployments/${deploymentId}/logs/stream?token=${token}`
     );
 
     eventSource.onmessage = (event) => {

@@ -59,7 +59,7 @@ export const authRoutes: FastifyPluginAsync = async (app) => {
           members: {
             create: {
               userId: user.id,
-              role: Role.OWNER,
+              role: Role.owner,
             },
           },
         },
@@ -74,7 +74,7 @@ export const authRoutes: FastifyPluginAsync = async (app) => {
       email: result.user.email,
       organizations: [{
         id: result.organization.id,
-        role: Role.OWNER,
+        role: Role.owner,
       }],
     });
 
