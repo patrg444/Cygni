@@ -81,15 +81,15 @@ export function requireRole(allowedRoles: Role[]) {
 
 // Role permission matrix - single source of truth
 const ROLE_PERMISSIONS = {
-  manageOrganization: [Role.OWNER],
-  manageProject: [Role.OWNER, Role.ADMIN, Role.DEVELOPER],
-  manageEnvironment: [Role.OWNER, Role.ADMIN],
-  manageSecrets: [Role.OWNER, Role.ADMIN],
-  manageBilling: [Role.OWNER],
-  triggerDeployment: [Role.OWNER, Role.ADMIN, Role.DEVELOPER],
-  viewDeployments: [Role.OWNER, Role.ADMIN, Role.DEVELOPER, Role.VIEWER],
-  viewLogs: [Role.OWNER, Role.ADMIN, Role.DEVELOPER, Role.VIEWER],
-  viewMetrics: [Role.OWNER, Role.ADMIN, Role.DEVELOPER, Role.VIEWER],
+  manageOrganization: [Role.owner],
+  manageProject: [Role.owner, Role.admin, Role.developer],
+  manageEnvironment: [Role.owner, Role.admin],
+  manageSecrets: [Role.owner, Role.admin],
+  manageBilling: [Role.owner],
+  triggerDeployment: [Role.owner, Role.admin, Role.developer],
+  viewDeployments: [Role.owner, Role.admin, Role.developer, Role.viewer],
+  viewLogs: [Role.owner, Role.admin, Role.developer, Role.viewer],
+  viewMetrics: [Role.owner, Role.admin, Role.developer, Role.viewer],
 } as const;
 
 // Generate permission check functions

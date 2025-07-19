@@ -25,7 +25,7 @@ export const listProjectsRoute: FastifyPluginAsync = async (app) => {
         }
       }
     }
-  }, async (request, reply) => {
+  }, async (request, _reply) => {
     const { organizationId } = request.params as { organizationId: string };
     const { limit, offset, orderBy, order } = request.query as {
       limit: number;

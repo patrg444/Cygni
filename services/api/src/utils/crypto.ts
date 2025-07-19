@@ -2,7 +2,7 @@ import crypto from 'crypto';
 
 const algorithm = 'aes-256-gcm';
 const secretKey = process.env.ENCRYPTION_KEY || crypto.randomBytes(32).toString('hex');
-const key = Buffer.from(secretKey, 'hex');
+const key = secretKey.length === 64 ? Buffer.from(secretKey, 'hex') : Buffer.from(crypto.randomBytes(32).toString('hex'), 'hex');
 
 export function encrypt(text: string): string {
   const iv = crypto.randomBytes(16);

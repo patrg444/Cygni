@@ -33,10 +33,10 @@ export interface Environment {
 }
 
 export enum Role {
-  OWNER = 'owner',
-  ADMIN = 'admin',
-  DEVELOPER = 'developer',
-  VIEWER = 'viewer'
+  owner = 'owner',
+  admin = 'admin',
+  developer = 'developer',
+  viewer = 'viewer'
 }
 
 export interface OrganizationMember {

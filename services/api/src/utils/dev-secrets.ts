@@ -46,7 +46,7 @@ export async function loadOrGenerateDevSecrets(): Promise<DevSecrets> {
     
     if (jwtMatch) {
       return {
-        JWT_SECRET: jwtMatch[1],
+        JWT_SECRET: jwtMatch[1] || '',
         generatedAt: new Date().toISOString(),
       };
     }

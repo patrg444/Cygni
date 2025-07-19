@@ -35,7 +35,7 @@ export const authRoutes: FastifyPluginAsync = async (app) => {
     const hashedPassword = await argon2.hash(body.password);
 
     // Create user and organization in transaction
-    const result = await prisma.$transaction(async (tx) => {
+    const result = await prisma.$transaction(async (tx: any) => {
       // Create user
       const user = await tx.user.create({
         data: {
@@ -161,7 +161,7 @@ export const authRoutes: FastifyPluginAsync = async (app) => {
     const token = await app.jwt.sign({
       sub: user.id,
       email: user.email,
-      organizations: organizations.map(om => ({
+      organizations: organizations.map((om: any) => ({
         id: om.organization.id,
         role: om.role,
       })),

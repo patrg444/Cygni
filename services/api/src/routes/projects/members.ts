@@ -22,7 +22,7 @@ export const projectMembersRoutes: FastifyPluginAsync = async (app) => {
         required: ['projectId']
       }
     }
-  }, async (request, reply) => {
+  }, async (request, _reply) => {
     const { projectId } = request.params as { projectId: string };
 
     const members = await projectService.listProjectMembers(projectId);
@@ -49,7 +49,7 @@ export const projectMembersRoutes: FastifyPluginAsync = async (app) => {
         required: ['email', 'role']
       }
     }
-  }, async (request, reply) => {
+  }, async (request, _reply) => {
     const { projectId } = request.params as { projectId: string };
     const body = addMemberSchema.parse(request.body);
 
@@ -94,7 +94,7 @@ export const projectMembersRoutes: FastifyPluginAsync = async (app) => {
         required: ['role']
       }
     }
-  }, async (request, reply) => {
+  }, async (request, _reply) => {
     const { projectId, userId } = request.params as { projectId: string; userId: string };
     const { role } = request.body as { role: Role };
 
@@ -120,7 +120,7 @@ export const projectMembersRoutes: FastifyPluginAsync = async (app) => {
         required: ['projectId', 'userId']
       }
     }
-  }, async (request, reply) => {
+  }, async (request, _reply) => {
     const { projectId, userId } = request.params as { projectId: string; userId: string };
 
     // Prevent removing the last owner

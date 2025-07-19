@@ -1,8 +1,8 @@
 import { FastifyPluginAsync } from 'fastify';
 import { z } from 'zod';
-import { nanoid } from 'nanoid';
+// import { nanoid } from 'nanoid';
 import { prisma } from '../utils/prisma';
-import { requireRole, canTriggerDeployment } from '../middleware/auth';
+import { requireRole } from '../middleware/auth';
 import { Role } from '../types/auth';
 import { DeploymentStatus } from '@prisma/client';
 import axios from 'axios';
@@ -20,7 +20,7 @@ export const deploymentRoutes: FastifyPluginAsync = async (app) => {
   // Create deployment
   app.post('/deployments', {
     preHandler: [app.authenticate, requireRole([Role.OWNER, Role.ADMIN, Role.DEVELOPER])]
-  }, async (request, reply) => {
+  }, async (request, _reply) => {
     const body = createDeploymentSchema.parse(request.body);
 
     // Verify build exists and is successful
@@ -117,7 +117,7 @@ export const deploymentRoutes: FastifyPluginAsync = async (app) => {
   // Get deployment
   app.get('/deployments/:deploymentId', {
     preHandler: [app.authenticate, requireRole([Role.OWNER, Role.ADMIN, Role.DEVELOPER, Role.VIEWER])]
-  }, async (request, reply) => {
+  }, async (request, _reply) => {
     const { deploymentId } = request.params as { deploymentId: string };
 
     const deployment = await prisma.deployment.findUnique({
@@ -163,7 +163,7 @@ export const deploymentRoutes: FastifyPluginAsync = async (app) => {
   // List deployments for project
   app.get('/projects/:projectId/deployments', {
     preHandler: [app.authenticate, requireRole([Role.OWNER, Role.ADMIN, Role.DEVELOPER, Role.VIEWER])]
-  }, async (request, reply) => {
+  }, async (request, _reply) => {
     const { projectId } = request.params as { projectId: string };
     const { environment, limit = 20, offset = 0 } = request.query as { 
       environment?: string; 
@@ -217,7 +217,7 @@ export const deploymentRoutes: FastifyPluginAsync = async (app) => {
   // Rollback deployment
   app.post('/deployments/:deploymentId/rollback', {
     preHandler: [app.authenticate, requireRole([Role.OWNER, Role.ADMIN, Role.DEVELOPER])]
-  }, async (request, reply) => {
+  }, async (request, _reply) => {
     const { deploymentId } = request.params as { deploymentId: string };
 
     const deployment = await prisma.deployment.findUnique({
@@ -275,12 +275,11 @@ export const deploymentRoutes: FastifyPluginAsync = async (app) => {
   // Get deployment logs
   app.get('/deployments/:deploymentId/logs', {
     preHandler: [app.authenticate, requireRole([Role.OWNER, Role.ADMIN, Role.DEVELOPER, Role.VIEWER])]
-  }, async (request, reply) => {
+  }, async (request, _reply) => {
     const { deploymentId } = request.params as { deploymentId: string };
-    const { lines = 100, since, follow } = request.query as { 
+    const { lines = 100, since } = request.query as { 
       lines?: number; 
       since?: string;
-      follow?: boolean;
     };
 
     const deployment = await prisma.deployment.findUnique({
