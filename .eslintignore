@@ -1,0 +1,44 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+.next/
+out/
+.turbo/
+
+# Generated files
+*.generated.ts
+*.generated.js
+coverage/
+.nyc_output/
+
+# Prisma generated client
+**/node_modules/@prisma/client/
+**/node_modules/@prisma/client-api/
+**/node_modules/.prisma/
+
+# Test files
+**/*.test.ts
+**/*.spec.ts
+**/*.test.js
+**/*.spec.js
+
+# Example apps
+examples/
+
+# CI logs
+ci-logs/
+
+# TypeScript build info
+*.tsbuildinfo
+
+# Environment files
+.env*
+
+# Misc
+*.log
+*.pid
+*.seed
+*.pid.lock

@@ -9,14 +9,15 @@
   ],
   "scripts": {
     "dev": "npx turbo run dev",
-    "build": "npx turbo run build",
+    "build": "tsc --build && npx turbo run build",
     "test": "npx turbo run test",
     "test:unit": "npx turbo run test",
     "test:integration": "npx turbo run test",
     "lint": "npx turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md}\"",
-    "typecheck": "npx turbo run typecheck",
+    "typecheck": "tsc --build",
+    "typecheck:clean": "tsc --build --clean",
     "prisma:generate": "./scripts/generate-prisma.sh"
   },
   "devDependencies": {
