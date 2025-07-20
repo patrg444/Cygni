@@ -1,0 +1,456 @@
+﻿2025-07-20T04:41:24.0964275Z Current runner version: '2.326.0'
+2025-07-20T04:41:24.0987330Z ##[group]Runner Image Provisioner
+2025-07-20T04:41:24.0988136Z Hosted Compute Agent
+2025-07-20T04:41:24.0988774Z Version: 20250711.363
+2025-07-20T04:41:24.0989380Z Commit: 6785254374ce925a23743850c1cb91912ce5c14c
+2025-07-20T04:41:24.0990058Z Build Date: 2025-07-11T20:04:25Z
+2025-07-20T04:41:24.0990709Z ##[endgroup]
+2025-07-20T04:41:24.0991229Z ##[group]Operating System
+2025-07-20T04:41:24.0991787Z Ubuntu
+2025-07-20T04:41:24.0992262Z 24.04.2
+2025-07-20T04:41:24.0992737Z LTS
+2025-07-20T04:41:24.0993154Z ##[endgroup]
+2025-07-20T04:41:24.0993674Z ##[group]Runner Image
+2025-07-20T04:41:24.0994225Z Image: ubuntu-24.04
+2025-07-20T04:41:24.0994728Z Version: 20250710.1.0
+2025-07-20T04:41:24.0996066Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20250710.1/images/ubuntu/Ubuntu2404-Readme.md
+2025-07-20T04:41:24.0997614Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20250710.1
+2025-07-20T04:41:24.0998608Z ##[endgroup]
+2025-07-20T04:41:24.0999691Z ##[group]GITHUB_TOKEN Permissions
+2025-07-20T04:41:24.1001460Z Contents: read
+2025-07-20T04:41:24.1002109Z Metadata: read
+2025-07-20T04:41:24.1002574Z Packages: read
+2025-07-20T04:41:24.1003046Z ##[endgroup]
+2025-07-20T04:41:24.1005081Z Secret source: Actions
+2025-07-20T04:41:24.1006011Z Prepare workflow directory
+2025-07-20T04:41:24.1528897Z Prepare all required actions
+2025-07-20T04:41:24.1566661Z Getting action download info
+2025-07-20T04:41:24.5789867Z ##[group]Download immutable action package 'actions/checkout@v4'
+2025-07-20T04:41:24.5791541Z Version: 4.2.2
+2025-07-20T04:41:24.5793145Z Digest: sha256:ccb2698953eaebd21c7bf6268a94f9c26518a7e38e27e0b83c1fe1ad049819b1
+2025-07-20T04:41:24.5795096Z Source commit SHA: 11bd71901bbe5b1630ceea73d27597364c9af683
+2025-07-20T04:41:24.5796628Z ##[endgroup]
+2025-07-20T04:41:24.6866118Z ##[group]Download immutable action package 'docker/setup-buildx-action@v3'
+2025-07-20T04:41:24.6867009Z Version: 3.11.1
+2025-07-20T04:41:24.6867708Z Digest: sha256:b58e632d2d812e161c8abeba6def9f56b420aa9ae41d825a8408241bcad0f303
+2025-07-20T04:41:24.6868805Z Source commit SHA: e468171a9de216ec08956ac3ada2f0791b6bd435
+2025-07-20T04:41:24.6869449Z ##[endgroup]
+2025-07-20T04:41:25.1896655Z Complete job name: Build Test
+2025-07-20T04:41:25.2483608Z ##[group]Run actions/checkout@v4
+2025-07-20T04:41:25.2484400Z with:
+2025-07-20T04:41:25.2484790Z   repository: patrg444/Cygni
+2025-07-20T04:41:25.2485659Z   token: ***
+2025-07-20T04:41:25.2486048Z   ssh-strict: true
+2025-07-20T04:41:25.2486442Z   ssh-user: git
+2025-07-20T04:41:25.2486832Z   persist-credentials: true
+2025-07-20T04:41:25.2487295Z   clean: true
+2025-07-20T04:41:25.2487679Z   sparse-checkout-cone-mode: true
+2025-07-20T04:41:25.2488152Z   fetch-depth: 1
+2025-07-20T04:41:25.2488531Z   fetch-tags: false
+2025-07-20T04:41:25.2488922Z   show-progress: true
+2025-07-20T04:41:25.2489308Z   lfs: false
+2025-07-20T04:41:25.2489661Z   submodules: false
+2025-07-20T04:41:25.2490051Z   set-safe-directory: true
+2025-07-20T04:41:25.2490734Z env:
+2025-07-20T04:41:25.2491091Z   REGISTRY: ghcr.io
+2025-07-20T04:41:25.2491496Z   IMAGE_NAME: patrg444/Cygni
+2025-07-20T04:41:25.2491934Z ##[endgroup]
+2025-07-20T04:41:25.3621867Z Syncing repository: patrg444/Cygni
+2025-07-20T04:41:25.3623881Z ##[group]Getting Git version info
+2025-07-20T04:41:25.3624982Z Working directory is '/home/runner/work/Cygni/Cygni'
+2025-07-20T04:41:25.3626844Z [command]/usr/bin/git version
+2025-07-20T04:41:25.3692499Z git version 2.50.1
+2025-07-20T04:41:25.3719495Z ##[endgroup]
+2025-07-20T04:41:25.3743104Z Temporarily overriding HOME='/home/runner/work/_temp/2ef7082e-1b5d-4db0-8de0-732b9b152c87' before making global git config changes
+2025-07-20T04:41:25.3745702Z Adding repository directory to the temporary git global config as a safe directory
+2025-07-20T04:41:25.3749627Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/Cygni/Cygni
+2025-07-20T04:41:25.3788171Z Deleting the contents of '/home/runner/work/Cygni/Cygni'
+2025-07-20T04:41:25.3792129Z ##[group]Initializing the repository
+2025-07-20T04:41:25.3796891Z [command]/usr/bin/git init /home/runner/work/Cygni/Cygni
+2025-07-20T04:41:25.3878097Z hint: Using 'master' as the name for the initial branch. This default branch name
+2025-07-20T04:41:25.3879657Z hint: is subject to change. To configure the initial branch name to use in all
+2025-07-20T04:41:25.3880613Z hint: of your new repositories, which will suppress this warning, call:
+2025-07-20T04:41:25.3881840Z hint:
+2025-07-20T04:41:25.3882358Z hint: 	git config --global init.defaultBranch <name>
+2025-07-20T04:41:25.3883328Z hint:
+2025-07-20T04:41:25.3884321Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2025-07-20T04:41:25.3886158Z hint: 'development'. The just-created branch can be renamed via this command:
+2025-07-20T04:41:25.3887457Z hint:
+2025-07-20T04:41:25.3888165Z hint: 	git branch -m <name>
+2025-07-20T04:41:25.3888982Z hint:
+2025-07-20T04:41:25.3889977Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2025-07-20T04:41:25.3891631Z Initialized empty Git repository in /home/runner/work/Cygni/Cygni/.git/
+2025-07-20T04:41:25.3895527Z [command]/usr/bin/git remote add origin https://github.com/patrg444/Cygni
+2025-07-20T04:41:25.3927871Z ##[endgroup]
+2025-07-20T04:41:25.3929041Z ##[group]Disabling automatic garbage collection
+2025-07-20T04:41:25.3932775Z [command]/usr/bin/git config --local gc.auto 0
+2025-07-20T04:41:25.3961053Z ##[endgroup]
+2025-07-20T04:41:25.3962251Z ##[group]Setting up auth
+2025-07-20T04:41:25.3968702Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2025-07-20T04:41:25.3998877Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2025-07-20T04:41:25.4325485Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-07-20T04:41:25.4357982Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2025-07-20T04:41:25.4580686Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2025-07-20T04:41:25.4616522Z ##[endgroup]
+2025-07-20T04:41:25.4617739Z ##[group]Fetching the repository
+2025-07-20T04:41:25.4626600Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +a3c1db9d84193924305a92bb6b995f4b66510eaa:refs/remotes/origin/main
+2025-07-20T04:41:26.0029122Z From https://github.com/patrg444/Cygni
+2025-07-20T04:41:26.0031246Z  * [new ref]         a3c1db9d84193924305a92bb6b995f4b66510eaa -> origin/main
+2025-07-20T04:41:26.0057864Z ##[endgroup]
+2025-07-20T04:41:26.0059658Z ##[group]Determining the checkout info
+2025-07-20T04:41:26.0061595Z ##[endgroup]
+2025-07-20T04:41:26.0066148Z [command]/usr/bin/git sparse-checkout disable
+2025-07-20T04:41:26.0108077Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2025-07-20T04:41:26.0135133Z ##[group]Checking out the ref
+2025-07-20T04:41:26.0138562Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2025-07-20T04:41:26.0420059Z Switched to a new branch 'main'
+2025-07-20T04:41:26.0421674Z branch 'main' set up to track 'origin/main'.
+2025-07-20T04:41:26.0431170Z ##[endgroup]
+2025-07-20T04:41:26.0471468Z [command]/usr/bin/git log -1 --format=%H
+2025-07-20T04:41:26.0493733Z a3c1db9d84193924305a92bb6b995f4b66510eaa
+2025-07-20T04:41:26.0791743Z ##[group]Run docker/setup-buildx-action@v3
+2025-07-20T04:41:26.0792885Z with:
+2025-07-20T04:41:26.0793610Z   driver: docker-container
+2025-07-20T04:41:26.0794484Z   install: false
+2025-07-20T04:41:26.0795218Z   use: true
+2025-07-20T04:41:26.0796103Z   keep-state: false
+2025-07-20T04:41:26.0796885Z   cache-binary: true
+2025-07-20T04:41:26.0797674Z   cleanup: true
+2025-07-20T04:41:26.0798617Z env:
+2025-07-20T04:41:26.0799280Z   REGISTRY: ghcr.io
+2025-07-20T04:41:26.0800119Z   IMAGE_NAME: patrg444/Cygni
+2025-07-20T04:41:26.0801014Z ##[endgroup]
+2025-07-20T04:41:26.3642165Z ##[group]Docker info
+2025-07-20T04:41:26.3663493Z [command]/usr/bin/docker version
+2025-07-20T04:41:26.4714306Z Client: Docker Engine - Community
+2025-07-20T04:41:26.4716210Z  Version:           28.0.4
+2025-07-20T04:41:26.4717771Z  API version:       1.48
+2025-07-20T04:41:26.4718602Z  Go version:        go1.23.7
+2025-07-20T04:41:26.4719402Z  Git commit:        b8034c0
+2025-07-20T04:41:26.4720331Z  Built:             Tue Mar 25 15:07:16 2025
+2025-07-20T04:41:26.4721257Z  OS/Arch:           linux/amd64
+2025-07-20T04:41:26.4722069Z  Context:           default
+2025-07-20T04:41:26.4722738Z 
+2025-07-20T04:41:26.4723378Z Server: Docker Engine - Community
+2025-07-20T04:41:26.4724831Z  Engine:
+2025-07-20T04:41:26.4726104Z   Version:          28.0.4
+2025-07-20T04:41:26.4727535Z   API version:      1.48 (minimum version 1.24)
+2025-07-20T04:41:26.4729199Z   Go version:       go1.23.7
+2025-07-20T04:41:26.4730529Z   Git commit:       6430e49
+2025-07-20T04:41:26.4731894Z   Built:            Tue Mar 25 15:07:16 2025
+2025-07-20T04:41:26.4733425Z   OS/Arch:          linux/amd64
+2025-07-20T04:41:26.4734813Z   Experimental:     false
+2025-07-20T04:41:26.4736289Z  containerd:
+2025-07-20T04:41:26.4737437Z   Version:          1.7.27
+2025-07-20T04:41:26.4739035Z   GitCommit:        05044ec0a9a75232cad458027ca83437aae3f4da
+2025-07-20T04:41:26.4740726Z  runc:
+2025-07-20T04:41:26.4741770Z   Version:          1.2.5
+2025-07-20T04:41:26.4743089Z   GitCommit:        v1.2.5-0-g59923ef
+2025-07-20T04:41:26.4744514Z  docker-init:
+2025-07-20T04:41:26.4745832Z   Version:          0.19.0
+2025-07-20T04:41:26.4747115Z   GitCommit:        de40ad0
+2025-07-20T04:41:26.4769986Z [command]/usr/bin/docker info
+2025-07-20T04:41:28.9361727Z Client: Docker Engine - Community
+2025-07-20T04:41:28.9362369Z  Version:    28.0.4
+2025-07-20T04:41:28.9362778Z  Context:    default
+2025-07-20T04:41:28.9363250Z  Debug Mode: false
+2025-07-20T04:41:28.9363630Z  Plugins:
+2025-07-20T04:41:28.9364013Z   buildx: Docker Buildx (Docker Inc.)
+2025-07-20T04:41:28.9364510Z     Version:  v0.25.0
+2025-07-20T04:41:28.9365061Z     Path:     /usr/libexec/docker/cli-plugins/docker-buildx
+2025-07-20T04:41:28.9365822Z   compose: Docker Compose (Docker Inc.)
+2025-07-20T04:41:28.9366146Z     Version:  v2.36.2
+2025-07-20T04:41:28.9366451Z     Path:     /usr/libexec/docker/cli-plugins/docker-compose
+2025-07-20T04:41:28.9366708Z 
+2025-07-20T04:41:28.9366817Z Server:
+2025-07-20T04:41:28.9367048Z  Containers: 0
+2025-07-20T04:41:28.9367313Z   Running: 0
+2025-07-20T04:41:28.9367621Z   Paused: 0
+2025-07-20T04:41:28.9367843Z   Stopped: 0
+2025-07-20T04:41:28.9368047Z  Images: 0
+2025-07-20T04:41:28.9368264Z  Server Version: 28.0.4
+2025-07-20T04:41:28.9368519Z  Storage Driver: overlay2
+2025-07-20T04:41:28.9368782Z   Backing Filesystem: extfs
+2025-07-20T04:41:28.9369046Z   Supports d_type: true
+2025-07-20T04:41:28.9369301Z   Using metacopy: false
+2025-07-20T04:41:28.9369572Z   Native Overlay Diff: false
+2025-07-20T04:41:28.9371216Z   userxattr: false
+2025-07-20T04:41:28.9371673Z  Logging Driver: json-file
+2025-07-20T04:41:28.9372150Z  Cgroup Driver: systemd
+2025-07-20T04:41:28.9372583Z  Cgroup Version: 2
+2025-07-20T04:41:28.9373003Z  Plugins:
+2025-07-20T04:41:28.9373500Z   Volume: local
+2025-07-20T04:41:28.9374159Z   Network: bridge host ipvlan macvlan null overlay
+2025-07-20T04:41:28.9374984Z   Log: awslogs fluentd gcplogs gelf journald json-file local splunk syslog
+2025-07-20T04:41:28.9376077Z  Swarm: inactive
+2025-07-20T04:41:28.9377089Z  Runtimes: io.containerd.runc.v2 runc
+2025-07-20T04:41:28.9377663Z  Default Runtime: runc
+2025-07-20T04:41:28.9378083Z  Init Binary: docker-init
+2025-07-20T04:41:28.9378645Z  containerd version: 05044ec0a9a75232cad458027ca83437aae3f4da
+2025-07-20T04:41:28.9379265Z  runc version: v1.2.5-0-g59923ef
+2025-07-20T04:41:28.9379723Z  init version: de40ad0
+2025-07-20T04:41:28.9380337Z  Security Options:
+2025-07-20T04:41:28.9380709Z   apparmor
+2025-07-20T04:41:28.9381053Z   seccomp
+2025-07-20T04:41:28.9381262Z    Profile: builtin
+2025-07-20T04:41:28.9381492Z   cgroupns
+2025-07-20T04:41:28.9381709Z  Kernel Version: 6.11.0-1018-azure
+2025-07-20T04:41:28.9382002Z  Operating System: Ubuntu 24.04.2 LTS
+2025-07-20T04:41:28.9382272Z  OSType: linux
+2025-07-20T04:41:28.9382500Z  Architecture: x86_64
+2025-07-20T04:41:28.9382833Z  CPUs: 4
+2025-07-20T04:41:28.9383241Z  Total Memory: 15.62GiB
+2025-07-20T04:41:28.9383551Z  Name: pkrvmq0rgcvqdmg
+2025-07-20T04:41:28.9383909Z  ID: 59ce2f9e-8373-49df-b904-c97e78d80d7f
+2025-07-20T04:41:28.9384526Z  Docker Root Dir: /var/lib/docker
+2025-07-20T04:41:28.9385219Z  Debug Mode: false
+2025-07-20T04:41:28.9385886Z  Username: githubactions
+2025-07-20T04:41:28.9386393Z  Experimental: false
+2025-07-20T04:41:28.9386727Z  Insecure Registries:
+2025-07-20T04:41:28.9390057Z   ::1/128
+2025-07-20T04:41:28.9390510Z   127.0.0.0/8
+2025-07-20T04:41:28.9391091Z  Live Restore Enabled: false
+2025-07-20T04:41:28.9391376Z 
+2025-07-20T04:41:28.9392249Z ##[endgroup]
+2025-07-20T04:41:29.0491617Z ##[group]Buildx version
+2025-07-20T04:41:29.0519235Z [command]/usr/bin/docker buildx version
+2025-07-20T04:41:29.1077746Z github.com/docker/buildx v0.25.0 faaea65da4ba0e58a13cd9cadcb950c51cf3b3c9
+2025-07-20T04:41:29.1109781Z ##[endgroup]
+2025-07-20T04:41:29.1264626Z ##[group]Inspecting default docker context
+2025-07-20T04:41:29.1411085Z [
+2025-07-20T04:41:29.1411714Z   {
+2025-07-20T04:41:29.1412298Z     "Name": "default",
+2025-07-20T04:41:29.1413097Z     "Metadata": {},
+2025-07-20T04:41:29.1413699Z     "Endpoints": {
+2025-07-20T04:41:29.1414239Z       "docker": {
+2025-07-20T04:41:29.1414919Z         "Host": "unix:///var/run/docker.sock",
+2025-07-20T04:41:29.1415866Z         "SkipTLSVerify": false
+2025-07-20T04:41:29.1416467Z       }
+2025-07-20T04:41:29.1417078Z     },
+2025-07-20T04:41:29.1417589Z     "TLSMaterial": {},
+2025-07-20T04:41:29.1418098Z     "Storage": {
+2025-07-20T04:41:29.1418759Z       "MetadataPath": "<IN MEMORY>",
+2025-07-20T04:41:29.1419393Z       "TLSPath": "<IN MEMORY>"
+2025-07-20T04:41:29.1420035Z     }
+2025-07-20T04:41:29.1420535Z   }
+2025-07-20T04:41:29.1421087Z ]
+2025-07-20T04:41:29.1422155Z ##[endgroup]
+2025-07-20T04:41:29.1423372Z ##[group]Creating a new builder instance
+2025-07-20T04:41:29.2545986Z [command]/usr/bin/docker buildx create --name builder-d158e669-5f4b-4bf9-b72d-a508491332c3 --driver docker-container --buildkitd-flags --allow-insecure-entitlement security.insecure --allow-insecure-entitlement network.host --use
+2025-07-20T04:41:29.3371848Z builder-d158e669-5f4b-4bf9-b72d-a508491332c3
+2025-07-20T04:41:29.3410913Z ##[endgroup]
+2025-07-20T04:41:29.3411780Z ##[group]Booting builder
+2025-07-20T04:41:29.3449391Z [command]/usr/bin/docker buildx inspect --bootstrap --builder builder-d158e669-5f4b-4bf9-b72d-a508491332c3
+2025-07-20T04:41:29.3861072Z #1 [internal] booting buildkit
+2025-07-20T04:41:29.5367520Z #1 pulling image moby/buildkit:buildx-stable-1
+2025-07-20T04:41:33.5153788Z #1 pulling image moby/buildkit:buildx-stable-1 4.1s done
+2025-07-20T04:41:33.6661733Z #1 creating container buildx_buildkit_builder-d158e669-5f4b-4bf9-b72d-a508491332c30
+2025-07-20T04:41:33.8181168Z #1 creating container buildx_buildkit_builder-d158e669-5f4b-4bf9-b72d-a508491332c30 0.3s done
+2025-07-20T04:41:33.8345012Z #1 DONE 4.4s
+2025-07-20T04:41:33.8651246Z Name:          builder-d158e669-5f4b-4bf9-b72d-a508491332c3
+2025-07-20T04:41:33.8651953Z Driver:        docker-container
+2025-07-20T04:41:33.8652664Z Last Activity: 2025-07-20 04:41:29 +0000 UTC
+2025-07-20T04:41:33.8653053Z 
+2025-07-20T04:41:33.8653595Z Nodes:
+2025-07-20T04:41:33.8654292Z Name:                  builder-d158e669-5f4b-4bf9-b72d-a508491332c30
+2025-07-20T04:41:33.8654747Z Endpoint:              unix:///var/run/docker.sock
+2025-07-20T04:41:33.8655135Z Status:                running
+2025-07-20T04:41:33.8656055Z BuildKit daemon flags: --allow-insecure-entitlement security.insecure --allow-insecure-entitlement network.host
+2025-07-20T04:41:33.8657038Z BuildKit version:      v0.22.0
+2025-07-20T04:41:33.8657473Z Platforms:             linux/amd64, linux/amd64/v2, linux/amd64/v3, linux/386
+2025-07-20T04:41:33.8657863Z Labels:
+2025-07-20T04:41:33.8658268Z  org.mobyproject.buildkit.worker.executor:         oci
+2025-07-20T04:41:33.8658730Z  org.mobyproject.buildkit.worker.hostname:         c39bef6fead7
+2025-07-20T04:41:33.8659226Z  org.mobyproject.buildkit.worker.network:          host
+2025-07-20T04:41:33.8659725Z  org.mobyproject.buildkit.worker.oci.process-mode: sandbox
+2025-07-20T04:41:33.8660211Z  org.mobyproject.buildkit.worker.selinux.enabled:  false
+2025-07-20T04:41:33.8660650Z  org.mobyproject.buildkit.worker.snapshotter:      overlayfs
+2025-07-20T04:41:33.8661100Z GC Policy rule#0:
+2025-07-20T04:41:33.8661384Z  All:            false
+2025-07-20T04:41:33.8661790Z  Filters:        type==source.local,type==exec.cachemount,type==source.git.checkout
+2025-07-20T04:41:33.8662285Z  Keep Duration:  48h0m0s
+2025-07-20T04:41:33.8662547Z  Max Used Space: 488.3MiB
+2025-07-20T04:41:33.8662842Z GC Policy rule#1:
+2025-07-20T04:41:33.8663098Z  All:            false
+2025-07-20T04:41:33.8663393Z  Keep Duration:  1440h0m0s
+2025-07-20T04:41:33.8663716Z  Reserved Space: 7.451GiB
+2025-07-20T04:41:33.8663995Z  Max Used Space: 54.02GiB
+2025-07-20T04:41:33.8664295Z  Min Free Space: 13.97GiB
+2025-07-20T04:41:33.8664535Z GC Policy rule#2:
+2025-07-20T04:41:33.8664836Z  All:            false
+2025-07-20T04:41:33.8665088Z  Reserved Space: 7.451GiB
+2025-07-20T04:41:33.8665572Z  Max Used Space: 54.02GiB
+2025-07-20T04:41:33.8665808Z  Min Free Space: 13.97GiB
+2025-07-20T04:41:33.8666171Z GC Policy rule#3:
+2025-07-20T04:41:33.8666396Z  All:            true
+2025-07-20T04:41:33.8666655Z  Reserved Space: 7.451GiB
+2025-07-20T04:41:33.8666996Z  Max Used Space: 54.02GiB
+2025-07-20T04:41:33.8667240Z  Min Free Space: 13.97GiB
+2025-07-20T04:41:33.8700711Z ##[endgroup]
+2025-07-20T04:41:33.9518062Z ##[group]Inspect builder
+2025-07-20T04:41:33.9520283Z {
+2025-07-20T04:41:33.9520599Z   "nodes": [
+2025-07-20T04:41:33.9520980Z     {
+2025-07-20T04:41:33.9521275Z       "name": "builder-d158e669-5f4b-4bf9-b72d-a508491332c30",
+2025-07-20T04:41:33.9521723Z       "endpoint": "unix:///var/run/docker.sock",
+2025-07-20T04:41:33.9522110Z       "status": "running",
+2025-07-20T04:41:33.9522717Z       "buildkitd-flags": "--allow-insecure-entitlement security.insecure --allow-insecure-entitlement network.host",
+2025-07-20T04:41:33.9523260Z       "buildkit": "v0.22.0",
+2025-07-20T04:41:33.9523856Z       "platforms": "linux/amd64,linux/amd64/v2,linux/amd64/v3,linux/386",
+2025-07-20T04:41:33.9524275Z       "features": {
+2025-07-20T04:41:33.9524749Z         "Automatically load images to the Docker Engine image store": true,
+2025-07-20T04:41:33.9525245Z         "Cache export": true,
+2025-07-20T04:41:33.9525872Z         "Direct push": true,
+2025-07-20T04:41:33.9526178Z         "Docker exporter": true,
+2025-07-20T04:41:33.9526509Z         "Multi-platform build": true,
+2025-07-20T04:41:33.9526917Z         "OCI exporter": true
+2025-07-20T04:41:33.9527288Z       },
+2025-07-20T04:41:33.9527578Z       "labels": {
+2025-07-20T04:41:33.9527928Z         "org.mobyproject.buildkit.worker.executor": "oci",
+2025-07-20T04:41:33.9528364Z         "org.mobyproject.buildkit.worker.hostname": "c39bef6fead7",
+2025-07-20T04:41:33.9528847Z         "org.mobyproject.buildkit.worker.network": "host",
+2025-07-20T04:41:33.9529306Z         "org.mobyproject.buildkit.worker.oci.process-mode": "sandbox",
+2025-07-20T04:41:33.9529837Z         "org.mobyproject.buildkit.worker.selinux.enabled": "false",
+2025-07-20T04:41:33.9530594Z         "org.mobyproject.buildkit.worker.snapshotter": "overlayfs"
+2025-07-20T04:41:33.9531083Z       },
+2025-07-20T04:41:33.9531331Z       "gcPolicy": [
+2025-07-20T04:41:33.9531538Z         {
+2025-07-20T04:41:33.9531855Z           "all": false,
+2025-07-20T04:41:33.9532129Z           "filter": [
+2025-07-20T04:41:33.9532391Z             "type==source.local",
+2025-07-20T04:41:33.9532772Z             "type==exec.cachemount",
+2025-07-20T04:41:33.9533242Z             "type==source.git.checkout"
+2025-07-20T04:41:33.9533542Z           ],
+2025-07-20T04:41:33.9533832Z           "keepDuration": "48h0m0s",
+2025-07-20T04:41:33.9534183Z           "maxUsedSpace": "488.3MiB"
+2025-07-20T04:41:33.9534468Z         },
+2025-07-20T04:41:33.9534727Z         {
+2025-07-20T04:41:33.9534971Z           "all": false,
+2025-07-20T04:41:33.9535234Z           "keepDuration": "1440h0m0s",
+2025-07-20T04:41:33.9535915Z           "reservedSpace": "7.451GiB",
+2025-07-20T04:41:33.9536203Z           "maxUsedSpace": "54.02GiB",
+2025-07-20T04:41:33.9536519Z           "minFreeSpace": "13.97GiB"
+2025-07-20T04:41:33.9536814Z         },
+2025-07-20T04:41:33.9537068Z         {
+2025-07-20T04:41:33.9537273Z           "all": false,
+2025-07-20T04:41:33.9537581Z           "reservedSpace": "7.451GiB",
+2025-07-20T04:41:33.9537941Z           "maxUsedSpace": "54.02GiB",
+2025-07-20T04:41:33.9538216Z           "minFreeSpace": "13.97GiB"
+2025-07-20T04:41:33.9538535Z         },
+2025-07-20T04:41:33.9538756Z         {
+2025-07-20T04:41:33.9538996Z           "all": true,
+2025-07-20T04:41:33.9539221Z           "reservedSpace": "7.451GiB",
+2025-07-20T04:41:33.9539623Z           "maxUsedSpace": "54.02GiB",
+2025-07-20T04:41:33.9539896Z           "minFreeSpace": "13.97GiB"
+2025-07-20T04:41:33.9540172Z         }
+2025-07-20T04:41:33.9540463Z       ]
+2025-07-20T04:41:33.9540660Z     }
+2025-07-20T04:41:33.9540875Z   ],
+2025-07-20T04:41:33.9541226Z   "name": "builder-d158e669-5f4b-4bf9-b72d-a508491332c3",
+2025-07-20T04:41:33.9541721Z   "driver": "docker-container",
+2025-07-20T04:41:33.9542186Z   "lastActivity": "2025-07-20T04:41:29.000Z"
+2025-07-20T04:41:33.9542602Z }
+2025-07-20T04:41:33.9543053Z ##[endgroup]
+2025-07-20T04:41:33.9543539Z ##[group]BuildKit version
+2025-07-20T04:41:33.9543895Z builder-d158e669-5f4b-4bf9-b72d-a508491332c30: v0.22.0
+2025-07-20T04:41:33.9544421Z ##[endgroup]
+2025-07-20T04:41:33.9717726Z ##[group]Run echo "FROM node:20-alpine" > Dockerfile.test
+2025-07-20T04:41:33.9718230Z [36;1mecho "FROM node:20-alpine" > Dockerfile.test[0m
+2025-07-20T04:41:33.9718561Z [36;1mecho "WORKDIR /app" >> Dockerfile.test[0m
+2025-07-20T04:41:33.9718856Z [36;1mecho "COPY . ." >> Dockerfile.test[0m
+2025-07-20T04:41:33.9719169Z [36;1mecho "RUN echo 'Build successful'" >> Dockerfile.test[0m
+2025-07-20T04:41:33.9719525Z [36;1mdocker build -f Dockerfile.test -t test-build .[0m
+2025-07-20T04:41:33.9750922Z shell: /usr/bin/bash -e {0}
+2025-07-20T04:41:33.9751162Z env:
+2025-07-20T04:41:33.9751328Z   REGISTRY: ghcr.io
+2025-07-20T04:41:33.9751525Z   IMAGE_NAME: patrg444/Cygni
+2025-07-20T04:41:33.9751728Z ##[endgroup]
+2025-07-20T04:41:34.2674758Z #0 building with "default" instance using docker driver
+2025-07-20T04:41:34.2675548Z 
+2025-07-20T04:41:34.2675811Z #1 [internal] load build definition from Dockerfile.test
+2025-07-20T04:41:34.2676247Z #1 transferring dockerfile: 112B done
+2025-07-20T04:41:34.2676639Z #1 DONE 0.0s
+2025-07-20T04:41:34.2676778Z 
+2025-07-20T04:41:34.2676994Z #2 [internal] load metadata for docker.io/library/node:20-alpine
+2025-07-20T04:41:34.4949933Z #2 ...
+2025-07-20T04:41:34.4950133Z 
+2025-07-20T04:41:34.4950358Z #3 [auth] library/node:pull token for registry-1.docker.io
+2025-07-20T04:41:34.4950913Z #3 DONE 0.0s
+2025-07-20T04:41:34.6455868Z 
+2025-07-20T04:41:34.6456511Z #2 [internal] load metadata for docker.io/library/node:20-alpine
+2025-07-20T04:41:35.1062578Z #2 DONE 1.0s
+2025-07-20T04:41:35.2272597Z 
+2025-07-20T04:41:35.2273076Z #4 [internal] load .dockerignore
+2025-07-20T04:41:35.2273611Z #4 transferring context: 431B done
+2025-07-20T04:41:35.2273925Z #4 DONE 0.0s
+2025-07-20T04:41:35.2274066Z 
+2025-07-20T04:41:35.2274184Z #5 [internal] load build context
+2025-07-20T04:41:35.2274511Z #5 transferring context: 2.46MB 0.1s done
+2025-07-20T04:41:35.2274840Z #5 DONE 0.1s
+2025-07-20T04:41:35.2274991Z 
+2025-07-20T04:41:35.2275707Z #6 [1/4] FROM docker.io/library/node:20-alpine@sha256:df02558528d3d3d0d621f112e232611aecfee7cbc654f6b375765f72bb262799
+2025-07-20T04:41:35.2276772Z #6 resolve docker.io/library/node:20-alpine@sha256:df02558528d3d3d0d621f112e232611aecfee7cbc654f6b375765f72bb262799 done
+2025-07-20T04:41:35.2278039Z #6 sha256:7cdef5a331927fafa250be6166052d8599bf5eb7b014342538c2cc79b70a081f 6.42kB / 6.42kB done
+2025-07-20T04:41:35.2278877Z #6 sha256:9824c27679d3b27c5e1cb00a73adb6f4f8d556994111c12db3c5d61a0c843df8 0B / 3.80MB 0.1s
+2025-07-20T04:41:35.2279703Z #6 sha256:8c59d92d6fc9f01af4aaa86824be72b74bd4d940c4c46aa95d9710bfa46c975e 0B / 42.99MB 0.1s
+2025-07-20T04:41:35.2280507Z #6 sha256:54225bd601967a0aa669ec9be621c24d8eeac874b698d55874018070898685c2 0B / 1.26MB 0.1s
+2025-07-20T04:41:35.2281329Z #6 sha256:df02558528d3d3d0d621f112e232611aecfee7cbc654f6b375765f72bb262799 7.67kB / 7.67kB done
+2025-07-20T04:41:35.2282173Z #6 sha256:ae6ee91a652d927de01d550c29f863a52f1da390c89df95f3ceba256d1e62604 1.72kB / 1.72kB done
+2025-07-20T04:41:35.3278896Z #6 sha256:9824c27679d3b27c5e1cb00a73adb6f4f8d556994111c12db3c5d61a0c843df8 3.17MB / 3.80MB 0.2s
+2025-07-20T04:41:35.5267101Z #6 sha256:9824c27679d3b27c5e1cb00a73adb6f4f8d556994111c12db3c5d61a0c843df8 3.80MB / 3.80MB 0.2s done
+2025-07-20T04:41:35.5268072Z #6 sha256:8c59d92d6fc9f01af4aaa86824be72b74bd4d940c4c46aa95d9710bfa46c975e 5.24MB / 42.99MB 0.4s
+2025-07-20T04:41:35.5268968Z #6 sha256:54225bd601967a0aa669ec9be621c24d8eeac874b698d55874018070898685c2 1.26MB / 1.26MB 0.3s done
+2025-07-20T04:41:35.5269846Z #6 extracting sha256:9824c27679d3b27c5e1cb00a73adb6f4f8d556994111c12db3c5d61a0c843df8 0.1s done
+2025-07-20T04:41:35.5270711Z #6 sha256:a9e48ad1219d4d11c6456a8db0fd5c11af46242d52edf84e17ab84a7bfd93809 445B / 445B 0.3s done
+2025-07-20T04:41:35.6271673Z #6 sha256:8c59d92d6fc9f01af4aaa86824be72b74bd4d940c4c46aa95d9710bfa46c975e 12.58MB / 42.99MB 0.5s
+2025-07-20T04:41:35.8271162Z #6 sha256:8c59d92d6fc9f01af4aaa86824be72b74bd4d940c4c46aa95d9710bfa46c975e 26.21MB / 42.99MB 0.7s
+2025-07-20T04:41:35.9274249Z #6 sha256:8c59d92d6fc9f01af4aaa86824be72b74bd4d940c4c46aa95d9710bfa46c975e 29.36MB / 42.99MB 0.8s
+2025-07-20T04:41:36.0274738Z #6 sha256:8c59d92d6fc9f01af4aaa86824be72b74bd4d940c4c46aa95d9710bfa46c975e 33.55MB / 42.99MB 0.9s
+2025-07-20T04:41:36.3268090Z #6 sha256:8c59d92d6fc9f01af4aaa86824be72b74bd4d940c4c46aa95d9710bfa46c975e 39.85MB / 42.99MB 1.2s
+2025-07-20T04:41:36.5063408Z #6 extracting sha256:8c59d92d6fc9f01af4aaa86824be72b74bd4d940c4c46aa95d9710bfa46c975e
+2025-07-20T04:41:36.6068434Z #6 sha256:8c59d92d6fc9f01af4aaa86824be72b74bd4d940c4c46aa95d9710bfa46c975e 42.99MB / 42.99MB 1.4s done
+2025-07-20T04:41:37.6721726Z #6 extracting sha256:8c59d92d6fc9f01af4aaa86824be72b74bd4d940c4c46aa95d9710bfa46c975e 1.0s done
+2025-07-20T04:41:37.7051532Z #6 extracting sha256:54225bd601967a0aa669ec9be621c24d8eeac874b698d55874018070898685c2
+2025-07-20T04:41:37.8054564Z #6 extracting sha256:54225bd601967a0aa669ec9be621c24d8eeac874b698d55874018070898685c2 0.0s done
+2025-07-20T04:41:37.8056266Z #6 extracting sha256:a9e48ad1219d4d11c6456a8db0fd5c11af46242d52edf84e17ab84a7bfd93809 done
+2025-07-20T04:41:37.8057225Z #6 DONE 2.7s
+2025-07-20T04:41:37.8057448Z 
+2025-07-20T04:41:37.8057573Z #7 [2/4] WORKDIR /app
+2025-07-20T04:41:37.8057838Z #7 DONE 0.0s
+2025-07-20T04:41:37.8057973Z 
+2025-07-20T04:41:37.8058068Z #8 [3/4] COPY . .
+2025-07-20T04:41:37.9869236Z #8 DONE 0.1s
+2025-07-20T04:41:37.9869501Z 
+2025-07-20T04:41:37.9869703Z #9 [4/4] RUN echo 'Build successful'
+2025-07-20T04:41:37.9870234Z #9 0.114 Build successful
+2025-07-20T04:41:38.1437223Z #9 DONE 0.1s
+2025-07-20T04:41:38.1447990Z 
+2025-07-20T04:41:38.1456102Z #10 exporting to image
+2025-07-20T04:41:38.1456888Z #10 exporting layers
+2025-07-20T04:41:39.0139681Z #10 exporting layers 1.0s done
+2025-07-20T04:41:39.0387973Z #10 writing image sha256:1a794f28c1f3404da3f17b6c2e9b909d25676982d7a1bbaa319d9379b4a38355 done
+2025-07-20T04:41:39.0389303Z #10 naming to docker.io/library/test-build done
+2025-07-20T04:41:39.0430681Z #10 DONE 1.0s
+2025-07-20T04:41:39.0505063Z Post job cleanup.
+2025-07-20T04:41:39.3233103Z ##[group]Removing builder
+2025-07-20T04:41:39.4265880Z [command]/usr/bin/docker buildx rm builder-d158e669-5f4b-4bf9-b72d-a508491332c3
+2025-07-20T04:41:39.5443420Z builder-d158e669-5f4b-4bf9-b72d-a508491332c3 removed
+2025-07-20T04:41:39.5477361Z ##[endgroup]
+2025-07-20T04:41:39.5478920Z ##[group]Cleaning up certificates
+2025-07-20T04:41:39.5484933Z ##[endgroup]
+2025-07-20T04:41:39.5485796Z ##[group]Post cache
+2025-07-20T04:41:39.5487780Z State not set
+2025-07-20T04:41:39.5488488Z ##[endgroup]
+2025-07-20T04:41:39.5617346Z Post job cleanup.
+2025-07-20T04:41:39.6550820Z [command]/usr/bin/git version
+2025-07-20T04:41:39.6586922Z git version 2.50.1
+2025-07-20T04:41:39.6631976Z Temporarily overriding HOME='/home/runner/work/_temp/3f4f718a-4201-495e-9566-fc26bf7d04d0' before making global git config changes
+2025-07-20T04:41:39.6633226Z Adding repository directory to the temporary git global config as a safe directory
+2025-07-20T04:41:39.6645904Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/Cygni/Cygni
+2025-07-20T04:41:39.6680231Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2025-07-20T04:41:39.6712338Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2025-07-20T04:41:39.6937913Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-07-20T04:41:39.6959032Z http.https://github.com/.extraheader
+2025-07-20T04:41:39.6971234Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2025-07-20T04:41:39.7000764Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2025-07-20T04:41:39.7327159Z Cleaning up orphan processes

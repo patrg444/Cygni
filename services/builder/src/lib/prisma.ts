@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { logger } from "./logger";
 
 declare global {
-  var prisma: PrismaClient | undefined;
+  let prisma: PrismaClient | undefined;
 }
 
 export const prisma =

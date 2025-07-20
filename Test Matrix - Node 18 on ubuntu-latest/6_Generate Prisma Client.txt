@@ -1,0 +1,34 @@
+﻿2025-07-20T04:41:04.0182653Z ##[group]Run pnpm run prisma:generate
+2025-07-20T04:41:04.0182984Z [36;1mpnpm run prisma:generate[0m
+2025-07-20T04:41:04.0211495Z shell: /usr/bin/bash -e {0}
+2025-07-20T04:41:04.0211719Z env:
+2025-07-20T04:41:04.0211882Z   REGISTRY: ghcr.io
+2025-07-20T04:41:04.0212088Z   IMAGE_NAME: patrg444/Cygni
+2025-07-20T04:41:04.0212361Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2025-07-20T04:41:04.0212641Z ##[endgroup]
+2025-07-20T04:41:04.4411282Z 
+2025-07-20T04:41:04.4412097Z > cloudexpress@0.1.0 prisma:generate /home/runner/work/Cygni/Cygni
+2025-07-20T04:41:04.4412884Z > ./scripts/generate-prisma.sh
+2025-07-20T04:41:04.4413188Z 
+2025-07-20T04:41:04.4462648Z Generating Prisma clients...
+2025-07-20T04:41:04.4478093Z Generating Prisma client for services/api
+2025-07-20T04:41:09.4786919Z Prisma schema loaded from prisma/schema.prisma
+2025-07-20T04:41:09.9101179Z 
+2025-07-20T04:41:09.9102506Z ✔ Generated Prisma Client (v5.22.0) to ./../../node_modules/@prisma/client-api in 164ms
+2025-07-20T04:41:09.9103146Z 
+2025-07-20T04:41:09.9103849Z Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+2025-07-20T04:41:09.9104445Z 
+2025-07-20T04:41:09.9105416Z Tip: Curious about the SQL queries Prisma ORM generates? Optimize helps you enhance your visibility: https://pris.ly/tip-2-optimize
+2025-07-20T04:41:09.9106266Z 
+2025-07-20T04:41:10.1436498Z Generating Prisma client for services/builder
+2025-07-20T04:41:13.7615607Z sh: 1: prisma: not found
+2025-07-20T04:41:13.7804398Z Generating Prisma client for packages/api
+2025-07-20T04:41:17.8680210Z Prisma schema loaded from prisma/schema.prisma
+2025-07-20T04:41:18.2294468Z 
+2025-07-20T04:41:18.2296165Z ✔ Generated Prisma Client (v5.22.0) to ./../../node_modules/.pnpm/@prisma+client@5.22.0_prisma@5.22.0/node_modules/@prisma/client in 129ms
+2025-07-20T04:41:18.2297152Z 
+2025-07-20T04:41:18.2297761Z Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+2025-07-20T04:41:18.2298360Z 
+2025-07-20T04:41:18.2298866Z Tip: Want to turn off tips and other hints? https://pris.ly/tip-4-nohints
+2025-07-20T04:41:18.2299939Z 
+2025-07-20T04:41:18.4578505Z Prisma client generation complete!

@@ -1,6 +1,7 @@
 import { logger } from "./lib/logger";
 import { buildWorker } from "./services/queue";
 import { prisma } from "./lib/prisma";
+import * as http from "http";
 
 // Worker-specific configuration
 const WORKER_ID = process.env.WORKER_ID || `worker-${process.pid}`;
@@ -9,8 +10,7 @@ logger.info({ workerId: WORKER_ID }, "Starting build worker");
 
 // Health check endpoint for container orchestrators
 if (process.env.HEALTH_CHECK_PORT) {
-  const http = require("http");
-  const healthServer = http.createServer((req: any, res: any) => {
+  const healthServer = http.createServer((req, res) => {
     if (req.url === "/health") {
       const isHealthy = buildWorker.isRunning();
       res.statusCode = isHealthy ? 200 : 503;

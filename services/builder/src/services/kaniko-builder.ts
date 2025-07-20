@@ -1,8 +1,8 @@
 import * as k8s from "@kubernetes/client-node";
-import { nanoid } from "nanoid";
 import { logger } from "../lib/logger";
-import { Build, BuildStatus } from "../types/build";
+import { BuildStatus } from "../types/build";
 import { ECRClient, GetAuthorizationTokenCommand } from "@aws-sdk/client-ecr";
+import { Readable } from "stream";
 
 interface KanikoBuildOptions {
   buildId: string;
@@ -277,7 +277,6 @@ export class KanikoBuilder {
   }
 
   async streamLogs(buildId: string): Promise<NodeJS.ReadableStream> {
-    const { Readable } = require('stream');
     const stream = new Readable({
       read() {}
     });

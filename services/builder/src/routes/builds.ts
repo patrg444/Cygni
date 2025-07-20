@@ -4,7 +4,6 @@ import { BuildStatus, BuildRequest } from "../types/build";
 import { buildQueue } from "../services/queue";
 import { prisma } from "../lib/prisma";
 import { KanikoBuilder } from "../services/kaniko-builder";
-import { Readable } from "stream";
 
 interface BuildParams {
   buildId: string;
@@ -230,7 +229,7 @@ const buildsRoutes: FastifyPluginAsync = async (app) => {
     async (request, reply) => {
       const { buildId, status, logs, imageUrl } = request.body;
 
-      const build = await prisma.build.update({
+      await prisma.build.update({
         where: { id: buildId },
         data: {
           status,
