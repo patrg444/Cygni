@@ -208,7 +208,11 @@ export const deploymentRoutes: FastifyPluginAsync = async (app) => {
         includePrevious?: boolean;
       };
 
-      const where: { projectId: string; status?: DeploymentStatus; environmentId?: string } = { projectId };
+      const where: {
+        projectId: string;
+        status?: DeploymentStatus;
+        environmentId?: string;
+      } = { projectId };
 
       if (environment) {
         const env = await prisma.environment.findFirst({
@@ -300,7 +304,11 @@ export const deploymentRoutes: FastifyPluginAsync = async (app) => {
         offset?: number;
       };
 
-      const where: { projectId: string; status?: DeploymentStatus; environmentId?: string } = { projectId };
+      const where: {
+        projectId: string;
+        status?: DeploymentStatus;
+        environmentId?: string;
+      } = { projectId };
 
       if (environment) {
         const env = await prisma.environment.findFirst({
@@ -397,8 +405,8 @@ export const deploymentRoutes: FastifyPluginAsync = async (app) => {
         }
         projectId = project.id;
       } else {
-        return _reply.status(400).send({ 
-          error: "Must provide either deploymentId, projectId, or projectSlug" 
+        return _reply.status(400).send({
+          error: "Must provide either deploymentId, projectId, or projectSlug",
         });
       }
 
@@ -946,12 +954,13 @@ export const deploymentRoutes: FastifyPluginAsync = async (app) => {
           },
         });
 
-        const logs = response.data.data.result.flatMap((stream: { values: [string, string][]; stream: unknown }) =>
-          stream.values.map((value: [string, string]) => ({
-            timestamp: new Date(parseInt(value[0]) / 1000000),
-            message: value[1],
-            stream: stream.stream,
-          })),
+        const logs = response.data.data.result.flatMap(
+          (stream: { values: [string, string][]; stream: unknown }) =>
+            stream.values.map((value: [string, string]) => ({
+              timestamp: new Date(parseInt(value[0]) / 1000000),
+              message: value[1],
+              stream: stream.stream,
+            })),
         );
 
         return { logs };
@@ -976,7 +985,15 @@ function getNamespaceForEnvironment(
   }
 }
 
-async function monitorDeploymentStatus(app: { log: { info: (msg: string, data?: unknown) => void; error: (msg: string, data?: unknown) => void } }, deploymentId: string) {
+async function monitorDeploymentStatus(
+  app: {
+    log: {
+      info: (msg: string, data?: unknown) => void;
+      error: (msg: string, data?: unknown) => void;
+    };
+  },
+  deploymentId: string,
+) {
   // Poll orchestrator for deployment status
   const checkStatus = async () => {
     try {

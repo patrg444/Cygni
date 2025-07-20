@@ -40,7 +40,7 @@ export interface WebhookPayload {
 
 export interface DeploymentEventPayload {
   projectId: string;
-  event: WebhookPayload['event'];
+  event: WebhookPayload["event"];
   deployment: {
     id: string;
     projectId: string;
@@ -70,7 +70,7 @@ export interface DeploymentEventPayload {
 export class WebhookService {
   async sendDeploymentEvent(payload: DeploymentEventPayload): Promise<void> {
     const { projectId, event, deployment } = payload;
-    
+
     // Get project with webhooks
     const project = await prisma.project.findUnique({
       where: { id: projectId },
@@ -101,16 +101,22 @@ export class WebhookService {
         name: project.name,
         slug: project.slug,
       },
-      environment: deployment.environment ? {
-        id: deployment.environment.id,
-        name: deployment.environment.name,
-        slug: deployment.environment.slug,
-      } : undefined,
+      environment: deployment.environment
+        ? {
+            id: deployment.environment.id,
+            name: deployment.environment.name,
+            slug: deployment.environment.slug,
+          }
+        : undefined,
     };
 
     // Send to all active webhooks
     for (const webhook of project.webhooks) {
-      await WebhookService.sendWebhook(webhook.url, webhookPayload, webhook.secret || undefined);
+      await WebhookService.sendWebhook(
+        webhook.url,
+        webhookPayload,
+        webhook.secret || undefined,
+      );
     }
   }
 
@@ -155,7 +161,10 @@ export class WebhookService {
         error: error instanceof Error ? error.message : String(error),
       });
 
-      return { success: false, error: error instanceof Error ? error.message : String(error) };
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : String(error),
+      };
     }
   }
 
@@ -296,12 +305,15 @@ export class WebhookService {
     }
   }
 
-  private static async sendSlackNotification(deployment: {
-    project: { name: string };
-    environment: { name: string };
-    user: { name?: string; email: string };
-    status: string;
-  }, action: string) {
+  private static async sendSlackNotification(
+    deployment: {
+      project: { name: string };
+      environment: { name: string };
+      user: { name?: string; email: string };
+      status: string;
+    },
+    action: string,
+  ) {
     const slackWebhookUrl = process.env.SLACK_WEBHOOK_URL;
     if (!slackWebhookUrl) return;
 

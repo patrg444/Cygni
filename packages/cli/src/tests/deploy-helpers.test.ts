@@ -148,8 +148,8 @@ describe("Deploy Helpers", () => {
       // Update the mock to return the expected hash
       const { exec } = await import("child_process");
       vi.mocked(exec).mockImplementationOnce((_cmd, _options, callback) => {
-        const cb = typeof _options === 'function' ? _options : callback;
-        const cmdStr = typeof _cmd === 'string' ? _cmd : '';
+        const cb = typeof _options === "function" ? _options : callback;
+        const cmdStr = typeof _cmd === "string" ? _cmd : "";
         if (cmdStr === "sha256sum Dockerfile") {
           cb?.(null, "hash123  Dockerfile\n", "");
         }
