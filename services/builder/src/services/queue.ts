@@ -72,7 +72,7 @@ export const buildWorker = new Worker(
           imageUrl: result.imageUrl,
           logs: result.logs,
           metadata: {
-            ...(await prisma.build.findUnique({ where: { id: buildId } }))?.metadata,
+            ...((await prisma.build.findUnique({ where: { id: buildId } }))?.metadata as any || {}),
             imageSha: result.imageSha,
             buildDuration: result.duration,
           },
