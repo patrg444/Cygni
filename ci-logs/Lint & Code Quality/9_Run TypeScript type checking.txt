@@ -1,0 +1,97 @@
+﻿2025-07-20T00:30:36.1782813Z ##[group]Run pnpm run typecheck || (echo "TypeScript check failed. Running detailed check..." && cd services/api && npx tsc --noEmit)
+2025-07-20T00:30:36.1783624Z [36;1mpnpm run typecheck || (echo "TypeScript check failed. Running detailed check..." && cd services/api && npx tsc --noEmit)[0m
+2025-07-20T00:30:36.1811329Z shell: /usr/bin/bash -e {0}
+2025-07-20T00:30:36.1811552Z env:
+2025-07-20T00:30:36.1811711Z   REGISTRY: ghcr.io
+2025-07-20T00:30:36.1811909Z   IMAGE_NAME: patrg444/Cygni
+2025-07-20T00:30:36.1812189Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2025-07-20T00:30:36.1812633Z ##[endgroup]
+2025-07-20T00:30:36.5840686Z 
+2025-07-20T00:30:36.5841575Z > cloudexpress@0.1.0 typecheck /home/runner/work/Cygni/Cygni
+2025-07-20T00:30:36.5842265Z > npx turbo run typecheck
+2025-07-20T00:30:36.5842519Z 
+2025-07-20T00:30:36.9874258Z • Packages in scope: @cloudexpress/api, @cloudexpress/auth, @cloudexpress/builder, @cloudexpress/services-api, @cloudexpress/web-ui, @cygni/cli, @cygni/sdk, cygni-nextjs-starter
+2025-07-20T00:30:36.9875855Z • Running typecheck in 8 packages
+2025-07-20T00:30:36.9876357Z • Remote caching disabled
+2025-07-20T00:30:37.0354420Z ##[group]@cygni/sdk:build
+2025-07-20T00:30:37.0361739Z cache hit, replaying logs 7c13eef4e550ea9c
+2025-07-20T00:30:37.0362342Z 
+2025-07-20T00:30:37.0362873Z > @cygni/sdk@0.1.0 build /home/runner/work/Cygni/Cygni/packages/sdk
+2025-07-20T00:30:37.0364318Z > tsc
+2025-07-20T00:30:37.0364701Z 
+2025-07-20T00:30:37.0365263Z ##[endgroup]
+2025-07-20T00:30:38.4077833Z ##[group]@cloudexpress/api:typecheck
+2025-07-20T00:30:38.4079545Z cache miss, executing ce4ce93968528ba1
+2025-07-20T00:30:38.4083315Z 
+2025-07-20T00:30:38.4084128Z > @cloudexpress/api@1.0.0 typecheck /home/runner/work/Cygni/Cygni/packages/api
+2025-07-20T00:30:38.4085369Z > echo 'Skipping typecheck for packages/api - using services/api instead'
+2025-07-20T00:30:38.4086058Z 
+2025-07-20T00:30:38.4086756Z Skipping typecheck for packages/api - using services/api instead
+2025-07-20T00:30:38.4087913Z ##[endgroup]
+2025-07-20T00:30:42.0761856Z ##[group]@cygni/sdk:typecheck
+2025-07-20T00:30:42.0762566Z cache miss, executing 6c170c68493091c5
+2025-07-20T00:30:42.0762856Z 
+2025-07-20T00:30:42.0763283Z > @cygni/sdk@0.1.0 typecheck /home/runner/work/Cygni/Cygni/packages/sdk
+2025-07-20T00:30:42.0764076Z > tsc --noEmit
+2025-07-20T00:30:42.0764347Z 
+2025-07-20T00:30:42.0773847Z ##[endgroup]
+2025-07-20T00:30:43.4182155Z ##[group]@cloudexpress/auth:typecheck
+2025-07-20T00:30:43.4186509Z cache miss, executing 602b9020a0706a01
+2025-07-20T00:30:43.4190849Z 
+2025-07-20T00:30:43.4195224Z > @cloudexpress/auth@0.1.0 typecheck /home/runner/work/Cygni/Cygni/services/auth
+2025-07-20T00:30:43.4199696Z > tsc --noEmit
+2025-07-20T00:30:43.4206159Z 
+2025-07-20T00:30:43.4211255Z ##[endgroup]
+2025-07-20T00:30:45.4475023Z ##[group]@cygni/cli:typecheck
+2025-07-20T00:30:45.4477282Z cache miss, executing a623820cd31c608d
+2025-07-20T00:30:45.4481924Z 
+2025-07-20T00:30:45.4507445Z > @cygni/cli@0.1.0 typecheck /home/runner/work/Cygni/Cygni/packages/cli
+2025-07-20T00:30:45.4508764Z > tsc --noEmit
+2025-07-20T00:30:45.4509122Z 
+2025-07-20T00:30:45.4509660Z ##[endgroup]
+2025-07-20T00:30:45.5776807Z [;31m@cloudexpress/builder:typecheck[;0m
+2025-07-20T00:30:45.5778141Z cache miss, executing fa2aad0210c675a3
+2025-07-20T00:30:45.5778719Z 
+2025-07-20T00:30:45.5779515Z > @cloudexpress/builder@0.1.0 typecheck /home/runner/work/Cygni/Cygni/services/builder
+2025-07-20T00:30:45.5780705Z > tsc --noEmit
+2025-07-20T00:30:45.5781090Z 
+2025-07-20T00:30:45.5785866Z ##[error]src/builder.test.ts(1,1): error TS2582: Cannot find name 'describe'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.
+2025-07-20T00:30:45.5791440Z ##[error]src/builder.test.ts(2,3): error TS2582: Cannot find name 'it'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.
+2025-07-20T00:30:45.5793830Z ##[error]src/builder.test.ts(3,5): error TS2304: Cannot find name 'expect'.
+2025-07-20T00:30:45.5795908Z  ELIFECYCLE  Command failed with exit code 2.
+2025-07-20T00:30:45.5797530Z [ERROR] command finished with error: command (/home/runner/work/Cygni/Cygni/services/builder) /home/runner/setup-pnpm/node_modules/.bin/pnpm run typecheck exited (2)
+2025-07-20T00:30:45.6228071Z ##[group]@cloudexpress/services-api:typecheck
+2025-07-20T00:30:45.6228567Z cache miss, executing 3742552e96ffc296
+2025-07-20T00:30:45.6228756Z 
+2025-07-20T00:30:45.6229082Z > @cloudexpress/services-api@0.1.0 typecheck /home/runner/work/Cygni/Cygni/services/api
+2025-07-20T00:30:45.6229788Z > tsc --noEmit
+2025-07-20T00:30:45.6229900Z 
+2025-07-20T00:30:45.6230351Z ##[endgroup]
+2025-07-20T00:30:45.6292681Z ##[group]@cloudexpress/web-ui:typecheck
+2025-07-20T00:30:45.6293373Z cache miss, executing 57027c154abe9ba9
+2025-07-20T00:30:45.6293688Z 
+2025-07-20T00:30:45.6294230Z > @cloudexpress/web-ui@0.1.0 typecheck /home/runner/work/Cygni/Cygni/packages/web-ui
+2025-07-20T00:30:45.6294786Z > tsc --noEmit
+2025-07-20T00:30:45.6294951Z 
+2025-07-20T00:30:45.6295173Z ##[endgroup]
+2025-07-20T00:30:45.6307099Z ##[error]@cloudexpress/builder#typecheck: command (/home/runner/work/Cygni/Cygni/services/builder) /home/runner/setup-pnpm/node_modules/.bin/pnpm run typecheck exited (2)
+2025-07-20T00:30:45.6315000Z 
+2025-07-20T00:30:45.6315211Z  Tasks:    5 successful, 8 total
+2025-07-20T00:30:45.6315507Z Cached:    1 cached, 8 total
+2025-07-20T00:30:45.6315742Z   Time:    8.697s 
+2025-07-20T00:30:45.6316014Z Failed:    @cloudexpress/builder#typecheck
+2025-07-20T00:30:45.6316198Z 
+2025-07-20T00:30:45.6357712Z  ERROR  run failed: command  exited (2)
+2025-07-20T00:30:45.7741153Z  ELIFECYCLE  Command failed with exit code 2.
+2025-07-20T00:30:45.7928208Z TypeScript check failed. Running detailed check...
+2025-07-20T00:30:49.4006520Z npm warn exec The following package was not found and will be installed: tsc@2.0.4
+2025-07-20T00:30:49.8143660Z 
+2025-07-20T00:30:49.8148684Z [41m                                                                               [0m
+2025-07-20T00:30:49.8149846Z [41m[37m                This is not the tsc command you are looking for                [0m
+2025-07-20T00:30:49.8151006Z [41m                                                                               [0m
+2025-07-20T00:30:49.8151340Z 
+2025-07-20T00:30:49.8151797Z To get access to the TypeScript compiler, [34mtsc[0m, from the command line either:
+2025-07-20T00:30:49.8152163Z 
+2025-07-20T00:30:49.8152692Z - Use [1mnpm install typescript[0m to first add TypeScript to your project [1mbefore[0m using npx
+2025-07-20T00:30:49.8153531Z - Use [1myarn[0m to avoid accidentally running code from un-installed packages
+2025-07-20T00:30:49.8359308Z ##[error]Process completed with exit code 1.

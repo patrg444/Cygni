@@ -1,7 +1,7 @@
 import { FastifyPluginAsync } from "fastify";
 import * as crypto from "crypto";
 import { prisma } from "../utils/prisma";
-import { BuildStatus } from "@prisma/client";
+import { BuildStatus } from "@prisma/client-api";
 import axios from "axios";
 
 const ORCHESTRATOR_URL =

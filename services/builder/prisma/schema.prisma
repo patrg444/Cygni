@@ -1,0 +1,47 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Import shared models from API service
+model Build {
+  id        String      @id @default(cuid())
+  projectId String
+  commitSha String
+  branch    String
+  status    BuildStatus
+  logs      String?
+  imageUrl  String?
+  metadata  Json?
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  project Project @relation(fields: [projectId], references: [id])
+}
+
+model Project {
+  id             String   @id @default(cuid())
+  organizationId String
+  name           String
+  slug           String
+  framework      String?
+  repository     String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  builds Build[]
+
+  @@unique([organizationId, slug])
+}
+
+enum BuildStatus {
+  pending
+  running
+  success
+  failed
+  cancelled
+}

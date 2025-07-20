@@ -4,7 +4,7 @@ import { prisma } from "../utils/prisma";
 import { requireRole } from "../middleware/auth";
 import { Role } from "../types/auth";
 import { nanoid } from "nanoid";
-import { DeploymentStatus } from "@prisma/client";
+import { DeploymentStatus } from "@prisma/client-api";
 
 const createWebhookSchema = z.object({
   url: z.string().url(),

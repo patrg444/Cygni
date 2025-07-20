@@ -15,6 +15,10 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@aws-sdk/client-cloudformation": "^3.0.0",
+    "@aws-sdk/client-ecr": "^3.0.0",
+    "@aws-sdk/client-ecs": "^3.0.0",
+    "@aws-sdk/client-sts": "^3.0.0",
     "@inquirer/prompts": "^3.0.0",
     "@types/semver": "^7.7.0",
     "axios": "^1.4.0",
@@ -26,7 +30,8 @@
     "js-yaml": "^4.1.0",
     "ora": "^7.0.0",
     "semver": "^7.7.2",
-    "ws": "^8.14.0"
+    "ws": "^8.14.0",
+    "zod": "^3.0.0"
   },
   "devDependencies": {
     "@types/js-yaml": "^4.0.5",

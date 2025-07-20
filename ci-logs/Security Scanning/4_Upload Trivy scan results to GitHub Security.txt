@@ -1,0 +1,22 @@
+﻿2025-07-20T00:30:07.8727063Z ##[group]Run github/codeql-action/upload-sarif@v3
+2025-07-20T00:30:07.8727380Z with:
+2025-07-20T00:30:07.8727580Z   sarif_file: trivy-results.sarif
+2025-07-20T00:30:07.8728093Z   checkout_path: /home/runner/work/Cygni/Cygni
+2025-07-20T00:30:07.8728531Z   token: ***
+2025-07-20T00:30:07.8728720Z   matrix: null
+2025-07-20T00:30:07.8728939Z   wait-for-processing: true
+2025-07-20T00:30:07.8729160Z env:
+2025-07-20T00:30:07.8729322Z   REGISTRY: ghcr.io
+2025-07-20T00:30:07.8729520Z   IMAGE_NAME: patrg444/Cygni
+2025-07-20T00:30:07.8729743Z ##[endgroup]
+2025-07-20T00:30:08.5138557Z ##[group]Uploading code scanning results
+2025-07-20T00:30:08.5139207Z Processing sarif files: ["trivy-results.sarif"]
+2025-07-20T00:30:08.5143677Z Validating trivy-results.sarif
+2025-07-20T00:30:08.5829572Z Adding fingerprints to SARIF file. See https://docs.github.com/en/enterprise-cloud@latest/code-security/code-scanning/integrating-with-code-scanning/sarif-support-for-code-scanning#providing-data-to-track-code-scanning-alerts-across-runs for more information.
+2025-07-20T00:30:08.7763114Z Uploading results
+2025-07-20T00:30:08.9981168Z Successfully uploaded results
+2025-07-20T00:30:08.9982557Z ##[endgroup]
+2025-07-20T00:30:08.9988745Z ##[group]Waiting for processing to finish
+2025-07-20T00:30:09.1104788Z Analysis upload status is pending.
+2025-07-20T00:30:14.2230189Z Analysis upload status is complete.
+2025-07-20T00:30:14.2230927Z ##[endgroup]

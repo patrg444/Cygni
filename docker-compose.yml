@@ -119,6 +119,8 @@ services:
       MINIO_ENDPOINT: http://minio:9000
       MINIO_ACCESS_KEY: ${MINIO_ROOT_USER}
       MINIO_SECRET_KEY: ${MINIO_ROOT_PASSWORD}
+      BUILDER_SERVICE_URL: http://builder:3001
+      RUNTIME_ORCHESTRATOR_URL: http://runtime-orchestrator:8080
     depends_on:
       postgres:
         condition: service_healthy
@@ -140,6 +142,89 @@ services:
       - --tries=1
       - --spider
       - http://localhost:3000/health
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+  
+  builder:
+    build:
+      context: .
+      dockerfile: ./services/builder/Dockerfile
+    container_name: cygni-builder
+    restart: unless-stopped
+    user: 1001:1001
+    env_file:
+    - .env.development
+    ports:
+    - ${BUILDER_PORT:-3001}:3001
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?schema=public
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      API_SERVICE_URL: http://api:3000
+      ECR_REPOSITORY_URI: ${ECR_REPOSITORY_URI}
+      AWS_REGION: ${AWS_REGION:-us-east-1}
+      K8S_NAMESPACE: cygni-builds
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+    - cygni-network
+    healthcheck:
+      test:
+      - CMD
+      - wget
+      - --no-verbose
+      - --tries=1
+      - --spider
+      - http://localhost:3001/health
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  builder-worker:
+    build:
+      context: .
+      dockerfile: ./services/builder/Dockerfile.worker
+    container_name: cygni-builder-worker
+    restart: unless-stopped
+    user: 1001:1001
+    env_file:
+    - .env.development
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?schema=public
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      API_SERVICE_URL: http://api:3000
+      ECR_REPOSITORY_URI: ${ECR_REPOSITORY_URI}
+      AWS_REGION: ${AWS_REGION:-us-east-1}
+      K8S_NAMESPACE: cygni-builds
+      BUILD_CONCURRENCY: 2
+      WORKER_ID: worker-1
+      HEALTH_CHECK_PORT: 9090
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      builder:
+        condition: service_healthy
+    networks:
+    - cygni-network
+    healthcheck:
+      test:
+      - CMD
+      - wget
+      - --no-verbose
+      - --tries=1
+      - --spider
+      - http://localhost:9090/health
       interval: 30s
       timeout: 10s
       retries: 3

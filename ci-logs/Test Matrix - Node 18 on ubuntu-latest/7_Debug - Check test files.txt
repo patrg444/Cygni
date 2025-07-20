@@ -1,0 +1,24 @@
+﻿2025-07-20T00:30:26.1374749Z ##[group]Run echo "=== Checking for test files ==="
+2025-07-20T00:30:26.1375128Z [36;1mecho "=== Checking for test files ==="[0m
+2025-07-20T00:30:26.1375501Z [36;1mfind . -name "*.test.*" -o -name "*.spec.*" | grep -v node_modules | head -20[0m
+2025-07-20T00:30:26.1404139Z shell: /usr/bin/bash -e {0}
+2025-07-20T00:30:26.1404363Z env:
+2025-07-20T00:30:26.1404523Z   REGISTRY: ghcr.io
+2025-07-20T00:30:26.1404711Z   IMAGE_NAME: patrg444/Cygni
+2025-07-20T00:30:26.1404974Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2025-07-20T00:30:26.1405248Z ##[endgroup]
+2025-07-20T00:30:26.1455926Z === Checking for test files ===
+2025-07-20T00:30:26.3556454Z ./examples/nextjs-starter/src/dummy.test.ts
+2025-07-20T00:30:26.3560099Z ./packages/web-ui/src/dummy.test.ts
+2025-07-20T00:30:26.3560985Z ./packages/cli/src/tests/framework-detector.test.ts
+2025-07-20T00:30:26.3561644Z ./packages/cli/src/tests/deploy-helpers.test.ts
+2025-07-20T00:30:26.3562234Z ./packages/cli/src/tests/builder.test.ts
+2025-07-20T00:30:26.3562789Z ./packages/cli/src/dummy.test.ts
+2025-07-20T00:30:26.3563231Z ./packages/sdk/src/sdk.test.ts
+2025-07-20T00:30:26.3563829Z ./packages/api/docker-compose.test.yml
+2025-07-20T00:30:26.3564688Z ./packages/api/tests/unit/budget-monitor.test.ts
+2025-07-20T00:30:26.3565414Z ./packages/api/tests/e2e/waitlist.test.ts
+2025-07-20T00:30:26.3565996Z ./packages/api/tests/e2e/health-auth.test.ts
+2025-07-20T00:30:26.3566462Z ./services/auth/src/auth.test.ts
+2025-07-20T00:30:26.3566753Z ./services/builder/src/builder.test.ts
+2025-07-20T00:30:26.3567052Z ./services/api/src/health.test.ts

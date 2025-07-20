@@ -1,7 +1,7 @@
 import axios from "axios";
 import { logger } from "../utils/logger";
 import { prisma } from "../utils/prisma";
-import { DeploymentStatus } from "@prisma/client";
+import { DeploymentStatus } from "@prisma/client-api";
 
 export interface WebhookPayload {
   event:
@@ -224,7 +224,15 @@ export class WebhookService {
     }
 
     // Send Slack notification if configured
-    await this.sendSlackNotification(deployment, "created");
+    await this.sendSlackNotification(
+      {
+        project: deployment.project,
+        environment: deployment.environment,
+        user: deployment.user,
+        status: deployment.status,
+      },
+      "created",
+    );
   }
 
   static async notifyDeploymentStatusChange(
@@ -299,7 +307,12 @@ export class WebhookService {
       newStatus === DeploymentStatus.failed
     ) {
       await this.sendSlackNotification(
-        deployment,
+        {
+          project: deployment.project,
+          environment: deployment.environment,
+          user: deployment.user,
+          status: deployment.status,
+        },
         newStatus === DeploymentStatus.active ? "succeeded" : "failed",
       );
     }

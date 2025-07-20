@@ -4,7 +4,7 @@ import { z } from "zod";
 import { prisma } from "../utils/prisma";
 import { requireRole } from "../middleware/auth";
 import { Role } from "../types/auth";
-import { DeploymentStatus } from "@prisma/client";
+import { DeploymentStatus } from "@prisma/client-api";
 import axios from "axios";
 import { WebhookService } from "../services/webhook.service";
 

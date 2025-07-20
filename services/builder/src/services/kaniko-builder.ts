@@ -1,16 +1,24 @@
 import * as k8s from "@kubernetes/client-node";
 import { nanoid } from "nanoid";
-import { logger } from "../utils/logger";
+import { logger } from "../lib/logger";
 import { Build, BuildStatus } from "../types/build";
 import { ECRClient, GetAuthorizationTokenCommand } from "@aws-sdk/client-ecr";
 
 interface KanikoBuildOptions {
-  repoUrl: string;
-  commitSha: string;
+  buildId: string;
+  gitUrl: string;
+  gitRef: string;
+  contextPath: string;
   dockerfilePath?: string;
   buildArgs?: Record<string, string>;
   cacheKey?: string;
-  projectId: string;
+}
+
+interface BuildResult {
+  imageUrl: string;
+  imageSha: string;
+  logs: string;
+  duration: number;
 }
 
 export class KanikoBuilder {
@@ -18,10 +26,10 @@ export class KanikoBuilder {
   private k8sCore: k8s.CoreV1Api;
   private kc: k8s.KubeConfig;
   private ecrClient: ECRClient;
-  private namespace = "cygni-builds";
+  private namespace: string;
   private ecrRegistry: string;
 
-  constructor() {
+  constructor(ecrRepositoryUri: string, namespace: string) {
     this.kc = new k8s.KubeConfig();
     if (process.env.NODE_ENV === "production") {
       this.kc.loadFromCluster();
@@ -34,32 +42,55 @@ export class KanikoBuilder {
     this.ecrClient = new ECRClient({
       region: process.env.AWS_REGION || "us-east-1",
     });
-    this.ecrRegistry = process.env.ECR_REGISTRY || "";
+    this.ecrRegistry = ecrRepositoryUri;
+    this.namespace = namespace;
   }
 
-  async build(options: KanikoBuildOptions): Promise<Build> {
-    const buildId = `build-${nanoid(12)}`;
-    const imageName = `${this.ecrRegistry}/${options.projectId}:${options.commitSha}`;
+  async build(options: KanikoBuildOptions): Promise<BuildResult> {
+    const startTime = Date.now();
+    const imageName = `${this.ecrRegistry}:${options.gitRef.substring(0, 7)}`;
 
     // Create ECR auth secret
-    await this.createECRAuthSecret(buildId);
+    await this.createECRAuthSecret(options.buildId);
 
     // Create Kaniko job
     await this.createKanikoJob({
-      buildId,
+      buildId: options.buildId,
       imageName,
+      repoUrl: options.gitUrl,
+      commitSha: options.gitRef,
       ...options,
     });
 
+    // Wait for job completion
+    let status = BuildStatus.PENDING;
+    let logs = "";
+    const maxWaitTime = 30 * 60 * 1000; // 30 minutes
+    const pollInterval = 5000; // 5 seconds
+    const startPoll = Date.now();
+
+    while (Date.now() - startPoll < maxWaitTime) {
+      status = await this.getBuildStatus(options.buildId);
+      
+      if (status === BuildStatus.SUCCESS || status === BuildStatus.FAILED) {
+        logs = await this.getBuildLogs(options.buildId);
+        break;
+      }
+      
+      await new Promise(resolve => setTimeout(resolve, pollInterval));
+    }
+
+    if (status !== BuildStatus.SUCCESS) {
+      throw new Error(`Build failed with status: ${status}\n${logs}`);
+    }
+
+    const duration = Date.now() - startTime;
+    
     return {
-      id: buildId,
-      projectId: options.projectId,
-      commitSha: options.commitSha,
-      branch: "", // Extract from repo in real implementation
-      status: BuildStatus.PENDING,
       imageUrl: imageName,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      imageSha: options.gitRef,
+      logs,
+      duration,
     };
   }
 
@@ -141,15 +172,15 @@ export class KanikoBuilder {
                 name: "kaniko",
                 image: "gcr.io/kaniko-project/executor:latest",
                 args: [
-                  `--context=${options.repoUrl}#${options.commitSha}`,
+                  `--context=git://${options.repoUrl}#${options.commitSha}`,
                   `--dockerfile=${options.dockerfilePath || "Dockerfile"}`,
                   `--destination=${options.imageName}`,
                   "--cache=true",
-                  `--cache-repo=${this.ecrRegistry}/cache`,
+                  `--cache-repo=${this.ecrRegistry}-cache`,
                   "--push-retry=3",
                   "--snapshotMode=redo",
-                  buildArgsFlags,
-                ].filter(Boolean),
+                  ...buildArgsFlags.split(' ').filter(Boolean),
+                ],
                 volumeMounts: [
                   {
                     name: "docker-config",
@@ -245,7 +276,41 @@ export class KanikoBuilder {
     }
   }
 
-  async streamBuildLogs(
+  async streamLogs(buildId: string): Promise<NodeJS.ReadableStream> {
+    const { Readable } = require('stream');
+    const stream = new Readable({
+      read() {}
+    });
+    
+    this.streamBuildLogs(buildId, (log) => {
+      stream.push(log);
+    }).then(() => {
+      stream.push(null); // End the stream
+    }).catch((error) => {
+      stream.destroy(error);
+    });
+    
+    return stream;
+  }
+  
+  async cancelBuild(buildId: string): Promise<void> {
+    try {
+      await this.k8sApi.deleteNamespacedJob(
+        buildId,
+        this.namespace,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        'Background'
+      );
+    } catch (error) {
+      logger.error("Failed to cancel build", { buildId, error });
+      throw error;
+    }
+  }
+
+  private async streamBuildLogs(
     buildId: string,
     onLog: (log: string) => void,
   ): Promise<void> {

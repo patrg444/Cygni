@@ -1,0 +1,33 @@
+﻿2025-07-20T00:29:59.1101257Z Current runner version: '2.326.0'
+2025-07-20T00:29:59.1134343Z ##[group]Runner Image Provisioner
+2025-07-20T00:29:59.1135579Z Hosted Compute Agent
+2025-07-20T00:29:59.1136531Z Version: 20250711.363
+2025-07-20T00:29:59.1137442Z Commit: 6785254374ce925a23743850c1cb91912ce5c14c
+2025-07-20T00:29:59.1138665Z Build Date: 2025-07-11T20:04:25Z
+2025-07-20T00:29:59.1139603Z ##[endgroup]
+2025-07-20T00:29:59.1140396Z ##[group]Operating System
+2025-07-20T00:29:59.1141217Z Ubuntu
+2025-07-20T00:29:59.1142340Z 24.04.2
+2025-07-20T00:29:59.1143038Z LTS
+2025-07-20T00:29:59.1143770Z ##[endgroup]
+2025-07-20T00:29:59.1144602Z ##[group]Runner Image
+2025-07-20T00:29:59.1145525Z Image: ubuntu-24.04
+2025-07-20T00:29:59.1146421Z Version: 20250710.1.0
+2025-07-20T00:29:59.1148058Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20250710.1/images/ubuntu/Ubuntu2404-Readme.md
+2025-07-20T00:29:59.1150421Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20250710.1
+2025-07-20T00:29:59.1152563Z ##[endgroup]
+2025-07-20T00:29:59.1154248Z ##[group]GITHUB_TOKEN Permissions
+2025-07-20T00:29:59.1156771Z Contents: read
+2025-07-20T00:29:59.1157540Z Metadata: read
+2025-07-20T00:29:59.1158476Z Packages: read
+2025-07-20T00:29:59.1159249Z ##[endgroup]
+2025-07-20T00:29:59.1162688Z Secret source: Actions
+2025-07-20T00:29:59.1163780Z Prepare workflow directory
+2025-07-20T00:29:59.1893503Z Prepare all required actions
+2025-07-20T00:29:59.1947675Z Getting action download info
+2025-07-20T00:29:59.4411539Z ##[group]Download immutable action package 'actions/checkout@v4'
+2025-07-20T00:29:59.4412699Z Version: 4.2.2
+2025-07-20T00:29:59.4413800Z Digest: sha256:ccb2698953eaebd21c7bf6268a94f9c26518a7e38e27e0b83c1fe1ad049819b1
+2025-07-20T00:29:59.4414925Z Source commit SHA: 11bd71901bbe5b1630ceea73d27597364c9af683
+2025-07-20T00:29:59.4415585Z ##[endgroup]
+2025-07-20T00:29:59.6118043Z Complete job name: Validate Kubernetes Manifests

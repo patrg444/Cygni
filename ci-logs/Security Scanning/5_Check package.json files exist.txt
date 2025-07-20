@@ -1,0 +1,22 @@
+﻿2025-07-20T00:30:14.3503238Z ##[group]Run echo "Checking for package.json files..."
+2025-07-20T00:30:14.3503647Z [36;1mecho "Checking for package.json files..."[0m
+2025-07-20T00:30:14.3504046Z [36;1mls -la services/api/package.json || echo "No package.json in api"[0m
+2025-07-20T00:30:14.3504514Z [36;1mls -la services/auth/package.json || echo "No package.json in auth"[0m
+2025-07-20T00:30:14.3504986Z [36;1mls -la services/builder/package.json || echo "No package.json in builder"[0m
+2025-07-20T00:30:14.3533730Z shell: /usr/bin/bash -e {0}
+2025-07-20T00:30:14.3533972Z env:
+2025-07-20T00:30:14.3534152Z   REGISTRY: ghcr.io
+2025-07-20T00:30:14.3534366Z   IMAGE_NAME: patrg444/Cygni
+2025-07-20T00:30:14.3534633Z   CODEQL_ACTION_FEATURE_MULTI_LANGUAGE: false
+2025-07-20T00:30:14.3534921Z   CODEQL_ACTION_FEATURE_SANDWICH: false
+2025-07-20T00:30:14.3535193Z   CODEQL_ACTION_FEATURE_SARIF_COMBINE: true
+2025-07-20T00:30:14.3535726Z   CODEQL_ACTION_FEATURE_WILL_UPLOAD: true
+2025-07-20T00:30:14.3535991Z   CODEQL_ACTION_VERSION: 3.29.2
+2025-07-20T00:30:14.3536313Z   CODEQL_ACTION_ANALYSIS_KEY: .github/workflows/ci.yml:security
+2025-07-20T00:30:14.3536668Z   CODEQL_WORKFLOW_STARTED_AT: 2025-07-20T00:30:08.153Z
+2025-07-20T00:30:14.3537204Z   CODEQL_UPLOAD_SARIF__GITHUB_WORKFLOWS_CI_YML_SECURITY__TRIVY: CODEQL_UPLOAD_SARIF__GITHUB_WORKFLOWS_CI_YML_SECURITY__TRIVY
+2025-07-20T00:30:14.3537695Z ##[endgroup]
+2025-07-20T00:30:14.3583665Z Checking for package.json files...
+2025-07-20T00:30:14.3596854Z -rw-r--r-- 1 runner docker 904 Jul 20 00:30 services/api/package.json
+2025-07-20T00:30:14.3610771Z -rw-r--r-- 1 runner docker 636 Jul 20 00:30 services/auth/package.json
+2025-07-20T00:30:14.3624112Z -rw-r--r-- 1 runner docker 704 Jul 20 00:30 services/builder/package.json

@@ -4,11 +4,12 @@ import { program } from "commander";
 import chalk from "chalk";
 import { version } from "../package.json";
 import { initCommand } from "./commands/init";
-import { deployCommand } from "./commands/deploy";
+import { deployAwsCommand } from "./commands/deploy-aws";
 import { loginCommand } from "./commands/login";
 import { logsCommand } from "./commands/logs";
 import { statusCommand } from "./commands/status";
 import { secretsCommand } from "./commands/secrets";
+import { validateCommand } from "./commands/validate";
 import { periodicUpdateCheck, autoUpdate } from "./utils/update-check";
 
 program
@@ -19,10 +20,11 @@ program
 // Commands
 program.addCommand(loginCommand);
 program.addCommand(initCommand);
-program.addCommand(deployCommand);
+program.addCommand(deployAwsCommand);
 program.addCommand(logsCommand);
 program.addCommand(statusCommand);
 program.addCommand(secretsCommand);
+program.addCommand(validateCommand);
 
 // Error handling
 program.exitOverride();

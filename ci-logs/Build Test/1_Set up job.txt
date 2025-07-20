@@ -1,0 +1,38 @@
+﻿2025-07-20T00:30:54.2568369Z Current runner version: '2.326.0'
+2025-07-20T00:30:54.2591653Z ##[group]Runner Image Provisioner
+2025-07-20T00:30:54.2592509Z Hosted Compute Agent
+2025-07-20T00:30:54.2593179Z Version: 20250711.363
+2025-07-20T00:30:54.2593740Z Commit: 6785254374ce925a23743850c1cb91912ce5c14c
+2025-07-20T00:30:54.2594587Z Build Date: 2025-07-11T20:04:25Z
+2025-07-20T00:30:54.2595211Z ##[endgroup]
+2025-07-20T00:30:54.2595800Z ##[group]Operating System
+2025-07-20T00:30:54.2596397Z Ubuntu
+2025-07-20T00:30:54.2596938Z 24.04.2
+2025-07-20T00:30:54.2597468Z LTS
+2025-07-20T00:30:54.2597941Z ##[endgroup]
+2025-07-20T00:30:54.2598478Z ##[group]Runner Image
+2025-07-20T00:30:54.2599058Z Image: ubuntu-24.04
+2025-07-20T00:30:54.2599567Z Version: 20250710.1.0
+2025-07-20T00:30:54.2600517Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20250710.1/images/ubuntu/Ubuntu2404-Readme.md
+2025-07-20T00:30:54.2601992Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20250710.1
+2025-07-20T00:30:54.2603151Z ##[endgroup]
+2025-07-20T00:30:54.2604554Z ##[group]GITHUB_TOKEN Permissions
+2025-07-20T00:30:54.2606380Z Contents: read
+2025-07-20T00:30:54.2607053Z Metadata: read
+2025-07-20T00:30:54.2607605Z Packages: read
+2025-07-20T00:30:54.2608096Z ##[endgroup]
+2025-07-20T00:30:54.2610160Z Secret source: Actions
+2025-07-20T00:30:54.2610915Z Prepare workflow directory
+2025-07-20T00:30:54.3116020Z Prepare all required actions
+2025-07-20T00:30:54.3152413Z Getting action download info
+2025-07-20T00:30:54.6890195Z ##[group]Download immutable action package 'actions/checkout@v4'
+2025-07-20T00:30:54.6891345Z Version: 4.2.2
+2025-07-20T00:30:54.6892440Z Digest: sha256:ccb2698953eaebd21c7bf6268a94f9c26518a7e38e27e0b83c1fe1ad049819b1
+2025-07-20T00:30:54.6893613Z Source commit SHA: 11bd71901bbe5b1630ceea73d27597364c9af683
+2025-07-20T00:30:54.6894540Z ##[endgroup]
+2025-07-20T00:30:54.7785551Z ##[group]Download immutable action package 'docker/setup-buildx-action@v3'
+2025-07-20T00:30:54.7786427Z Version: 3.11.1
+2025-07-20T00:30:54.7787281Z Digest: sha256:b58e632d2d812e161c8abeba6def9f56b420aa9ae41d825a8408241bcad0f303
+2025-07-20T00:30:54.7788286Z Source commit SHA: e468171a9de216ec08956ac3ada2f0791b6bd435
+2025-07-20T00:30:54.7788975Z ##[endgroup]
+2025-07-20T00:30:55.3059954Z Complete job name: Build Test

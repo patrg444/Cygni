@@ -1,0 +1,488 @@
+﻿2025-07-20T00:29:58.1708144Z Current runner version: '2.326.0'
+2025-07-20T00:29:58.1744861Z ##[group]Runner Image Provisioner
+2025-07-20T00:29:58.1746365Z Hosted Compute Agent
+2025-07-20T00:29:58.1747258Z Version: 20250711.363
+2025-07-20T00:29:58.1748270Z Commit: 6785254374ce925a23743850c1cb91912ce5c14c
+2025-07-20T00:29:58.1749623Z Build Date: 2025-07-11T20:04:25Z
+2025-07-20T00:29:58.1750680Z ##[endgroup]
+2025-07-20T00:29:58.1751787Z ##[group]Operating System
+2025-07-20T00:29:58.1752912Z Ubuntu
+2025-07-20T00:29:58.1753622Z 24.04.2
+2025-07-20T00:29:58.1754359Z LTS
+2025-07-20T00:29:58.1755234Z ##[endgroup]
+2025-07-20T00:29:58.1756037Z ##[group]Runner Image
+2025-07-20T00:29:58.1757025Z Image: ubuntu-24.04
+2025-07-20T00:29:58.1757870Z Version: 20250710.1.0
+2025-07-20T00:29:58.1759567Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20250710.1/images/ubuntu/Ubuntu2404-Readme.md
+2025-07-20T00:29:58.1762483Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20250710.1
+2025-07-20T00:29:58.1764136Z ##[endgroup]
+2025-07-20T00:29:58.1766088Z ##[group]GITHUB_TOKEN Permissions
+2025-07-20T00:29:58.1768715Z Contents: read
+2025-07-20T00:29:58.1769684Z Metadata: read
+2025-07-20T00:29:58.1770587Z Packages: read
+2025-07-20T00:29:58.1771552Z ##[endgroup]
+2025-07-20T00:29:58.1775218Z Secret source: Actions
+2025-07-20T00:29:58.1776328Z Prepare workflow directory
+2025-07-20T00:29:58.2547949Z Prepare all required actions
+2025-07-20T00:29:58.2608058Z Getting action download info
+2025-07-20T00:29:58.5004952Z ##[group]Download immutable action package 'actions/checkout@v4'
+2025-07-20T00:29:58.5006022Z Version: 4.2.2
+2025-07-20T00:29:58.5006998Z Digest: sha256:ccb2698953eaebd21c7bf6268a94f9c26518a7e38e27e0b83c1fe1ad049819b1
+2025-07-20T00:29:58.5008272Z Source commit SHA: 11bd71901bbe5b1630ceea73d27597364c9af683
+2025-07-20T00:29:58.5009029Z ##[endgroup]
+2025-07-20T00:29:58.5880188Z Download action repository 'pnpm/action-setup@v2' (SHA:eae0cfeb286e66ffb5155f1a79b90583a127a68b)
+2025-07-20T00:29:58.8635047Z ##[group]Download immutable action package 'actions/setup-node@v4'
+2025-07-20T00:29:58.8635852Z Version: 4.4.0
+2025-07-20T00:29:58.8636662Z Digest: sha256:9427cefe82346e992fb5b949e3569b39d537ae41aa3086483b14eceebfc16bc1
+2025-07-20T00:29:58.8637658Z Source commit SHA: 49933ea5288caeca8642d1e84afbd3f7d6820020
+2025-07-20T00:29:58.8638335Z ##[endgroup]
+2025-07-20T00:29:59.0283700Z Complete job name: Test Matrix - Node 22 on ubuntu-latest
+2025-07-20T00:29:59.0884711Z ##[group]Run actions/checkout@v4
+2025-07-20T00:29:59.0885565Z with:
+2025-07-20T00:29:59.0885948Z   repository: patrg444/Cygni
+2025-07-20T00:29:59.0886571Z   token: ***
+2025-07-20T00:29:59.0886949Z   ssh-strict: true
+2025-07-20T00:29:59.0887326Z   ssh-user: git
+2025-07-20T00:29:59.0887716Z   persist-credentials: true
+2025-07-20T00:29:59.0888138Z   clean: true
+2025-07-20T00:29:59.0888532Z   sparse-checkout-cone-mode: true
+2025-07-20T00:29:59.0888993Z   fetch-depth: 1
+2025-07-20T00:29:59.0889368Z   fetch-tags: false
+2025-07-20T00:29:59.0889760Z   show-progress: true
+2025-07-20T00:29:59.0890174Z   lfs: false
+2025-07-20T00:29:59.0890524Z   submodules: false
+2025-07-20T00:29:59.0890915Z   set-safe-directory: true
+2025-07-20T00:29:59.0891708Z env:
+2025-07-20T00:29:59.0892075Z   REGISTRY: ghcr.io
+2025-07-20T00:29:59.0892498Z   IMAGE_NAME: patrg444/Cygni
+2025-07-20T00:29:59.0892937Z ##[endgroup]
+2025-07-20T00:29:59.2081789Z Syncing repository: patrg444/Cygni
+2025-07-20T00:29:59.2084348Z ##[group]Getting Git version info
+2025-07-20T00:29:59.2085288Z Working directory is '/home/runner/work/Cygni/Cygni'
+2025-07-20T00:29:59.2086681Z [command]/usr/bin/git version
+2025-07-20T00:29:59.2156325Z git version 2.50.1
+2025-07-20T00:29:59.2184451Z ##[endgroup]
+2025-07-20T00:29:59.2200365Z Temporarily overriding HOME='/home/runner/work/_temp/223b24a9-9ecb-444d-88c9-d629395dc70d' before making global git config changes
+2025-07-20T00:29:59.2203282Z Adding repository directory to the temporary git global config as a safe directory
+2025-07-20T00:29:59.2213363Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/Cygni/Cygni
+2025-07-20T00:29:59.2250988Z Deleting the contents of '/home/runner/work/Cygni/Cygni'
+2025-07-20T00:29:59.2255342Z ##[group]Initializing the repository
+2025-07-20T00:29:59.2260414Z [command]/usr/bin/git init /home/runner/work/Cygni/Cygni
+2025-07-20T00:29:59.2320242Z hint: Using 'master' as the name for the initial branch. This default branch name
+2025-07-20T00:29:59.2322279Z hint: is subject to change. To configure the initial branch name to use in all
+2025-07-20T00:29:59.2323599Z hint: of your new repositories, which will suppress this warning, call:
+2025-07-20T00:29:59.2324783Z hint:
+2025-07-20T00:29:59.2325651Z hint: 	git config --global init.defaultBranch <name>
+2025-07-20T00:29:59.2326643Z hint:
+2025-07-20T00:29:59.2327591Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2025-07-20T00:29:59.2329153Z hint: 'development'. The just-created branch can be renamed via this command:
+2025-07-20T00:29:59.2330354Z hint:
+2025-07-20T00:29:59.2331012Z hint: 	git branch -m <name>
+2025-07-20T00:29:59.2331966Z hint:
+2025-07-20T00:29:59.2332921Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2025-07-20T00:29:59.2334589Z Initialized empty Git repository in /home/runner/work/Cygni/Cygni/.git/
+2025-07-20T00:29:59.2337329Z [command]/usr/bin/git remote add origin https://github.com/patrg444/Cygni
+2025-07-20T00:29:59.2371959Z ##[endgroup]
+2025-07-20T00:29:59.2373132Z ##[group]Disabling automatic garbage collection
+2025-07-20T00:29:59.2376903Z [command]/usr/bin/git config --local gc.auto 0
+2025-07-20T00:29:59.2410001Z ##[endgroup]
+2025-07-20T00:29:59.2411214Z ##[group]Setting up auth
+2025-07-20T00:29:59.2419489Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2025-07-20T00:29:59.2453456Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2025-07-20T00:29:59.2738542Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-07-20T00:29:59.2767537Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2025-07-20T00:29:59.2988856Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2025-07-20T00:29:59.3034306Z ##[endgroup]
+2025-07-20T00:29:59.3035568Z ##[group]Fetching the repository
+2025-07-20T00:29:59.3044758Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +8b20634d93c48d8caab83322c76f2e8c55822afa:refs/remotes/origin/main
+2025-07-20T00:29:59.5827965Z From https://github.com/patrg444/Cygni
+2025-07-20T00:29:59.5829597Z  * [new ref]         8b20634d93c48d8caab83322c76f2e8c55822afa -> origin/main
+2025-07-20T00:29:59.5854825Z ##[endgroup]
+2025-07-20T00:29:59.5856236Z ##[group]Determining the checkout info
+2025-07-20T00:29:59.5857747Z ##[endgroup]
+2025-07-20T00:29:59.5863467Z [command]/usr/bin/git sparse-checkout disable
+2025-07-20T00:29:59.5904306Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2025-07-20T00:29:59.5935707Z ##[group]Checking out the ref
+2025-07-20T00:29:59.5940521Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2025-07-20T00:29:59.6152052Z Switched to a new branch 'main'
+2025-07-20T00:29:59.6154559Z branch 'main' set up to track 'origin/main'.
+2025-07-20T00:29:59.6159649Z ##[endgroup]
+2025-07-20T00:29:59.6198365Z [command]/usr/bin/git log -1 --format=%H
+2025-07-20T00:29:59.6220499Z 8b20634d93c48d8caab83322c76f2e8c55822afa
+2025-07-20T00:29:59.6457560Z ##[group]Run pnpm/action-setup@v2
+2025-07-20T00:29:59.6458663Z with:
+2025-07-20T00:29:59.6459381Z   version: 8
+2025-07-20T00:29:59.6460134Z   dest: ~/setup-pnpm
+2025-07-20T00:29:59.6460966Z   run_install: null
+2025-07-20T00:29:59.6462177Z   package_json_file: package.json
+2025-07-20T00:29:59.6463189Z   standalone: false
+2025-07-20T00:29:59.6463939Z env:
+2025-07-20T00:29:59.6464600Z   REGISTRY: ghcr.io
+2025-07-20T00:29:59.6465392Z   IMAGE_NAME: patrg444/Cygni
+2025-07-20T00:29:59.6466299Z ##[endgroup]
+2025-07-20T00:29:59.7326178Z ##[group]Running self-installer...
+2025-07-20T00:30:00.2864006Z Progress: resolved 1, reused 0, downloaded 0, added 0
+2025-07-20T00:30:00.2954879Z Packages: +1
+2025-07-20T00:30:00.2955322Z +
+2025-07-20T00:30:00.9118852Z Packages are hard linked from the content-addressable store to the virtual store.
+2025-07-20T00:30:00.9136141Z   Content-addressable store is at: /home/runner/.local/share/pnpm/store/v3
+2025-07-20T00:30:00.9138436Z   Virtual store is at:             node_modules/.pnpm
+2025-07-20T00:30:01.0344691Z 
+2025-07-20T00:30:01.0345167Z dependencies:
+2025-07-20T00:30:01.0345676Z + pnpm 8.15.9 (10.13.1 is available)
+2025-07-20T00:30:01.0346004Z 
+2025-07-20T00:30:01.0379100Z Done in 1.1s
+2025-07-20T00:30:01.2879797Z Progress: resolved 1, reused 0, downloaded 1, added 1, done
+2025-07-20T00:30:01.3023274Z ##[endgroup]
+2025-07-20T00:30:01.3027269Z Installation Completed!
+2025-07-20T00:30:01.3181487Z ##[group]Run actions/setup-node@v4
+2025-07-20T00:30:01.3181991Z with:
+2025-07-20T00:30:01.3182283Z   node-version: 22
+2025-07-20T00:30:01.3182543Z   cache: pnpm
+2025-07-20T00:30:01.3182879Z   always-auth: false
+2025-07-20T00:30:01.3183183Z   check-latest: false
+2025-07-20T00:30:01.3183587Z   token: ***
+2025-07-20T00:30:01.3183806Z env:
+2025-07-20T00:30:01.3184139Z   REGISTRY: ghcr.io
+2025-07-20T00:30:01.3184434Z   IMAGE_NAME: patrg444/Cygni
+2025-07-20T00:30:01.3184764Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2025-07-20T00:30:01.3185233Z ##[endgroup]
+2025-07-20T00:30:01.4960058Z Found in cache @ /opt/hostedtoolcache/node/22.17.0/x64
+2025-07-20T00:30:01.4966678Z ##[group]Environment details
+2025-07-20T00:30:06.3829720Z node: v22.17.0
+2025-07-20T00:30:06.3830282Z npm: 10.9.2
+2025-07-20T00:30:06.3830740Z yarn: 1.22.22
+2025-07-20T00:30:06.3832412Z ##[endgroup]
+2025-07-20T00:30:06.3860314Z [command]/home/runner/setup-pnpm/node_modules/.bin/pnpm store path --silent
+2025-07-20T00:30:07.0216875Z /home/runner/setup-pnpm/node_modules/.bin/store/v3
+2025-07-20T00:30:07.1140714Z pnpm cache is not found
+2025-07-20T00:30:07.1248283Z ##[group]Run pnpm install --no-frozen-lockfile
+2025-07-20T00:30:07.1248822Z [36;1mpnpm install --no-frozen-lockfile[0m
+2025-07-20T00:30:07.1282461Z shell: /usr/bin/bash -e {0}
+2025-07-20T00:30:07.1282850Z env:
+2025-07-20T00:30:07.1283082Z   REGISTRY: ghcr.io
+2025-07-20T00:30:07.1346473Z   IMAGE_NAME: patrg444/Cygni
+2025-07-20T00:30:07.1347074Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2025-07-20T00:30:07.1347582Z ##[endgroup]
+2025-07-20T00:30:07.5657230Z Scope: all 9 workspace projects
+2025-07-20T00:30:07.6570015Z Lockfile is up to date, resolution step is skipped
+2025-07-20T00:30:07.7442200Z Progress: resolved 1, reused 0, downloaded 0, added 0
+2025-07-20T00:30:07.9726139Z Packages: +1155
+2025-07-20T00:30:07.9726925Z ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+2025-07-20T00:30:08.7623337Z Progress: resolved 1155, reused 0, downloaded 19, added 12
+2025-07-20T00:30:09.7636177Z Progress: resolved 1155, reused 0, downloaded 45, added 34
+2025-07-20T00:30:10.7623199Z Progress: resolved 1155, reused 0, downloaded 349, added 349
+2025-07-20T00:30:11.7665634Z Progress: resolved 1155, reused 0, downloaded 697, added 693
+2025-07-20T00:30:12.7639872Z Progress: resolved 1155, reused 0, downloaded 901, added 901
+2025-07-20T00:30:13.7006288Z Progress: resolved 1155, reused 0, downloaded 1155, added 1155, done
+2025-07-20T00:30:14.0426447Z .../node_modules/@prisma/engines postinstall$ node scripts/postinstall.js
+2025-07-20T00:30:14.0682958Z .../bcrypt@5.1.1/node_modules/bcrypt install$ node-pre-gyp install --fallback-to-build
+2025-07-20T00:30:14.0893618Z .../argon2@0.31.2/node_modules/argon2 install$ node-pre-gyp install --fallback-to-build
+2025-07-20T00:30:14.1539091Z .../bcrypt@5.1.1/node_modules/bcrypt install: node-pre-gyp info it worked if it ends with ok
+2025-07-20T00:30:14.1542070Z .../bcrypt@5.1.1/node_modules/bcrypt install: node-pre-gyp info using node-pre-gyp@1.0.11
+2025-07-20T00:30:14.1545311Z .../bcrypt@5.1.1/node_modules/bcrypt install: node-pre-gyp info using node@22.17.0 | linux | x64
+2025-07-20T00:30:14.1880237Z .../argon2@0.31.2/node_modules/argon2 install: node-pre-gyp info it worked if it ends with ok
+2025-07-20T00:30:14.1888839Z .../argon2@0.31.2/node_modules/argon2 install: node-pre-gyp info using node-pre-gyp@1.0.11
+2025-07-20T00:30:14.1890086Z .../argon2@0.31.2/node_modules/argon2 install: node-pre-gyp info using node@22.17.0 | linux | x64
+2025-07-20T00:30:14.2315085Z .../bcrypt@5.1.1/node_modules/bcrypt install: node-pre-gyp info check checked for "/home/runner/work/Cygni/Cygni/node_modules/.pnpm/bcrypt@5.1.1/node_modules/bcrypt/lib/binding/napi-v3/bcrypt_lib.node" (not found)
+2025-07-20T00:30:14.2326090Z .../bcrypt@5.1.1/node_modules/bcrypt install: node-pre-gyp http GET https://github.com/kelektiv/node.bcrypt.js/releases/download/v5.1.1/bcrypt_lib-v5.1.1-napi-v3-linux-x64-glibc.tar.gz
+2025-07-20T00:30:14.2495654Z .../argon2@0.31.2/node_modules/argon2 install: node-pre-gyp info check checked for "/home/runner/work/Cygni/Cygni/node_modules/.pnpm/argon2@0.31.2/node_modules/argon2/lib/binding/napi-v3/argon2.node" (not found)
+2025-07-20T00:30:14.2502515Z .../argon2@0.31.2/node_modules/argon2 install: node-pre-gyp http GET https://github.com/ranisalt/node-argon2/releases/download/v0.31.2/argon2-v0.31.2-napi-v3-linux-x64-glibc.tar.gz
+2025-07-20T00:30:14.3439146Z .../argon2@0.31.2/node_modules/argon2 install: node-pre-gyp info install unpacking napi-v3/argon2.node
+2025-07-20T00:30:14.3521129Z .../argon2@0.31.2/node_modules/argon2 install: node-pre-gyp info extracted file count: 1 
+2025-07-20T00:30:14.3522937Z .../argon2@0.31.2/node_modules/argon2 install: node-pre-gyp info ok 
+2025-07-20T00:30:14.3524949Z .../argon2@0.31.2/node_modules/argon2 install: [argon2] Success: "/home/runner/work/Cygni/Cygni/node_modules/.pnpm/argon2@0.31.2/node_modules/argon2/lib/binding/napi-v3/argon2.node" is installed via remote
+2025-07-20T00:30:14.3592781Z .../argon2@0.31.2/node_modules/argon2 install: Done
+2025-07-20T00:30:14.4052751Z .../bcrypt@5.1.1/node_modules/bcrypt install: node-pre-gyp info install unpacking napi-v3/bcrypt_lib.node
+2025-07-20T00:30:14.4185268Z .../bcrypt@5.1.1/node_modules/bcrypt install: node-pre-gyp info extracted file count: 1 
+2025-07-20T00:30:14.4187664Z .../bcrypt@5.1.1/node_modules/bcrypt install: node-pre-gyp info ok 
+2025-07-20T00:30:14.4190975Z .../bcrypt@5.1.1/node_modules/bcrypt install: [bcrypt] Success: "/home/runner/work/Cygni/Cygni/node_modules/.pnpm/bcrypt@5.1.1/node_modules/bcrypt/lib/binding/napi-v3/bcrypt_lib.node" is installed via remote
+2025-07-20T00:30:14.4259705Z .../bcrypt@5.1.1/node_modules/bcrypt install: Done
+2025-07-20T00:30:14.7144412Z .../node_modules/@prisma/engines postinstall: Done
+2025-07-20T00:30:14.8085534Z .../node_modules/unrs-resolver postinstall$ napi-postinstall unrs-resolver 1.11.1 check
+2025-07-20T00:30:14.8087127Z .../esbuild@0.18.20/node_modules/esbuild postinstall$ node install.js
+2025-07-20T00:30:14.8089309Z .../esbuild@0.21.5/node_modules/esbuild postinstall$ node install.js
+2025-07-20T00:30:14.8597284Z .../prisma@5.22.0/node_modules/prisma preinstall$ node scripts/preinstall-entry.js
+2025-07-20T00:30:14.8839575Z .../node_modules/unrs-resolver postinstall: Done
+2025-07-20T00:30:14.8899143Z .../esbuild@0.18.20/node_modules/esbuild postinstall: Done
+2025-07-20T00:30:14.9050074Z .../esbuild@0.21.5/node_modules/esbuild postinstall: Done
+2025-07-20T00:30:14.9224099Z .../prisma@5.22.0/node_modules/prisma preinstall: Done
+2025-07-20T00:30:14.9781567Z .../node_modules/@prisma/client postinstall$ node scripts/postinstall.js
+2025-07-20T00:30:15.5044199Z .../node_modules/@prisma/client postinstall: prisma:warn We could not find your Prisma schema in the default locations (see: https://pris.ly/d/prisma-schema-location).
+2025-07-20T00:30:15.5046349Z .../node_modules/@prisma/client postinstall: If you have a Prisma schema file in a custom path, you will need to run
+2025-07-20T00:30:15.5047899Z .../node_modules/@prisma/client postinstall: `prisma generate --schema=./path/to/your/schema.prisma` to generate Prisma Client.
+2025-07-20T00:30:15.5048960Z .../node_modules/@prisma/client postinstall: If you do not have a Prisma schema file yet, you can ignore this message.
+2025-07-20T00:30:15.5195300Z .../node_modules/@prisma/client postinstall: Done
+2025-07-20T00:30:15.7459738Z 
+2025-07-20T00:30:15.7460239Z devDependencies:
+2025-07-20T00:30:15.7460662Z + @types/node 20.19.9
+2025-07-20T00:30:15.7461132Z + @typescript-eslint/eslint-plugin 6.21.0
+2025-07-20T00:30:15.7462031Z + @typescript-eslint/parser 6.21.0
+2025-07-20T00:30:15.7462516Z + eslint-config-prettier 10.1.8
+2025-07-20T00:30:15.7462922Z + lint-staged 16.1.2
+2025-07-20T00:30:15.7463254Z + prettier 3.6.2
+2025-07-20T00:30:15.7463545Z + turbo 1.13.4
+2025-07-20T00:30:15.7463766Z 
+2025-07-20T00:30:15.8188734Z Done in 8.6s
+2025-07-20T00:30:15.9102732Z ##[group]Run pnpm run prisma:generate
+2025-07-20T00:30:15.9103202Z [36;1mpnpm run prisma:generate[0m
+2025-07-20T00:30:15.9133738Z shell: /usr/bin/bash -e {0}
+2025-07-20T00:30:15.9133971Z env:
+2025-07-20T00:30:15.9134135Z   REGISTRY: ghcr.io
+2025-07-20T00:30:15.9134342Z   IMAGE_NAME: patrg444/Cygni
+2025-07-20T00:30:15.9134607Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2025-07-20T00:30:15.9134900Z ##[endgroup]
+2025-07-20T00:30:16.3345141Z 
+2025-07-20T00:30:16.3346074Z > cloudexpress@0.1.0 prisma:generate /home/runner/work/Cygni/Cygni
+2025-07-20T00:30:16.3346786Z > ./scripts/generate-prisma.sh
+2025-07-20T00:30:16.3347020Z 
+2025-07-20T00:30:16.3402790Z Generating Prisma clients...
+2025-07-20T00:30:16.3414682Z Generating Prisma client for services/api
+2025-07-20T00:30:22.1184388Z Prisma schema loaded from prisma/schema.prisma
+2025-07-20T00:30:22.5297628Z 
+2025-07-20T00:30:22.5300126Z ✔ Generated Prisma Client (v5.22.0) to ./../../node_modules/.pnpm/@prisma+client@5.22.0_prisma@5.22.0/node_modules/@prisma/client in 175ms
+2025-07-20T00:30:22.5302350Z 
+2025-07-20T00:30:22.5302966Z Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+2025-07-20T00:30:22.5303510Z 
+2025-07-20T00:30:22.5304421Z Tip: Easily identify and fix slow SQL queries in your app. Optimize helps you enhance your visibility: https://pris.ly/--optimize
+2025-07-20T00:30:22.5305213Z 
+2025-07-20T00:30:22.7922465Z Generating Prisma client for packages/api
+2025-07-20T00:30:26.3393405Z Prisma schema loaded from prisma/schema.prisma
+2025-07-20T00:30:26.7001612Z 
+2025-07-20T00:30:26.7003614Z ✔ Generated Prisma Client (v5.22.0) to ./../../node_modules/.pnpm/@prisma+client@5.22.0_prisma@5.22.0/node_modules/@prisma/client in 148ms
+2025-07-20T00:30:26.7004683Z 
+2025-07-20T00:30:26.7010193Z Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+2025-07-20T00:30:26.7010962Z 
+2025-07-20T00:30:26.7012183Z Tip: Easily identify and fix slow SQL queries in your app. Optimize helps you enhance your visibility: https://pris.ly/--optimize
+2025-07-20T00:30:26.7013186Z 
+2025-07-20T00:30:26.9254568Z Prisma client generation complete!
+2025-07-20T00:30:26.9371218Z ##[group]Run echo "=== Checking for test files ==="
+2025-07-20T00:30:26.9371997Z [36;1mecho "=== Checking for test files ==="[0m
+2025-07-20T00:30:26.9372393Z [36;1mfind . -name "*.test.*" -o -name "*.spec.*" | grep -v node_modules | head -20[0m
+2025-07-20T00:30:26.9401013Z shell: /usr/bin/bash -e {0}
+2025-07-20T00:30:26.9401236Z env:
+2025-07-20T00:30:26.9401631Z   REGISTRY: ghcr.io
+2025-07-20T00:30:26.9401828Z   IMAGE_NAME: patrg444/Cygni
+2025-07-20T00:30:26.9402095Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2025-07-20T00:30:26.9402364Z ##[endgroup]
+2025-07-20T00:30:26.9450148Z === Checking for test files ===
+2025-07-20T00:30:27.1619579Z ./examples/nextjs-starter/src/dummy.test.ts
+2025-07-20T00:30:27.1620229Z ./packages/web-ui/src/dummy.test.ts
+2025-07-20T00:30:27.1621201Z ./packages/cli/src/tests/framework-detector.test.ts
+2025-07-20T00:30:27.1622261Z ./packages/cli/src/tests/deploy-helpers.test.ts
+2025-07-20T00:30:27.1622935Z ./packages/cli/src/tests/builder.test.ts
+2025-07-20T00:30:27.1623462Z ./packages/cli/src/dummy.test.ts
+2025-07-20T00:30:27.1623944Z ./packages/sdk/src/sdk.test.ts
+2025-07-20T00:30:27.1624430Z ./packages/api/docker-compose.test.yml
+2025-07-20T00:30:27.1625032Z ./packages/api/tests/unit/budget-monitor.test.ts
+2025-07-20T00:30:27.1625693Z ./packages/api/tests/e2e/waitlist.test.ts
+2025-07-20T00:30:27.1626258Z ./packages/api/tests/e2e/health-auth.test.ts
+2025-07-20T00:30:27.1626806Z ./services/auth/src/auth.test.ts
+2025-07-20T00:30:27.1627323Z ./services/builder/src/builder.test.ts
+2025-07-20T00:30:27.1627823Z ./services/api/src/health.test.ts
+2025-07-20T00:30:27.1651515Z ##[group]Run pnpm test || (echo "Tests failed. Running individual package tests..." && pnpm -r test)
+2025-07-20T00:30:27.1652149Z [36;1mpnpm test || (echo "Tests failed. Running individual package tests..." && pnpm -r test)[0m
+2025-07-20T00:30:27.1680434Z shell: /usr/bin/bash -e {0}
+2025-07-20T00:30:27.1680656Z env:
+2025-07-20T00:30:27.1680815Z   REGISTRY: ghcr.io
+2025-07-20T00:30:27.1681010Z   IMAGE_NAME: patrg444/Cygni
+2025-07-20T00:30:27.1681467Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2025-07-20T00:30:27.1681754Z ##[endgroup]
+2025-07-20T00:30:27.5714711Z 
+2025-07-20T00:30:27.5715335Z > cloudexpress@0.1.0 test /home/runner/work/Cygni/Cygni
+2025-07-20T00:30:27.5715730Z > npx turbo run test
+2025-07-20T00:30:27.5715865Z 
+2025-07-20T00:30:27.8679171Z 
+2025-07-20T00:30:27.8679598Z Attention:
+2025-07-20T00:30:27.8680357Z Turborepo now collects completely anonymous telemetry regarding usage.
+2025-07-20T00:30:27.8681847Z This information is used to shape the Turborepo roadmap and prioritize features.
+2025-07-20T00:30:27.8683232Z You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+2025-07-20T00:30:27.8684247Z https://turbo.build/repo/docs/telemetry
+2025-07-20T00:30:27.8684558Z 
+2025-07-20T00:30:27.9384468Z • Packages in scope: @cloudexpress/api, @cloudexpress/auth, @cloudexpress/builder, @cloudexpress/services-api, @cloudexpress/web-ui, @cygni/cli, @cygni/sdk, cygni-nextjs-starter
+2025-07-20T00:30:27.9385908Z • Running test in 8 packages
+2025-07-20T00:30:27.9386396Z • Remote caching disabled
+2025-07-20T00:30:29.3253423Z ##[group]@cloudexpress/api:build
+2025-07-20T00:30:29.3259039Z cache miss, executing d7d57639bfc623a5
+2025-07-20T00:30:29.3259746Z 
+2025-07-20T00:30:29.3260574Z > @cloudexpress/api@1.0.0 build /home/runner/work/Cygni/Cygni/packages/api
+2025-07-20T00:30:29.3262449Z > echo 'Skipping build for packages/api - using services/api instead'
+2025-07-20T00:30:29.3265322Z 
+2025-07-20T00:30:29.3265999Z Skipping build for packages/api - using services/api instead
+2025-07-20T00:30:29.3267187Z ##[endgroup]
+2025-07-20T00:30:31.1217826Z ##[group]@cloudexpress/api:test
+2025-07-20T00:30:31.1218642Z cache miss, executing 65717c5af65827f0
+2025-07-20T00:30:31.1219128Z 
+2025-07-20T00:30:31.1219779Z > @cloudexpress/api@1.0.0 test /home/runner/work/Cygni/Cygni/packages/api
+2025-07-20T00:30:31.1220680Z > echo 'Skipping tests for packages/api - using services/api instead'
+2025-07-20T00:30:31.1221118Z 
+2025-07-20T00:30:31.1221973Z Skipping tests for packages/api - using services/api instead
+2025-07-20T00:30:31.1222842Z ##[endgroup]
+2025-07-20T00:30:33.9416961Z ##[group]@cloudexpress/auth:build
+2025-07-20T00:30:33.9418219Z cache miss, executing b67affc02e0960ce
+2025-07-20T00:30:33.9418847Z 
+2025-07-20T00:30:33.9419619Z > @cloudexpress/auth@0.1.0 build /home/runner/work/Cygni/Cygni/services/auth
+2025-07-20T00:30:33.9420443Z > tsc
+2025-07-20T00:30:33.9420792Z 
+2025-07-20T00:30:33.9421900Z ##[endgroup]
+2025-07-20T00:30:34.8643927Z ##[group]@cygni/sdk:build
+2025-07-20T00:30:34.8645865Z cache miss, executing 7c13eef4e550ea9c
+2025-07-20T00:30:34.8647308Z 
+2025-07-20T00:30:34.8648905Z > @cygni/sdk@0.1.0 build /home/runner/work/Cygni/Cygni/packages/sdk
+2025-07-20T00:30:34.8651019Z > tsc
+2025-07-20T00:30:34.8653081Z 
+2025-07-20T00:30:34.8662140Z ##[endgroup]
+2025-07-20T00:30:35.8189547Z [;31m@cloudexpress/builder:build[;0m
+2025-07-20T00:30:35.8233400Z cache miss, executing 1c027b4cae1c2aa2
+2025-07-20T00:30:35.8234186Z 
+2025-07-20T00:30:35.8235051Z > @cloudexpress/builder@0.1.0 build /home/runner/work/Cygni/Cygni/services/builder
+2025-07-20T00:30:35.8235885Z > tsc
+2025-07-20T00:30:35.8236364Z 
+2025-07-20T00:30:35.8258044Z ##[error]src/builder.test.ts(1,1): error TS2582: Cannot find name 'describe'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.
+2025-07-20T00:30:35.8269384Z ##[error]src/builder.test.ts(2,3): error TS2582: Cannot find name 'it'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha`.
+2025-07-20T00:30:35.8272494Z ##[error]src/builder.test.ts(3,5): error TS2304: Cannot find name 'expect'.
+2025-07-20T00:30:35.8274129Z  ELIFECYCLE  Command failed with exit code 1.
+2025-07-20T00:30:35.8275545Z [ERROR] command finished with error: command (/home/runner/work/Cygni/Cygni/services/builder) /home/runner/setup-pnpm/node_modules/.bin/pnpm run build exited (1)
+2025-07-20T00:30:35.8276917Z ##[group]@cygni/sdk:test
+2025-07-20T00:30:35.8277362Z cache miss, executing 70edf3f992f51596
+2025-07-20T00:30:35.8277957Z ##[endgroup]
+2025-07-20T00:30:35.8278452Z ##[group]cygni-nextjs-starter:build
+2025-07-20T00:30:35.8278926Z cache miss, executing 574eded4be020d8b
+2025-07-20T00:30:35.8279495Z ##[endgroup]
+2025-07-20T00:30:35.8413850Z ##[group]@cloudexpress/auth:test
+2025-07-20T00:30:35.8414468Z cache miss, executing efa40a2d72fc604b
+2025-07-20T00:30:35.8435059Z 
+2025-07-20T00:30:35.8438847Z > @cloudexpress/auth@0.1.0 test /home/runner/work/Cygni/Cygni/services/auth
+2025-07-20T00:30:35.8442768Z > vitest
+2025-07-20T00:30:35.8446015Z 
+2025-07-20T00:30:35.8449612Z ##[endgroup]
+2025-07-20T00:30:35.8579839Z ##[group]@cloudexpress/services-api:build
+2025-07-20T00:30:35.8582107Z cache miss, executing 0df342134276763b
+2025-07-20T00:30:35.8582431Z 
+2025-07-20T00:30:35.8582945Z > @cloudexpress/services-api@0.1.0 build /home/runner/work/Cygni/Cygni/services/api
+2025-07-20T00:30:35.8583550Z > tsc
+2025-07-20T00:30:35.8583700Z 
+2025-07-20T00:30:35.8584048Z ##[endgroup]
+2025-07-20T00:30:35.8587222Z ##[group]@cygni/cli:build
+2025-07-20T00:30:35.8587568Z cache miss, executing 689109052fca61f6
+2025-07-20T00:30:35.8587862Z 
+2025-07-20T00:30:35.8588251Z > @cygni/cli@0.1.0 build /home/runner/work/Cygni/Cygni/packages/cli
+2025-07-20T00:30:35.8588748Z > tsc && chmod +x dist/index.js
+2025-07-20T00:30:35.8588908Z 
+2025-07-20T00:30:35.8589103Z ##[endgroup]
+2025-07-20T00:30:36.0210745Z ##[group]@cloudexpress/web-ui:build
+2025-07-20T00:30:36.0212036Z cache miss, executing 228955e8942f1de9
+2025-07-20T00:30:36.0212339Z 
+2025-07-20T00:30:36.0212842Z > @cloudexpress/web-ui@0.1.0 build /home/runner/work/Cygni/Cygni/packages/web-ui
+2025-07-20T00:30:36.0213453Z > next build
+2025-07-20T00:30:36.0213635Z 
+2025-07-20T00:30:36.0214108Z  ⚠ Invalid next.config.js options detected: 
+2025-07-20T00:30:36.0214810Z  ⚠     Unrecognized key(s) in object: 'serverActions' at "experimental"
+2025-07-20T00:30:36.0215760Z  ⚠ See more info here: https://nextjs.org/docs/messages/invalid-next-config
+2025-07-20T00:30:36.0217024Z  ⚠ Server Actions are available by default now, `experimental.serverActions` option can be safely removed.
+2025-07-20T00:30:36.0218784Z ⚠ No build cache found. Please configure build caching for faster rebuilds. Read more: https://nextjs.org/docs/messages/no-cache
+2025-07-20T00:30:36.0220108Z Attention: Next.js now collects completely anonymous telemetry regarding usage.
+2025-07-20T00:30:36.0221146Z This information is used to shape Next.js' roadmap and prioritize features.
+2025-07-20T00:30:36.0222749Z You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+2025-07-20T00:30:36.0224215Z https://nextjs.org/telemetry
+2025-07-20T00:30:36.0224479Z 
+2025-07-20T00:30:36.0224695Z    ▲ Next.js 14.0.0
+2025-07-20T00:30:36.0224900Z 
+2025-07-20T00:30:36.0225137Z    Creating an optimized production build ...
+2025-07-20T00:30:36.0225826Z ##[endgroup]
+2025-07-20T00:30:36.0241738Z ##[error]@cloudexpress/builder#build: command (/home/runner/work/Cygni/Cygni/services/builder) /home/runner/setup-pnpm/node_modules/.bin/pnpm run build exited (1)
+2025-07-20T00:30:36.0243643Z 
+2025-07-20T00:30:36.0243845Z  Tasks:    4 successful, 11 total
+2025-07-20T00:30:36.0244258Z Cached:    0 cached, 11 total
+2025-07-20T00:30:36.0244591Z   Time:    8.15s 
+2025-07-20T00:30:36.0244983Z Failed:    @cloudexpress/builder#build
+2025-07-20T00:30:36.0245274Z 
+2025-07-20T00:30:36.0280693Z  ERROR  run failed: command  exited (1)
+2025-07-20T00:30:36.1058317Z  ELIFECYCLE  Test failed. See above for more details.
+2025-07-20T00:30:36.1257461Z Tests failed. Running individual package tests...
+2025-07-20T00:30:36.5458742Z Scope: 8 of 9 workspace projects
+2025-07-20T00:30:36.5557845Z packages/api test$ echo 'Skipping tests for packages/api - using services/api instead'
+2025-07-20T00:30:36.5559561Z packages/cli test$ vitest
+2025-07-20T00:30:36.5564771Z packages/sdk test$ jest
+2025-07-20T00:30:36.5569287Z services/api test$ vitest
+2025-07-20T00:30:36.5803142Z packages/api test: Skipping tests for packages/api - using services/api instead
+2025-07-20T00:30:36.5804024Z packages/api test: Done
+2025-07-20T00:30:36.5805724Z services/auth test$ vitest
+2025-07-20T00:30:37.2043745Z services/auth test: [7m[1m[36m RUN [39m[22m[27m [36mv0.34.6[39m [90m/home/runner/work/Cygni/Cygni/services/auth[39m
+2025-07-20T00:30:37.2360537Z services/api test: [7m[1m[36m RUN [39m[22m[27m [36mv0.34.6[39m [90m/home/runner/work/Cygni/Cygni/services/api[39m
+2025-07-20T00:30:37.2369616Z packages/cli test: [33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+2025-07-20T00:30:37.3681522Z packages/cli test: [7m[1m[36m RUN [39m[22m[27m [36mv0.34.6[39m [90m/home/runner/work/Cygni/Cygni/packages/cli[39m
+2025-07-20T00:30:38.2792833Z services/auth test:  [32m✓[39m src/auth.test.ts [2m ([22m[2m1 test[22m[2m)[22m[90m 10[2mms[22m[39m
+2025-07-20T00:30:38.3116728Z services/auth test: [2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+2025-07-20T00:30:38.3122744Z services/auth test: [2m      Tests [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+2025-07-20T00:30:38.3124176Z services/auth test: [2m   Start at [22m 00:30:37
+2025-07-20T00:30:38.3125847Z services/auth test: [2m   Duration [22m 1.11s[2m (transform 125ms, setup 0ms, collect 93ms, tests 10ms, environment 0ms, prepare 206ms)[22m
+2025-07-20T00:30:38.3190907Z services/api test:  [32m✓[39m src/health.test.ts [2m ([22m[2m1 test[22m[2m)[22m[90m 9[2mms[22m[39m
+2025-07-20T00:30:38.3405202Z services/api test: [2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+2025-07-20T00:30:38.3410630Z services/api test: [2m      Tests [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+2025-07-20T00:30:38.3415595Z services/api test: [2m   Start at [22m 00:30:37
+2025-07-20T00:30:38.3420827Z services/api test: [2m   Duration [22m 1.11s[2m (transform 101ms, setup 0ms, collect 81ms, tests 9ms, environment 0ms, prepare 214ms)[22m
+2025-07-20T00:30:38.3582826Z services/auth test: Done
+2025-07-20T00:30:38.3620607Z services/builder test$ vitest
+2025-07-20T00:30:38.3824196Z services/api test: Done
+2025-07-20T00:30:38.5198004Z packages/sdk test: PASS src/sdk.test.ts
+2025-07-20T00:30:38.5200272Z packages/sdk test:   SDK
+2025-07-20T00:30:38.5203153Z packages/sdk test:     ✓ should pass basic test (4 ms)
+2025-07-20T00:30:38.5228822Z packages/sdk test: Test Suites: 1 passed, 1 total
+2025-07-20T00:30:38.5232294Z packages/sdk test: Tests:       1 passed, 1 total
+2025-07-20T00:30:38.5234017Z packages/sdk test: Snapshots:   0 total
+2025-07-20T00:30:38.5240649Z packages/sdk test: Time:        1.123 s
+2025-07-20T00:30:38.5253406Z packages/sdk test: Ran all test suites.
+2025-07-20T00:30:38.5536625Z packages/sdk test: Done
+2025-07-20T00:30:38.5806986Z packages/cli test:  [32m✓[39m src/tests/framework-detector.test.ts [2m ([22m[2m12 tests[22m[2m)[22m[90m 14[2mms[22m[39m
+2025-07-20T00:30:38.5853192Z packages/cli test: [90mstdout[2m | src/tests/builder.test.ts[2m > [22m[2mBuilder[2m > [22m[2mbuildProject[2m > [22m[2mshould auto-detect framework when not specified[22m[39m
+2025-07-20T00:30:38.5854478Z packages/cli test: Detected framework: react
+2025-07-20T00:30:38.5856651Z packages/cli test: [90mstdout[2m | src/tests/builder.test.ts[2m > [22m[2mBuilder[2m > [22m[2mbuildProject[2m > [22m[2mshould run pre-build commands when specified[22m[39m
+2025-07-20T00:30:38.5857917Z packages/cli test: Running build command...
+2025-07-20T00:30:38.5863454Z packages/cli test:  [32m✓[39m src/tests/builder.test.ts [2m ([22m[2m7 tests[22m[2m)[22m[90m 13[2mms[22m[39m
+2025-07-20T00:30:38.8590448Z packages/cli test:  [33m❯[39m src/tests/deploy-helpers.test.ts [2m ([22m[2m18 tests[22m [2m|[22m [31m1 failed[39m[2m)[22m[90m 48[2mms[22m[39m
+2025-07-20T00:30:38.8593462Z packages/cli test: [31m   [33m❯[31m src/tests/deploy-helpers.test.ts[2m > [22mDeploy Helpers[2m > [22mcheckBuildCache[2m > [22mshould calculate dockerfile hash when provided[39m
+2025-07-20T00:30:38.8595657Z packages/cli test: [31m     → expected "spy" to be called with arguments: [ '/builds/cache', …(1) ]
+2025-07-20T00:30:38.8596758Z packages/cli test: Received: 
+2025-07-20T00:30:38.8597526Z packages/cli test: Number of calls: 0
+2025-07-20T00:30:38.8598147Z packages/cli test: [39m
+2025-07-20T00:30:38.9108999Z services/builder test: [7m[1m[36m RUN [39m[22m[27m [36mv0.34.6[39m [90m/home/runner/work/Cygni/Cygni/services/builder[39m
+2025-07-20T00:30:39.0919183Z packages/cli test:  [32m✓[39m src/dummy.test.ts [2m ([22m[2m1 test[22m[2m)[22m[90m 8[2mms[22m[39m
+2025-07-20T00:30:39.1205123Z packages/cli test: [31m⎯⎯⎯⎯⎯⎯⎯[1m[7m Failed Tests 1 [27m[22m⎯⎯⎯⎯⎯⎯⎯[39m
+2025-07-20T00:30:39.1207248Z packages/cli test: [31m[1m[7m FAIL [27m[22m[39m src/tests/deploy-helpers.test.ts[2m > [22mDeploy Helpers[2m > [22mcheckBuildCache[2m > [22mshould calculate dockerfile hash when provided
+2025-07-20T00:30:39.1352607Z packages/cli test: [31m[1mAssertionError[22m: expected "spy" to be called with arguments: [ '/builds/cache', …(1) ]
+2025-07-20T00:30:39.1357688Z packages/cli test: Received: 
+2025-07-20T00:30:39.1358545Z packages/cli test: Number of calls: 0
+2025-07-20T00:30:39.1363120Z packages/cli test: [39m
+2025-07-20T00:30:39.1364523Z packages/cli test: [36m [2m❯[22m src/tests/deploy-helpers.test.ts:[2m165:27[22m[39m
+2025-07-20T00:30:39.1414897Z packages/cli test:     [90m163| [39m      await checkBuildCache("abc123", "Dockerfile");
+2025-07-20T00:30:39.1419834Z packages/cli test:     [90m164| [39m
+2025-07-20T00:30:39.1425053Z packages/cli test:     [90m165| [39m      expect(mockApi.get).toHaveBeenCalledWith("/builds/cache", {
+2025-07-20T00:30:39.1430429Z packages/cli test:     [90m   | [39m                          [31m^[39m
+2025-07-20T00:30:39.1431891Z packages/cli test:     [90m166| [39m        params: {
+2025-07-20T00:30:39.1434191Z packages/cli test:     [90m167| [39m          gitSha: "abc123",
+2025-07-20T00:30:39.1438698Z packages/cli test: [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+2025-07-20T00:30:39.1523205Z packages/cli test: [2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m3 passed[39m[22m[90m (4)[39m
+2025-07-20T00:30:39.1525012Z packages/cli test: [2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m37 passed[39m[22m[90m (38)[39m
+2025-07-20T00:30:39.1526260Z packages/cli test: [2m   Start at [22m 00:30:37
+2025-07-20T00:30:39.1527910Z packages/cli test: [2m   Duration [22m 1.75s[2m (transform 536ms, setup 0ms, collect 979ms, tests 83ms, environment 2ms, prepare 690ms)[22m
+2025-07-20T00:30:39.2392866Z packages/cli test: Failed
+2025-07-20T00:30:39.2394033Z /home/runner/work/Cygni/Cygni/packages/cli:
+2025-07-20T00:30:39.2395627Z  ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  @cygni/cli@0.1.0 test: `vitest`
+2025-07-20T00:30:39.2398073Z Exit status 1
+2025-07-20T00:30:39.2811573Z ##[error]Process completed with exit code 1.
+2025-07-20T00:30:39.2863191Z Post job cleanup.
+2025-07-20T00:30:39.3758357Z Pruning is unnecessary.
+2025-07-20T00:30:39.3858896Z Post job cleanup.
+2025-07-20T00:30:39.4837242Z [command]/usr/bin/git version
+2025-07-20T00:30:39.4876196Z git version 2.50.1
+2025-07-20T00:30:39.4923011Z Temporarily overriding HOME='/home/runner/work/_temp/b9877881-b445-43b1-9e86-b4d65a84882f' before making global git config changes
+2025-07-20T00:30:39.4924427Z Adding repository directory to the temporary git global config as a safe directory
+2025-07-20T00:30:39.4937828Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/Cygni/Cygni
+2025-07-20T00:30:39.4976932Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2025-07-20T00:30:39.5012322Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2025-07-20T00:30:39.5263814Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-07-20T00:30:39.5288145Z http.https://github.com/.extraheader
+2025-07-20T00:30:39.5303823Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2025-07-20T00:30:39.5337308Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2025-07-20T00:30:39.5693944Z Cleaning up orphan processes

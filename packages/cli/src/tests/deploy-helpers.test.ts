@@ -14,13 +14,15 @@ vi.mock("../lib/api-client");
 
 // Mock child_process with proper exec implementation
 vi.mock("child_process", () => ({
-  exec: vi.fn((cmd: string, callback: any) => {
+  exec: vi.fn((cmd: string, options: any, callback?: any) => {
+    const cb = typeof options === "function" ? options : callback;
     // Default behavior for sha256sum
     if (cmd.startsWith("sha256sum")) {
-      callback(null, { stdout: "abc123def456789  Dockerfile\n" }, "");
+      cb?.(null, { stdout: "abc123def456789  Dockerfile\n" }, "");
     } else {
-      callback(new Error("Command not found"));
+      cb?.(new Error("Command not found"));
     }
+    return {} as any;
   }),
 }));
 
@@ -145,14 +147,11 @@ describe("Deploy Helpers", () => {
     });
 
     it("should calculate dockerfile hash when provided", async () => {
-      // Update the mock to return the expected hash
-      const { exec } = await import("child_process");
-      vi.mocked(exec).mockImplementationOnce((_cmd, _options, callback) => {
-        const cb = typeof _options === "function" ? _options : callback;
-        const cmdStr = typeof _cmd === "string" ? _cmd : "";
-        if (cmdStr === "sha256sum Dockerfile") {
-          cb?.(null, "hash123  Dockerfile\n", "");
-        }
+      // Re-mock exec to return a different hash for this test
+      const childProcess = await import("child_process");
+      vi.mocked(childProcess.exec).mockImplementationOnce((_cmd: any, options: any, callback?: any) => {
+        const cb = typeof options === "function" ? options : callback;
+        cb?.(null, { stdout: "hash123  Dockerfile\n" }, "");
         return {} as any;
       });
 
