@@ -31,9 +31,9 @@ app.get("/ready", async () => {
     return {
       status: "ready",
       checks: {
-        database: "ok",
-        queue: "ok",
-        worker: workerRunning ? "ok" : "not running",
+        database: "healthy",
+        redis: "healthy",
+        worker: workerRunning ? "healthy" : "unhealthy",
       },
       queueStats: queueHealth,
     };

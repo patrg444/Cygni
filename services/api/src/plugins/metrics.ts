@@ -47,6 +47,9 @@ const metricsPlugin: FastifyPluginAsync = async (fastify) => {
     buildJobsTotal,
   });
 
+  // Export for use in routes
+  (fastify as any).buildJobsTotal = buildJobsTotal;
+
   // Add metrics collection hook
   fastify.addHook("onRequest", async (request, _reply) => {
     request.startTime = Date.now();

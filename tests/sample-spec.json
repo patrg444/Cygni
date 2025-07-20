@@ -1,0 +1,15 @@
+{
+  "projectId": "demo-project-1",
+  "branch": "main",
+  "commitSha": "abc123def456",
+  "dockerfilePath": "Dockerfile",
+  "buildArgs": {
+    "NODE_ENV": "production",
+    "BUILD_VERSION": "1.0.0"
+  },
+  "repoUrl": "https://github.com/example/hello-world",
+  "runtimeSpec": {
+    "runtime": "node",
+    "version": "20"
+  }
+}
