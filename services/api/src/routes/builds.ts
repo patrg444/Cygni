@@ -3,7 +3,7 @@ import { z } from "zod";
 import { prisma } from "../utils/prisma";
 import { requireRole } from "../middleware/auth";
 import { Role } from "../types/auth";
-import { BuildStatus } from "@prisma/client";
+import { BuildStatus } from "@prisma/client-api";
 import axios from "axios";
 
 const createBuildSchema = z.object({

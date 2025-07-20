@@ -4,7 +4,7 @@ import Redis from "ioredis";
 
 export const healthRoutes: FastifyPluginAsync = async (app) => {
   // Basic health check
-  app.get("/health", async (request, reply) => {
+  app.get("/health", async (_request, _reply) => {
     return {
       status: "ok",
       timestamp: new Date().toISOString(),
@@ -14,7 +14,7 @@ export const healthRoutes: FastifyPluginAsync = async (app) => {
   });
 
   // Readiness check - verifies all dependencies are available
-  app.get("/ready", async (request, reply) => {
+  app.get("/ready", async (_request, reply) => {
     const checks = {
       database: "checking",
       redis: "checking",
@@ -57,7 +57,7 @@ export const healthRoutes: FastifyPluginAsync = async (app) => {
   });
 
   // Liveness check - simple check to verify the service is running
-  app.get("/live", async (request, reply) => {
+  app.get("/live", async (_request, _reply) => {
     return {
       status: "alive",
       timestamp: new Date().toISOString(),

@@ -7,7 +7,11 @@ declare module "fastify" {
     metrics: {
       httpRequestsTotal: Counter;
       httpRequestDuration: Histogram;
+      buildJobsTotal: Counter;
     };
+  }
+  interface FastifyRequest {
+    startTime?: number;
   }
 }
 
@@ -44,7 +48,7 @@ const metricsPlugin: FastifyPluginAsync = async (fastify) => {
   });
 
   // Add metrics collection hook
-  fastify.addHook("onRequest", async (request, reply) => {
+  fastify.addHook("onRequest", async (request, _reply) => {
     request.startTime = Date.now();
   });
 
@@ -57,7 +61,7 @@ const metricsPlugin: FastifyPluginAsync = async (fastify) => {
   });
 
   // Metrics endpoint
-  fastify.get("/metrics", async (request, reply) => {
+  fastify.get("/metrics", async (_request, reply) => {
     reply.type("text/plain; version=0.0.4");
     return register.metrics();
   });
