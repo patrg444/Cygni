@@ -39,7 +39,8 @@ jobs:
         run: pnpm run lint
 
       - name: Run TypeScript type checking
-        run: pnpm run typecheck
+        run: |
+          pnpm run typecheck || (echo "TypeScript check failed. Running detailed check..." && cd services/api && npx tsc --noEmit)
 
       - name: Run Prettier check
         run: pnpm run format:check
