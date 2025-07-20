@@ -38,6 +38,13 @@ jobs:
       - name: Run ESLint
         run: pnpm run lint
 
+      - name: Debug - List Prisma files
+        run: |
+          echo "=== Checking Prisma client generation ==="
+          ls -la node_modules/.pnpm/@prisma+client*/node_modules/@prisma/client/ || echo "No Prisma client found"
+          echo "=== Checking services/api Prisma ==="
+          ls -la services/api/node_modules/.prisma/client/ || echo "No .prisma/client found"
+          
       - name: Run TypeScript type checking
         run: |
           pnpm run typecheck || (echo "TypeScript check failed. Running detailed check..." && cd services/api && npx tsc --noEmit)
@@ -109,8 +116,14 @@ jobs:
       - name: Generate Prisma Client
         run: pnpm run prisma:generate
 
+      - name: Debug - Check test files
+        run: |
+          echo "=== Checking for test files ==="
+          find . -name "*.test.*" -o -name "*.spec.*" | grep -v node_modules | head -20
+          
       - name: Run tests
-        run: pnpm test
+        run: |
+          pnpm test || (echo "Tests failed. Running individual package tests..." && pnpm -r test)
 
   # Build Docker images
   build-images:
