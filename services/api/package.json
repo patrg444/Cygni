@@ -42,7 +42,7 @@
   "devDependencies": {
     "@aws-sdk/client-cloudwatch": "^3.848.0",
     "@aws-sdk/client-ecs": "^3.0.0",
-    "@types/node": "^20.0.0",
+    "@types/node": "^24.0.15",
     "@types/supertest": "^6.0.3",
     "@types/uuid": "^10.0.0",
     "axios": "^1.10.0",
