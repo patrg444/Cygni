@@ -16,7 +16,7 @@
     "lint": "npx turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md}\"",
-    "typecheck": "tsc --build",
+    "typecheck": "npx turbo run typecheck",
     "typecheck:clean": "tsc --build --clean",
     "prisma:generate": "./scripts/generate-prisma.sh"
   },

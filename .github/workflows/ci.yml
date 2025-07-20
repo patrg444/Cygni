@@ -46,8 +46,7 @@ jobs:
           ls -la services/api/node_modules/.prisma/client/ || echo "No .prisma/client found"
           
       - name: Run TypeScript type checking
-        run: |
-          pnpm run typecheck || (echo "TypeScript check failed. Running detailed check..." && cd services/api && npx tsc --noEmit)
+        run: pnpm run typecheck
 
       - name: Run Prettier check
         run: pnpm run format:check
