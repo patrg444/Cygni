@@ -1,0 +1,102 @@
+﻿2025-07-20T05:00:26.4246695Z ##[group]Run pnpm run typecheck || (echo "TypeScript check failed. Running detailed check..." && cd services/api && npx tsc --noEmit)
+2025-07-20T05:00:26.4247515Z [36;1mpnpm run typecheck || (echo "TypeScript check failed. Running detailed check..." && cd services/api && npx tsc --noEmit)[0m
+2025-07-20T05:00:26.4281647Z shell: /usr/bin/bash -e {0}
+2025-07-20T05:00:26.4282016Z env:
+2025-07-20T05:00:26.4282641Z   REGISTRY: ghcr.io
+2025-07-20T05:00:26.4282980Z   IMAGE_NAME: patrg444/Cygni
+2025-07-20T05:00:26.4283426Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2025-07-20T05:00:26.4283895Z ##[endgroup]
+2025-07-20T05:00:26.8767617Z 
+2025-07-20T05:00:26.8768259Z > cloudexpress@0.1.0 typecheck /home/runner/work/Cygni/Cygni
+2025-07-20T05:00:26.8768788Z > tsc --build
+2025-07-20T05:00:26.8768910Z 
+2025-07-20T05:00:35.8851672Z ##[error]services/builder/src/routes/builds.ts(34,32): error TS2339: Property 'build' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+2025-07-20T05:00:35.8856411Z ##[error]services/builder/src/routes/builds.ts(73,32): error TS2339: Property 'build' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+2025-07-20T05:00:35.8859616Z ##[error]services/builder/src/routes/builds.ts(99,34): error TS2339: Property 'build' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+2025-07-20T05:00:35.8862923Z ##[error]services/builder/src/routes/builds.ts(150,14): error TS2339: Property 'build' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+2025-07-20T05:00:35.8866093Z ##[error]services/builder/src/routes/builds.ts(156,14): error TS2339: Property 'build' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+2025-07-20T05:00:35.8869223Z ##[error]services/builder/src/routes/builds.ts(171,32): error TS2339: Property 'build' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+2025-07-20T05:00:35.8871974Z ##[error]services/builder/src/routes/builds.ts(201,39): error TS2339: Property 'build' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+2025-07-20T05:00:35.8874353Z ##[error]services/builder/src/routes/builds.ts(232,20): error TS2339: Property 'build' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+2025-07-20T05:00:35.8876408Z ##[error]services/builder/src/services/queue.ts(45,20): error TS2339: Property 'build' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+2025-07-20T05:00:35.8878253Z ##[error]services/builder/src/services/queue.ts(68,20): error TS2339: Property 'build' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+2025-07-20T05:00:35.8880042Z ##[error]services/builder/src/services/queue.ts(75,30): error TS2339: Property 'build' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+2025-07-20T05:00:35.8881875Z ##[error]services/builder/src/services/queue.ts(115,20): error TS2339: Property 'build' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+2025-07-20T05:00:35.8884152Z ##[error]services/builder/tsconfig.json(15,5): error TS6306: Referenced project '/home/runner/work/Cygni/Cygni/packages/cli' must have setting "composite": true.
+2025-07-20T05:00:37.8594930Z error TS6305: Output file '/home/runner/work/Cygni/Cygni/packages/web-ui/src/app/deployments/page.d.ts' has not been built from source file '/home/runner/work/Cygni/Cygni/packages/web-ui/src/app/deployments/page.tsx'.
+2025-07-20T05:00:37.8597148Z   The file is in the program because:
+2025-07-20T05:00:37.8597864Z     Matched by default include pattern '**/*'
+2025-07-20T05:00:37.8599914Z error TS6305: Output file '/home/runner/work/Cygni/Cygni/packages/web-ui/src/app/layout.d.ts' has not been built from source file '/home/runner/work/Cygni/Cygni/packages/web-ui/src/app/layout.tsx'.
+2025-07-20T05:00:37.8602918Z   The file is in the program because:
+2025-07-20T05:00:37.8603453Z     Matched by default include pattern '**/*'
+2025-07-20T05:00:37.8607741Z error TS6305: Output file '/home/runner/work/Cygni/Cygni/packages/web-ui/src/app/providers.d.ts' has not been built from source file '/home/runner/work/Cygni/Cygni/packages/web-ui/src/app/providers.tsx'.
+2025-07-20T05:00:37.8609222Z   The file is in the program because:
+2025-07-20T05:00:37.8609754Z     Matched by default include pattern '**/*'
+2025-07-20T05:00:37.8612502Z error TS6305: Output file '/home/runner/work/Cygni/Cygni/packages/web-ui/src/components/DeploymentStrategyView.d.ts' has not been built from source file '/home/runner/work/Cygni/Cygni/packages/web-ui/src/components/DeploymentStrategyView.tsx'.
+2025-07-20T05:00:37.8614328Z   The file is in the program because:
+2025-07-20T05:00:37.8614846Z     Matched by default include pattern '**/*'
+2025-07-20T05:00:37.8616793Z error TS6305: Output file '/home/runner/work/Cygni/Cygni/packages/web-ui/src/components/LogViewer.d.ts' has not been built from source file '/home/runner/work/Cygni/Cygni/packages/web-ui/src/components/LogViewer.tsx'.
+2025-07-20T05:00:37.8618367Z   The file is in the program because:
+2025-07-20T05:00:37.8618882Z     Matched by default include pattern '**/*'
+2025-07-20T05:00:37.8621095Z error TS6305: Output file '/home/runner/work/Cygni/Cygni/packages/web-ui/src/components/MonitoringDashboard.d.ts' has not been built from source file '/home/runner/work/Cygni/Cygni/packages/web-ui/src/components/MonitoringDashboard.tsx'.
+2025-07-20T05:00:37.8623031Z   The file is in the program because:
+2025-07-20T05:00:37.8623555Z     Matched by default include pattern '**/*'
+2025-07-20T05:00:37.8625304Z error TS6305: Output file '/home/runner/work/Cygni/Cygni/packages/web-ui/src/dummy.test.d.ts' has not been built from source file '/home/runner/work/Cygni/Cygni/packages/web-ui/src/dummy.test.ts'.
+2025-07-20T05:00:37.8626708Z   The file is in the program because:
+2025-07-20T05:00:37.8627232Z     Matched by default include pattern '**/*'
+2025-07-20T05:00:37.8628924Z error TS6305: Output file '/home/runner/work/Cygni/Cygni/packages/web-ui/src/lib/api.d.ts' has not been built from source file '/home/runner/work/Cygni/Cygni/packages/web-ui/src/lib/api.ts'.
+2025-07-20T05:00:37.8630284Z   The file is in the program because:
+2025-07-20T05:00:37.8630791Z     Matched by default include pattern '**/*'
+2025-07-20T05:00:37.8632654Z error TS6305: Output file '/home/runner/work/Cygni/Cygni/packages/web-ui/src/lib/utils.d.ts' has not been built from source file '/home/runner/work/Cygni/Cygni/packages/web-ui/src/lib/utils.ts'.
+2025-07-20T05:00:37.8634045Z   The file is in the program because:
+2025-07-20T05:00:37.8634548Z     Matched by default include pattern '**/*'
+2025-07-20T05:00:37.8636373Z error TS6305: Output file '/home/runner/work/Cygni/Cygni/services/builder/dist/builder.test.d.ts' has not been built from source file '/home/runner/work/Cygni/Cygni/services/builder/src/builder.test.ts'.
+2025-07-20T05:00:37.8637828Z   The file is in the program because:
+2025-07-20T05:00:37.8638338Z     Matched by default include pattern '**/*'
+2025-07-20T05:00:37.8640039Z error TS6305: Output file '/home/runner/work/Cygni/Cygni/services/builder/dist/index.d.ts' has not been built from source file '/home/runner/work/Cygni/Cygni/services/builder/src/index.ts'.
+2025-07-20T05:00:37.8641425Z   The file is in the program because:
+2025-07-20T05:00:37.8641954Z     Matched by default include pattern '**/*'
+2025-07-20T05:00:37.8643960Z error TS6305: Output file '/home/runner/work/Cygni/Cygni/services/builder/dist/lib/logger.d.ts' has not been built from source file '/home/runner/work/Cygni/Cygni/services/builder/src/lib/logger.ts'.
+2025-07-20T05:00:37.8645415Z   The file is in the program because:
+2025-07-20T05:00:37.8645925Z     Matched by default include pattern '**/*'
+2025-07-20T05:00:37.8647713Z error TS6305: Output file '/home/runner/work/Cygni/Cygni/services/builder/dist/lib/prisma.d.ts' has not been built from source file '/home/runner/work/Cygni/Cygni/services/builder/src/lib/prisma.ts'.
+2025-07-20T05:00:37.8649181Z   The file is in the program because:
+2025-07-20T05:00:37.8649978Z     Matched by default include pattern '**/*'
+2025-07-20T05:00:37.8651841Z error TS6305: Output file '/home/runner/work/Cygni/Cygni/services/builder/dist/routes/builds.d.ts' has not been built from source file '/home/runner/work/Cygni/Cygni/services/builder/src/routes/builds.ts'.
+2025-07-20T05:00:37.8653636Z   The file is in the program because:
+2025-07-20T05:00:37.8654379Z     Matched by default include pattern '**/*'
+2025-07-20T05:00:37.8656525Z error TS6305: Output file '/home/runner/work/Cygni/Cygni/services/builder/dist/services/kaniko-builder.d.ts' has not been built from source file '/home/runner/work/Cygni/Cygni/services/builder/src/services/kaniko-builder.ts'.
+2025-07-20T05:00:37.8658234Z   The file is in the program because:
+2025-07-20T05:00:37.8658768Z     Matched by default include pattern '**/*'
+2025-07-20T05:00:37.8660697Z error TS6305: Output file '/home/runner/work/Cygni/Cygni/services/builder/dist/services/queue.d.ts' has not been built from source file '/home/runner/work/Cygni/Cygni/services/builder/src/services/queue.ts'.
+2025-07-20T05:00:37.8662423Z   The file is in the program because:
+2025-07-20T05:00:37.8662944Z     Matched by default include pattern '**/*'
+2025-07-20T05:00:37.8664739Z error TS6305: Output file '/home/runner/work/Cygni/Cygni/services/builder/dist/types/build.d.ts' has not been built from source file '/home/runner/work/Cygni/Cygni/services/builder/src/types/build.ts'.
+2025-07-20T05:00:37.8666222Z   The file is in the program because:
+2025-07-20T05:00:37.8666716Z     Matched by default include pattern '**/*'
+2025-07-20T05:00:37.8668520Z error TS6305: Output file '/home/runner/work/Cygni/Cygni/services/builder/dist/utils/logger.d.ts' has not been built from source file '/home/runner/work/Cygni/Cygni/services/builder/src/utils/logger.ts'.
+2025-07-20T05:00:37.8670027Z   The file is in the program because:
+2025-07-20T05:00:37.8670542Z     Matched by default include pattern '**/*'
+2025-07-20T05:00:37.8672438Z error TS6305: Output file '/home/runner/work/Cygni/Cygni/services/builder/dist/worker.d.ts' has not been built from source file '/home/runner/work/Cygni/Cygni/services/builder/src/worker.ts'.
+2025-07-20T05:00:37.8673837Z   The file is in the program because:
+2025-07-20T05:00:37.8674348Z     Matched by default include pattern '**/*'
+2025-07-20T05:00:37.8678488Z ##[error]packages/api/src/routes/auth.ts(7,7): error TS2742: The inferred type of 'router' cannot be named without a reference to '.pnpm/@types+express-serve-static-core@4.19.6/node_modules/@types/express-serve-static-core'. This is likely not portable. A type annotation is necessary.
+2025-07-20T05:00:37.8684822Z ##[error]packages/api/src/routes/waitlist.ts(6,7): error TS2742: The inferred type of 'router' cannot be named without a reference to '.pnpm/@types+express-serve-static-core@4.19.6/node_modules/@types/express-serve-static-core'. This is likely not portable. A type annotation is necessary.
+2025-07-20T05:00:37.8690512Z ##[error]packages/api/src/server.ts(13,17): error TS2742: The inferred type of 'createServer' cannot be named without a reference to '.pnpm/@types+express-serve-static-core@4.19.6/node_modules/@types/express-serve-static-core'. This is likely not portable. A type annotation is necessary.
+2025-07-20T05:00:37.8695272Z ##[error]tsconfig.json(22,5): error TS6306: Referenced project '/home/runner/work/Cygni/Cygni/packages/cli' must have setting "composite": true.
+2025-07-20T05:00:37.8698519Z ##[error]tsconfig.json(23,5): error TS6306: Referenced project '/home/runner/work/Cygni/Cygni/packages/web-ui' must have setting "composite": true.
+2025-07-20T05:00:37.8729467Z ##[error]tsconfig.json(23,5): error TS6310: Referenced project '/home/runner/work/Cygni/Cygni/packages/web-ui' may not disable emit.
+2025-07-20T05:00:37.8732796Z ##[error]tsconfig.json(24,5): error TS6306: Referenced project '/home/runner/work/Cygni/Cygni/services/api' must have setting "composite": true.
+2025-07-20T05:00:37.9247591Z  ELIFECYCLE  Command failed with exit code 2.
+2025-07-20T05:00:37.9428421Z TypeScript check failed. Running detailed check...
+2025-07-20T05:00:41.4082067Z npm warn exec The following package was not found and will be installed: tsc@2.0.4
+2025-07-20T05:00:41.5842967Z 
+2025-07-20T05:00:41.5847895Z [41m                                                                               [0m
+2025-07-20T05:00:41.5848901Z [41m[37m                This is not the tsc command you are looking for                [0m
+2025-07-20T05:00:41.5850031Z [41m                                                                               [0m
+2025-07-20T05:00:41.5850253Z 
+2025-07-20T05:00:41.5850649Z To get access to the TypeScript compiler, [34mtsc[0m, from the command line either:
+2025-07-20T05:00:41.5850965Z 
+2025-07-20T05:00:41.5851429Z - Use [1mnpm install typescript[0m to first add TypeScript to your project [1mbefore[0m using npx
+2025-07-20T05:00:41.5852363Z - Use [1myarn[0m to avoid accidentally running code from un-installed packages
+2025-07-20T05:00:41.6039036Z ##[error]Process completed with exit code 1.

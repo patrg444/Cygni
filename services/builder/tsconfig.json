@@ -10,8 +10,5 @@
     "declarationMap": true
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"],
-  "references": [
-    { "path": "../../packages/cli" }
-  ]
+  "exclude": ["node_modules", "dist"]
 }

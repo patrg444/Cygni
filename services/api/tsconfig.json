@@ -18,7 +18,8 @@
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "allowJs": true
+    "allowJs": true,
+    "composite": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]

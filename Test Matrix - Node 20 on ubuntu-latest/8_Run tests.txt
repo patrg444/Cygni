@@ -1,0 +1,175 @@
+﻿2025-07-20T05:00:19.4997952Z ##[group]Run pnpm test || (echo "Tests failed. Running individual package tests..." && pnpm -r test)
+2025-07-20T05:00:19.4998574Z [36;1mpnpm test || (echo "Tests failed. Running individual package tests..." && pnpm -r test)[0m
+2025-07-20T05:00:19.5025784Z shell: /usr/bin/bash -e {0}
+2025-07-20T05:00:19.5026014Z env:
+2025-07-20T05:00:19.5026172Z   REGISTRY: ghcr.io
+2025-07-20T05:00:19.5026371Z   IMAGE_NAME: patrg444/Cygni
+2025-07-20T05:00:19.5026633Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2025-07-20T05:00:19.5027167Z ##[endgroup]
+2025-07-20T05:00:19.8857537Z 
+2025-07-20T05:00:19.8858150Z > cloudexpress@0.1.0 test /home/runner/work/Cygni/Cygni
+2025-07-20T05:00:19.8858762Z > npx turbo run test
+2025-07-20T05:00:19.8858996Z 
+2025-07-20T05:00:20.2158661Z 
+2025-07-20T05:00:20.2159152Z Attention:
+2025-07-20T05:00:20.2159925Z Turborepo now collects completely anonymous telemetry regarding usage.
+2025-07-20T05:00:20.2160609Z This information is used to shape the Turborepo roadmap and prioritize features.
+2025-07-20T05:00:20.2161513Z You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+2025-07-20T05:00:20.2162133Z https://turbo.build/repo/docs/telemetry
+2025-07-20T05:00:20.2162324Z 
+2025-07-20T05:00:20.2749137Z • Packages in scope: @cloudexpress/api, @cloudexpress/auth, @cloudexpress/builder, @cloudexpress/services-api, @cloudexpress/web-ui, @cygni/cli, @cygni/sdk, cygni-nextjs-starter, express-demo, fullstack-demo
+2025-07-20T05:00:20.2750795Z • Running test in 10 packages
+2025-07-20T05:00:20.2751271Z • Remote caching disabled
+2025-07-20T05:00:21.3952774Z ##[group]@cloudexpress/api:build
+2025-07-20T05:00:21.3953465Z cache miss, executing d7d57639bfc623a5
+2025-07-20T05:00:21.4006536Z 
+2025-07-20T05:00:21.4007372Z > @cloudexpress/api@1.0.0 build /home/runner/work/Cygni/Cygni/packages/api
+2025-07-20T05:00:21.4008339Z > echo 'Skipping build for packages/api - using services/api instead'
+2025-07-20T05:00:21.4008838Z 
+2025-07-20T05:00:21.4009297Z Skipping build for packages/api - using services/api instead
+2025-07-20T05:00:21.4010274Z ##[endgroup]
+2025-07-20T05:00:22.8249678Z [;31mfullstack-demo:build[;0m
+2025-07-20T05:00:22.8251796Z cache miss, executing 836c423f5302bbfb
+2025-07-20T05:00:22.8255736Z 
+2025-07-20T05:00:22.8260215Z > fullstack-demo@1.0.0 build /home/runner/work/Cygni/Cygni/examples/fullstack-demo
+2025-07-20T05:00:22.8264841Z > npm run build:frontend && npm run build:backend
+2025-07-20T05:00:22.8269118Z 
+2025-07-20T05:00:22.8272800Z 
+2025-07-20T05:00:22.8276499Z > fullstack-demo@1.0.0 build:frontend
+2025-07-20T05:00:22.8280864Z > cd frontend && npm run build
+2025-07-20T05:00:22.8282267Z 
+2025-07-20T05:00:22.8285708Z 
+2025-07-20T05:00:22.8287285Z > frontend@1.0.0 build
+2025-07-20T05:00:22.8288970Z > vite build
+2025-07-20T05:00:22.8292633Z 
+2025-07-20T05:00:22.8294053Z sh: 1: vite: not found
+2025-07-20T05:00:22.8295687Z npm error Lifecycle script `build` failed with error:
+2025-07-20T05:00:22.8298438Z npm error code 127
+2025-07-20T05:00:22.8299451Z npm error path /home/runner/work/Cygni/Cygni/examples/fullstack-demo/frontend
+2025-07-20T05:00:22.8302069Z npm error workspace frontend@1.0.0
+2025-07-20T05:00:22.8303093Z npm error location /home/runner/work/Cygni/Cygni/examples/fullstack-demo/frontend
+2025-07-20T05:00:22.8304069Z npm error command failed
+2025-07-20T05:00:22.8305635Z npm error command sh -c vite build
+2025-07-20T05:00:22.8307588Z  ELIFECYCLE  Command failed.
+2025-07-20T05:00:22.8327082Z [ERROR] command finished with error: command (/home/runner/work/Cygni/Cygni/examples/fullstack-demo) /home/runner/setup-pnpm/node_modules/.bin/pnpm run build exited (1)
+2025-07-20T05:00:22.8468834Z ##[group]@cloudexpress/api:test
+2025-07-20T05:00:22.8487532Z cache miss, executing 65717c5af65827f0
+2025-07-20T05:00:22.8488505Z ##[endgroup]
+2025-07-20T05:00:22.8547648Z ##[group]@cloudexpress/builder:build
+2025-07-20T05:00:22.8562575Z cache miss, executing e89deacc57de36f2
+2025-07-20T05:00:22.8567003Z 
+2025-07-20T05:00:22.8571475Z > @cloudexpress/builder@0.1.0 build /home/runner/work/Cygni/Cygni/services/builder
+2025-07-20T05:00:22.8576314Z > tsc
+2025-07-20T05:00:22.8580459Z 
+2025-07-20T05:00:22.8584767Z ##[endgroup]
+2025-07-20T05:00:22.8614642Z ##[group]@cygni/cli:build
+2025-07-20T05:00:22.8615179Z cache miss, executing b16674cbdaf125c3
+2025-07-20T05:00:22.8615495Z 
+2025-07-20T05:00:22.8615926Z > @cygni/cli@0.1.0 build /home/runner/work/Cygni/Cygni/packages/cli
+2025-07-20T05:00:22.8616567Z > tsc && chmod +x dist/index.js
+2025-07-20T05:00:22.8617030Z 
+2025-07-20T05:00:22.8617436Z ##[endgroup]
+2025-07-20T05:00:22.8618283Z ##[group]@cloudexpress/auth:build
+2025-07-20T05:00:22.8627777Z cache miss, executing b67affc02e0960ce
+2025-07-20T05:00:22.8629579Z 
+2025-07-20T05:00:22.8630132Z > @cloudexpress/auth@0.1.0 build /home/runner/work/Cygni/Cygni/services/auth
+2025-07-20T05:00:22.8630779Z > tsc
+2025-07-20T05:00:22.8630945Z 
+2025-07-20T05:00:22.8631854Z ##[endgroup]
+2025-07-20T05:00:22.8632469Z ##[group]@cloudexpress/services-api:build
+2025-07-20T05:00:22.8633076Z cache miss, executing 4e62ac1d496e0320
+2025-07-20T05:00:22.8633381Z 
+2025-07-20T05:00:22.8633952Z > @cloudexpress/services-api@0.1.0 build /home/runner/work/Cygni/Cygni/services/api
+2025-07-20T05:00:22.8634603Z > tsc
+2025-07-20T05:00:22.8634774Z 
+2025-07-20T05:00:22.8635146Z ##[endgroup]
+2025-07-20T05:00:22.8662421Z ##[group]@cygni/sdk:build
+2025-07-20T05:00:22.8663174Z cache miss, executing 7c13eef4e550ea9c
+2025-07-20T05:00:22.8663542Z 
+2025-07-20T05:00:22.8663988Z > @cygni/sdk@0.1.0 build /home/runner/work/Cygni/Cygni/packages/sdk
+2025-07-20T05:00:22.8664555Z > tsc
+2025-07-20T05:00:22.8664741Z 
+2025-07-20T05:00:22.8665119Z ##[endgroup]
+2025-07-20T05:00:23.0744508Z ##[group]@cloudexpress/web-ui:build
+2025-07-20T05:00:23.0745251Z cache miss, executing 18dc8aad732b6e50
+2025-07-20T05:00:23.0764703Z ##[error]fullstack-demo#build: command (/home/runner/work/Cygni/Cygni/examples/fullstack-demo) /home/runner/setup-pnpm/node_modules/.bin/pnpm run build exited (1)
+2025-07-20T05:00:23.0772815Z 
+2025-07-20T05:00:23.0773230Z > @cloudexpress/web-ui@0.1.0 build /home/runner/work/Cygni/Cygni/packages/web-ui
+2025-07-20T05:00:23.0773623Z > next build
+2025-07-20T05:00:23.0773735Z 
+2025-07-20T05:00:23.0773953Z ##[endgroup]
+2025-07-20T05:00:23.0774069Z 
+2025-07-20T05:00:23.0774196Z  Tasks:    1 successful, 9 total
+2025-07-20T05:00:23.0774451Z Cached:    0 cached, 9 total
+2025-07-20T05:00:23.0774665Z   Time:    2.855s 
+2025-07-20T05:00:23.0774901Z Failed:    fullstack-demo#build
+2025-07-20T05:00:23.0775048Z 
+2025-07-20T05:00:23.0796553Z  ERROR  run failed: command  exited (1)
+2025-07-20T05:00:23.2920932Z  ELIFECYCLE  Test failed. See above for more details.
+2025-07-20T05:00:23.3100489Z Tests failed. Running individual package tests...
+2025-07-20T05:00:23.7150864Z Scope: 10 of 11 workspace projects
+2025-07-20T05:00:23.7243432Z examples/fullstack-demo test$ echo "No tests yet"
+2025-07-20T05:00:23.7244416Z packages/api test$ echo 'Skipping tests for packages/api - using services/api instead'
+2025-07-20T05:00:23.7245014Z packages/cli test$ vitest
+2025-07-20T05:00:23.7277111Z packages/sdk test$ jest
+2025-07-20T05:00:23.7401899Z examples/fullstack-demo test: No tests yet
+2025-07-20T05:00:23.7421707Z packages/api test: Skipping tests for packages/api - using services/api instead
+2025-07-20T05:00:23.7434884Z packages/api test: Done
+2025-07-20T05:00:23.7440109Z examples/fullstack-demo test: Done
+2025-07-20T05:00:23.7447811Z packages/web-ui test$ vitest
+2025-07-20T05:00:23.7452065Z services/api test$ vitest
+2025-07-20T05:00:24.3149604Z packages/cli test: [33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+2025-07-20T05:00:24.3252772Z packages/web-ui test: [7m[1m[36m RUN [39m[22m[27m [36mv0.34.6[39m [90m/home/runner/work/Cygni/Cygni/packages/web-ui[39m
+2025-07-20T05:00:24.3513726Z services/api test: [7m[1m[36m RUN [39m[22m[27m [36mv0.34.6[39m [90m/home/runner/work/Cygni/Cygni/services/api[39m
+2025-07-20T05:00:24.3713551Z packages/cli test: [7m[1m[36m RUN [39m[22m[27m [36mv0.34.6[39m [90m/home/runner/work/Cygni/Cygni/packages/cli[39m
+2025-07-20T05:00:25.1273546Z packages/web-ui test:  [32m✓[39m src/dummy.test.ts [2m ([22m[2m1 test[22m[2m)[22m[90m 4[2mms[22m[39m
+2025-07-20T05:00:25.1423730Z packages/web-ui test: [2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+2025-07-20T05:00:25.1427389Z packages/web-ui test: [2m      Tests [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+2025-07-20T05:00:25.1428453Z packages/web-ui test: [2m   Start at [22m 05:00:24
+2025-07-20T05:00:25.1430734Z packages/web-ui test: [2m   Duration [22m 814ms[2m (transform 111ms, setup 0ms, collect 46ms, tests 4ms, environment 0ms, prepare 218ms)[22m
+2025-07-20T05:00:25.1734529Z packages/web-ui test: Done
+2025-07-20T05:00:25.1754044Z services/auth test$ vitest
+2025-07-20T05:00:25.2139774Z services/api test:  [32m✓[39m src/health.test.ts [2m ([22m[2m1 test[22m[2m)[22m[90m 9[2mms[22m[39m
+2025-07-20T05:00:25.2308569Z services/api test: [2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+2025-07-20T05:00:25.2328059Z services/api test: [2m      Tests [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+2025-07-20T05:00:25.2329030Z services/api test: [2m   Start at [22m 05:00:24
+2025-07-20T05:00:25.2333681Z services/api test: [2m   Duration [22m 879ms[2m (transform 62ms, setup 0ms, collect 40ms, tests 9ms, environment 0ms, prepare 183ms)[22m
+2025-07-20T05:00:25.2697462Z services/api test: Done
+2025-07-20T05:00:25.2770504Z services/builder test$ vitest
+2025-07-20T05:00:25.4475759Z packages/cli test:  [32m✓[39m src/tests/framework-detector.test.ts [2m ([22m[2m12 tests[22m[2m)[22m[90m 32[2mms[22m[39m
+2025-07-20T05:00:25.4589495Z packages/cli test: [90mstdout[2m | src/tests/builder.test.ts[2m > [22m[2mBuilder[2m > [22m[2mbuildProject[2m > [22m[2mshould auto-detect framework when not specified[22m[39m
+2025-07-20T05:00:25.4617006Z packages/cli test: Detected framework: react
+2025-07-20T05:00:25.4619090Z packages/cli test: [90mstdout[2m | src/tests/builder.test.ts[2m > [22m[2mBuilder[2m > [22m[2mbuildProject[2m > [22m[2mshould run pre-build commands when specified[22m[39m
+2025-07-20T05:00:25.4620329Z packages/cli test: Running build command...
+2025-07-20T05:00:25.4641256Z packages/cli test:  [32m✓[39m src/tests/builder.test.ts [2m ([22m[2m7 tests[22m[2m)[22m[90m 34[2mms[22m[39m
+2025-07-20T05:00:25.7231259Z packages/cli test:  [32m✓[39m src/tests/deploy-helpers.test.ts [2m ([22m[2m18 tests[22m[2m)[22m[90m 29[2mms[22m[39m
+2025-07-20T05:00:25.7553320Z packages/sdk test: PASS src/sdk.test.ts
+2025-07-20T05:00:25.7607942Z packages/sdk test:   SDK
+2025-07-20T05:00:25.7613041Z packages/sdk test:     ✓ should pass basic test (6 ms)
+2025-07-20T05:00:25.7662048Z packages/sdk test: Test Suites: 1 passed, 1 total
+2025-07-20T05:00:25.7666653Z packages/sdk test: Tests:       1 passed, 1 total
+2025-07-20T05:00:25.7671267Z packages/sdk test: Snapshots:   0 total
+2025-07-20T05:00:25.7676007Z packages/sdk test: Time:        1.381 s
+2025-07-20T05:00:25.7679034Z packages/sdk test: Ran all test suites.
+2025-07-20T05:00:25.8760715Z packages/sdk test: Done
+2025-07-20T05:00:25.9514593Z services/auth test: [7m[1m[36m RUN [39m[22m[27m [36mv0.34.6[39m [90m/home/runner/work/Cygni/Cygni/services/auth[39m
+2025-07-20T05:00:26.0019407Z services/builder test: [7m[1m[36m RUN [39m[22m[27m [36mv0.34.6[39m [90m/home/runner/work/Cygni/Cygni/services/builder[39m
+2025-07-20T05:00:26.1272854Z packages/cli test:  [32m✓[39m src/dummy.test.ts [2m ([22m[2m1 test[22m[2m)[22m[90m 6[2mms[22m[39m
+2025-07-20T05:00:26.2229134Z packages/cli test:  [32m✓[39m src/tests/runtime-validator.test.ts [2m ([22m[2m8 tests[22m[2m)[22m[90m 64[2mms[22m[39m
+2025-07-20T05:00:26.2433084Z packages/cli test: [2m Test Files [22m [1m[32m5 passed[39m[22m[90m (5)[39m
+2025-07-20T05:00:26.2438129Z packages/cli test: [2m      Tests [22m [1m[32m46 passed[39m[22m[90m (46)[39m
+2025-07-20T05:00:26.2516547Z packages/cli test: [2m   Start at [22m 05:00:24
+2025-07-20T05:00:26.2525831Z packages/cli test: [2m   Duration [22m 1.87s[2m (transform 574ms, setup 0ms, collect 1.25s, tests 165ms, environment 1ms, prepare 1.01s)[22m
+2025-07-20T05:00:26.3118848Z packages/cli test: Done
+2025-07-20T05:00:26.5449290Z services/auth test:  [32m✓[39m src/auth.test.ts [2m ([22m[2m1 test[22m[2m)[22m[90m 3[2mms[22m[39m
+2025-07-20T05:00:26.5561011Z services/auth test: [2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+2025-07-20T05:00:26.5562170Z services/auth test: [2m      Tests [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+2025-07-20T05:00:26.5563051Z services/auth test: [2m   Start at [22m 05:00:25
+2025-07-20T05:00:26.5564516Z services/auth test: [2m   Duration [22m 607ms[2m (transform 41ms, setup 0ms, collect 31ms, tests 3ms, environment 0ms, prepare 79ms)[22m
+2025-07-20T05:00:26.5674279Z services/builder test:  [32m✓[39m src/builder.test.ts [2m ([22m[2m1 test[22m[2m)[22m[90m 4[2mms[22m[39m
+2025-07-20T05:00:26.5745570Z services/auth test: Done
+2025-07-20T05:00:26.5772698Z services/builder test: [2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+2025-07-20T05:00:26.5780161Z services/builder test: [2m      Tests [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+2025-07-20T05:00:26.5781190Z services/builder test: [2m   Start at [22m 05:00:25
+2025-07-20T05:00:26.5782745Z services/builder test: [2m   Duration [22m 579ms[2m (transform 38ms, setup 0ms, collect 33ms, tests 4ms, environment 2ms, prepare 75ms)[22m
+2025-07-20T05:00:26.5948752Z services/builder test: Done

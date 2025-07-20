@@ -1,0 +1,5 @@
+﻿2025-07-20T05:00:19.7395125Z Post job cleanup.
+2025-07-20T05:00:19.9089705Z [command]/usr/bin/tar --posix -cf cache.tzst --exclude cache.tzst -P -C /home/runner/work/Cygni/Cygni --files-from manifest.txt --use-compress-program zstdmt
+2025-07-20T05:00:23.3692256Z Sent 125992590 of 193101454 (65.2%), 120.2 MBs/sec
+2025-07-20T05:00:23.4420525Z Sent 193101454 of 193101454 (100.0%), 171.6 MBs/sec
+2025-07-20T05:00:23.5476925Z Cache saved with the key: node-cache-Linux-x64-pnpm-79fc460ccc1207c813757f9fdf4413fead0a19281f1f71e89b6b1e7157e26185

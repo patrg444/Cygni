@@ -1,0 +1,379 @@
+﻿2025-07-20T04:59:48.0882139Z Current runner version: '2.326.0'
+2025-07-20T04:59:48.0906905Z ##[group]Runner Image Provisioner
+2025-07-20T04:59:48.0907873Z Hosted Compute Agent
+2025-07-20T04:59:48.0908374Z Version: 20250711.363
+2025-07-20T04:59:48.0909029Z Commit: 6785254374ce925a23743850c1cb91912ce5c14c
+2025-07-20T04:59:48.0909670Z Build Date: 2025-07-11T20:04:25Z
+2025-07-20T04:59:48.0910245Z ##[endgroup]
+2025-07-20T04:59:48.0910791Z ##[group]Operating System
+2025-07-20T04:59:48.0911369Z Ubuntu
+2025-07-20T04:59:48.0911807Z 24.04.2
+2025-07-20T04:59:48.0912299Z LTS
+2025-07-20T04:59:48.0912759Z ##[endgroup]
+2025-07-20T04:59:48.0913196Z ##[group]Runner Image
+2025-07-20T04:59:48.0913791Z Image: ubuntu-24.04
+2025-07-20T04:59:48.0914285Z Version: 20250710.1.0
+2025-07-20T04:59:48.0915279Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20250710.1/images/ubuntu/Ubuntu2404-Readme.md
+2025-07-20T04:59:48.0917100Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20250710.1
+2025-07-20T04:59:48.0918101Z ##[endgroup]
+2025-07-20T04:59:48.0919279Z ##[group]GITHUB_TOKEN Permissions
+2025-07-20T04:59:48.0921421Z Contents: read
+2025-07-20T04:59:48.0921939Z Metadata: read
+2025-07-20T04:59:48.0922501Z SecurityEvents: write
+2025-07-20T04:59:48.0923019Z ##[endgroup]
+2025-07-20T04:59:48.0924996Z Secret source: Actions
+2025-07-20T04:59:48.0925787Z Prepare workflow directory
+2025-07-20T04:59:48.1445911Z Prepare all required actions
+2025-07-20T04:59:48.1483483Z Getting action download info
+2025-07-20T04:59:48.4906602Z ##[group]Download immutable action package 'actions/checkout@v4'
+2025-07-20T04:59:48.4907766Z Version: 4.2.2
+2025-07-20T04:59:48.4908867Z Digest: sha256:ccb2698953eaebd21c7bf6268a94f9c26518a7e38e27e0b83c1fe1ad049819b1
+2025-07-20T04:59:48.4910053Z Source commit SHA: 11bd71901bbe5b1630ceea73d27597364c9af683
+2025-07-20T04:59:48.4910722Z ##[endgroup]
+2025-07-20T04:59:48.5909971Z Download action repository 'aquasecurity/trivy-action@master' (SHA:77137e9dc3ab1b329b7c8a38c2eb7475850a14e8)
+2025-07-20T04:59:48.8881919Z ##[group]Download immutable action package 'github/codeql-action@v3'
+2025-07-20T04:59:48.8882687Z Version: 3.29.2
+2025-07-20T04:59:48.8883475Z Digest: sha256:617a9ad0698ba03fb7c3febbfd3b22a70991075522cc2e00cf6d2863a54536d7
+2025-07-20T04:59:48.8884433Z Source commit SHA: 181d5eefc20863364f96762470ba6f862bdef56b
+2025-07-20T04:59:48.8885103Z ##[endgroup]
+2025-07-20T04:59:53.9625066Z Getting action download info
+2025-07-20T04:59:54.1403086Z Download action repository 'aquasecurity/setup-trivy@ff1b8b060f23b650436d419b5e13f67f5d4c3087' (SHA:ff1b8b060f23b650436d419b5e13f67f5d4c3087)
+2025-07-20T04:59:54.4527476Z ##[group]Download immutable action package 'actions/cache@v4'
+2025-07-20T04:59:54.4527880Z Version: 4.2.3
+2025-07-20T04:59:54.4528256Z Digest: sha256:c8a3bb963e1f1826d8fcc8d1354f0dd29d8ac1db1d4f6f20247055ae11b81ed9
+2025-07-20T04:59:54.4528754Z Source commit SHA: 5a3ec84eff668545956fd18022155c47e93e2684
+2025-07-20T04:59:54.4529073Z ##[endgroup]
+2025-07-20T04:59:54.5638489Z Getting action download info
+2025-07-20T04:59:54.7318376Z Complete job name: Security Scanning
+2025-07-20T04:59:54.7943387Z ##[group]Run actions/checkout@v4
+2025-07-20T04:59:54.7944013Z with:
+2025-07-20T04:59:54.7944264Z   repository: patrg444/Cygni
+2025-07-20T04:59:54.7944736Z   token: ***
+2025-07-20T04:59:54.7944974Z   ssh-strict: true
+2025-07-20T04:59:54.7945198Z   ssh-user: git
+2025-07-20T04:59:54.7945439Z   persist-credentials: true
+2025-07-20T04:59:54.7945684Z   clean: true
+2025-07-20T04:59:54.7945922Z   sparse-checkout-cone-mode: true
+2025-07-20T04:59:54.7946203Z   fetch-depth: 1
+2025-07-20T04:59:54.7946416Z   fetch-tags: false
+2025-07-20T04:59:54.7946650Z   show-progress: true
+2025-07-20T04:59:54.7947056Z   lfs: false
+2025-07-20T04:59:54.7947271Z   submodules: false
+2025-07-20T04:59:54.7947501Z   set-safe-directory: true
+2025-07-20T04:59:54.7947999Z env:
+2025-07-20T04:59:54.7948211Z   REGISTRY: ghcr.io
+2025-07-20T04:59:54.7948448Z   IMAGE_NAME: patrg444/Cygni
+2025-07-20T04:59:54.7948703Z ##[endgroup]
+2025-07-20T04:59:54.9040225Z Syncing repository: patrg444/Cygni
+2025-07-20T04:59:54.9041940Z ##[group]Getting Git version info
+2025-07-20T04:59:54.9042403Z Working directory is '/home/runner/work/Cygni/Cygni'
+2025-07-20T04:59:54.9043163Z [command]/usr/bin/git version
+2025-07-20T04:59:54.9074005Z git version 2.50.1
+2025-07-20T04:59:54.9102172Z ##[endgroup]
+2025-07-20T04:59:54.9119301Z Temporarily overriding HOME='/home/runner/work/_temp/f6bb5f34-825f-4552-8415-9bb7a34e70a0' before making global git config changes
+2025-07-20T04:59:54.9120750Z Adding repository directory to the temporary git global config as a safe directory
+2025-07-20T04:59:54.9134048Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/Cygni/Cygni
+2025-07-20T04:59:54.9172704Z Deleting the contents of '/home/runner/work/Cygni/Cygni'
+2025-07-20T04:59:54.9176569Z ##[group]Initializing the repository
+2025-07-20T04:59:54.9181546Z [command]/usr/bin/git init /home/runner/work/Cygni/Cygni
+2025-07-20T04:59:54.9249879Z hint: Using 'master' as the name for the initial branch. This default branch name
+2025-07-20T04:59:54.9250970Z hint: is subject to change. To configure the initial branch name to use in all
+2025-07-20T04:59:54.9251521Z hint: of your new repositories, which will suppress this warning, call:
+2025-07-20T04:59:54.9251969Z hint:
+2025-07-20T04:59:54.9252519Z hint: 	git config --global init.defaultBranch <name>
+2025-07-20T04:59:54.9253197Z hint:
+2025-07-20T04:59:54.9253567Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2025-07-20T04:59:54.9254104Z hint: 'development'. The just-created branch can be renamed via this command:
+2025-07-20T04:59:54.9254492Z hint:
+2025-07-20T04:59:54.9254920Z hint: 	git branch -m <name>
+2025-07-20T04:59:54.9255394Z hint:
+2025-07-20T04:59:54.9256043Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2025-07-20T04:59:54.9257395Z Initialized empty Git repository in /home/runner/work/Cygni/Cygni/.git/
+2025-07-20T04:59:54.9267551Z [command]/usr/bin/git remote add origin https://github.com/patrg444/Cygni
+2025-07-20T04:59:54.9301463Z ##[endgroup]
+2025-07-20T04:59:54.9302204Z ##[group]Disabling automatic garbage collection
+2025-07-20T04:59:54.9306648Z [command]/usr/bin/git config --local gc.auto 0
+2025-07-20T04:59:54.9336274Z ##[endgroup]
+2025-07-20T04:59:54.9337385Z ##[group]Setting up auth
+2025-07-20T04:59:54.9344579Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2025-07-20T04:59:54.9375222Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2025-07-20T04:59:54.9646412Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-07-20T04:59:54.9679078Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2025-07-20T04:59:54.9924220Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2025-07-20T04:59:54.9973799Z ##[endgroup]
+2025-07-20T04:59:54.9974597Z ##[group]Fetching the repository
+2025-07-20T04:59:54.9984398Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +ed550598453f64cb10e7ffd14d06b4707a350876:refs/remotes/origin/main
+2025-07-20T04:59:55.3852524Z From https://github.com/patrg444/Cygni
+2025-07-20T04:59:55.3853368Z  * [new ref]         ed550598453f64cb10e7ffd14d06b4707a350876 -> origin/main
+2025-07-20T04:59:55.3878529Z ##[endgroup]
+2025-07-20T04:59:55.3879222Z ##[group]Determining the checkout info
+2025-07-20T04:59:55.3880741Z ##[endgroup]
+2025-07-20T04:59:55.3885753Z [command]/usr/bin/git sparse-checkout disable
+2025-07-20T04:59:55.3924485Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2025-07-20T04:59:55.3951376Z ##[group]Checking out the ref
+2025-07-20T04:59:55.3954943Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2025-07-20T04:59:55.4190364Z Switched to a new branch 'main'
+2025-07-20T04:59:55.4191313Z branch 'main' set up to track 'origin/main'.
+2025-07-20T04:59:55.4199736Z ##[endgroup]
+2025-07-20T04:59:55.4238296Z [command]/usr/bin/git log -1 --format=%H
+2025-07-20T04:59:55.4262623Z ed550598453f64cb10e7ffd14d06b4707a350876
+2025-07-20T04:59:55.4585931Z ##[group]Run aquasecurity/trivy-action@master
+2025-07-20T04:59:55.4586294Z with:
+2025-07-20T04:59:55.4586501Z   scan-type: fs
+2025-07-20T04:59:55.4586886Z   scan-ref: .
+2025-07-20T04:59:55.4587105Z   format: sarif
+2025-07-20T04:59:55.4587334Z   output: trivy-results.sarif
+2025-07-20T04:59:55.4587602Z   ignore-unfixed: false
+2025-07-20T04:59:55.4587846Z   vuln-type: os,library
+2025-07-20T04:59:55.4588102Z   severity: UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL
+2025-07-20T04:59:55.4588494Z   cache-dir: /home/runner/work/Cygni/Cygni/.cache/trivy
+2025-07-20T04:59:55.4588820Z   list-all-pkgs: false
+2025-07-20T04:59:55.4589067Z   version: v0.64.1
+2025-07-20T04:59:55.4589280Z   cache: true
+2025-07-20T04:59:55.4589494Z   skip-setup-trivy: false
+2025-07-20T04:59:55.4589913Z   token-setup-trivy: ***
+2025-07-20T04:59:55.4590158Z env:
+2025-07-20T04:59:55.4590357Z   REGISTRY: ghcr.io
+2025-07-20T04:59:55.4590595Z   IMAGE_NAME: patrg444/Cygni
+2025-07-20T04:59:55.4590836Z ##[endgroup]
+2025-07-20T04:59:55.4731918Z ##[group]Run aquasecurity/setup-trivy@ff1b8b060f23b650436d419b5e13f67f5d4c3087
+2025-07-20T04:59:55.4732344Z with:
+2025-07-20T04:59:55.4732554Z   version: v0.64.1
+2025-07-20T04:59:55.4732770Z   cache: true
+2025-07-20T04:59:55.4733154Z   token: ***
+2025-07-20T04:59:55.4733379Z   path: $HOME/.local/bin
+2025-07-20T04:59:55.4733610Z env:
+2025-07-20T04:59:55.4733808Z   REGISTRY: ghcr.io
+2025-07-20T04:59:55.4734041Z   IMAGE_NAME: patrg444/Cygni
+2025-07-20T04:59:55.4734288Z ##[endgroup]
+2025-07-20T04:59:55.4766466Z ##[group]Run echo "dir=$HOME/.local/bin/trivy-bin" >> $GITHUB_OUTPUT
+2025-07-20T04:59:55.4767246Z [36;1mecho "dir=$HOME/.local/bin/trivy-bin" >> $GITHUB_OUTPUT[0m
+2025-07-20T04:59:55.4798790Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2025-07-20T04:59:55.4799164Z env:
+2025-07-20T04:59:55.4799365Z   REGISTRY: ghcr.io
+2025-07-20T04:59:55.4799617Z   IMAGE_NAME: patrg444/Cygni
+2025-07-20T04:59:55.4799872Z ##[endgroup]
+2025-07-20T04:59:55.4956589Z ##[group]Run actions/cache@v4
+2025-07-20T04:59:55.4957096Z with:
+2025-07-20T04:59:55.4957337Z   path: /home/runner/.local/bin/trivy-bin
+2025-07-20T04:59:55.4957648Z   key: trivy-binary-v0.64.1-Linux-X64
+2025-07-20T04:59:55.4957934Z   enableCrossOsArchive: false
+2025-07-20T04:59:55.4958198Z   fail-on-cache-miss: false
+2025-07-20T04:59:55.4958442Z   lookup-only: false
+2025-07-20T04:59:55.4958667Z   save-always: false
+2025-07-20T04:59:55.4958875Z env:
+2025-07-20T04:59:55.4959075Z   REGISTRY: ghcr.io
+2025-07-20T04:59:55.4959307Z   IMAGE_NAME: patrg444/Cygni
+2025-07-20T04:59:55.4959560Z ##[endgroup]
+2025-07-20T04:59:55.7303242Z Cache hit for: trivy-binary-v0.64.1-Linux-X64
+2025-07-20T04:59:56.4843611Z Received 41645727 of 41645727 (100.0%), 64.5 MBs/sec
+2025-07-20T04:59:56.4844892Z Cache Size: ~40 MB (41645727 B)
+2025-07-20T04:59:56.4874321Z [command]/usr/bin/tar -xf /home/runner/work/_temp/f05a0999-cf0d-4ca0-8cc4-6e42e13afc8a/cache.tzst -P -C /home/runner/work/Cygni/Cygni --use-compress-program unzstd
+2025-07-20T04:59:56.7292184Z Cache restored successfully
+2025-07-20T04:59:56.7446398Z Cache restored from key: trivy-binary-v0.64.1-Linux-X64
+2025-07-20T04:59:56.7591866Z ##[group]Run echo /home/runner/.local/bin/trivy-bin >> $GITHUB_PATH
+2025-07-20T04:59:56.7592309Z [36;1mecho /home/runner/.local/bin/trivy-bin >> $GITHUB_PATH[0m
+2025-07-20T04:59:56.7619742Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2025-07-20T04:59:56.7620066Z env:
+2025-07-20T04:59:56.7620234Z   REGISTRY: ghcr.io
+2025-07-20T04:59:56.7620436Z   IMAGE_NAME: patrg444/Cygni
+2025-07-20T04:59:56.7620656Z ##[endgroup]
+2025-07-20T04:59:56.7695859Z ##[group]Run echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+2025-07-20T04:59:56.7696398Z [36;1mecho "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT[0m
+2025-07-20T04:59:56.7723439Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2025-07-20T04:59:56.7723784Z env:
+2025-07-20T04:59:56.7723952Z   REGISTRY: ghcr.io
+2025-07-20T04:59:56.7724163Z   IMAGE_NAME: patrg444/Cygni
+2025-07-20T04:59:56.7724383Z ##[endgroup]
+2025-07-20T04:59:56.7829276Z ##[group]Run actions/cache@v4
+2025-07-20T04:59:56.7829523Z with:
+2025-07-20T04:59:56.7829743Z   path: /home/runner/work/Cygni/Cygni/.cache/trivy
+2025-07-20T04:59:56.7830042Z   key: cache-trivy-2025-07-20
+2025-07-20T04:59:56.7830279Z   restore-keys: cache-trivy-
+2025-07-20T04:59:56.7830511Z   enableCrossOsArchive: false
+2025-07-20T04:59:56.7830762Z   fail-on-cache-miss: false
+2025-07-20T04:59:56.7830981Z   lookup-only: false
+2025-07-20T04:59:56.7831172Z   save-always: false
+2025-07-20T04:59:56.7831359Z env:
+2025-07-20T04:59:56.7831547Z   REGISTRY: ghcr.io
+2025-07-20T04:59:56.7831794Z   IMAGE_NAME: patrg444/Cygni
+2025-07-20T04:59:56.7832021Z ##[endgroup]
+2025-07-20T04:59:57.0214630Z Cache hit for: cache-trivy-2025-07-20
+2025-07-20T04:59:57.8327696Z Received 48645079 of 48645079 (100.0%), 68.0 MBs/sec
+2025-07-20T04:59:57.8329164Z Cache Size: ~46 MB (48645079 B)
+2025-07-20T04:59:57.8361095Z [command]/usr/bin/tar -xf /home/runner/work/_temp/50193c71-6b42-43e9-a2e5-e4d0ae8e15ff/cache.tzst -P -C /home/runner/work/Cygni/Cygni --use-compress-program unzstd
+2025-07-20T04:59:58.6765880Z Cache restored successfully
+2025-07-20T04:59:58.6933484Z Cache restored from key: cache-trivy-2025-07-20
+2025-07-20T04:59:58.7040733Z ##[group]Run echo "$GITHUB_ACTION_PATH" >> $GITHUB_PATH
+2025-07-20T04:59:58.7041097Z [36;1mecho "$GITHUB_ACTION_PATH" >> $GITHUB_PATH[0m
+2025-07-20T04:59:58.7069057Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2025-07-20T04:59:58.7069388Z env:
+2025-07-20T04:59:58.7069563Z   REGISTRY: ghcr.io
+2025-07-20T04:59:58.7069780Z   IMAGE_NAME: patrg444/Cygni
+2025-07-20T04:59:58.7070179Z   GITHUB_ACTION_PATH: /home/runner/work/_actions/aquasecurity/trivy-action/master
+2025-07-20T04:59:58.7070554Z ##[endgroup]
+2025-07-20T04:59:58.7137359Z ##[group]Run rm -f trivy_envs.txt
+2025-07-20T04:59:58.7137633Z [36;1mrm -f trivy_envs.txt[0m
+2025-07-20T04:59:58.7137865Z [36;1mtouch trivy_envs.txt[0m
+2025-07-20T04:59:58.7162635Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2025-07-20T04:59:58.7162971Z env:
+2025-07-20T04:59:58.7163150Z   REGISTRY: ghcr.io
+2025-07-20T04:59:58.7163363Z   IMAGE_NAME: patrg444/Cygni
+2025-07-20T04:59:58.7163581Z ##[endgroup]
+2025-07-20T04:59:58.7248724Z ##[group]Run # Note: There is currently no way to distinguish between undefined variables and empty strings in GitHub Actions.
+2025-07-20T04:59:58.7249599Z [36;1m# Note: There is currently no way to distinguish between undefined variables and empty strings in GitHub Actions.[0m
+2025-07-20T04:59:58.7250195Z [36;1m# This limitation affects how we handle default values and empty inputs.[0m
+2025-07-20T04:59:58.7250736Z [36;1m# For more information, see: https://github.com/actions/runner/issues/924[0m
+2025-07-20T04:59:58.7251095Z [36;1m[0m
+2025-07-20T04:59:58.7251439Z [36;1m# The following logic implements the configuration priority described in the README:[0m
+2025-07-20T04:59:58.7251848Z [36;1m#[0m
+2025-07-20T04:59:58.7252023Z [36;1m# Inputs[0m
+2025-07-20T04:59:58.7252226Z [36;1m# Environment Variables[0m
+2025-07-20T04:59:58.7252465Z [36;1m# Config File[0m
+2025-07-20T04:59:58.7252666Z [36;1m# Defaults[0m
+2025-07-20T04:59:58.7252852Z [36;1m#[0m
+2025-07-20T04:59:58.7253224Z [36;1m# As noted above defaults are awkward to handle as GitHub Actions will inject those values as the input[0m
+2025-07-20T04:59:58.7253833Z [36;1m# if the caller doesn't provide them, thus if the input matches the default we don't set it as we[0m
+2025-07-20T04:59:58.7254425Z [36;1m# can't tell the difference.  Plus if we did set it when it was the default value then it could potentially [0m
+2025-07-20T04:59:58.7255076Z [36;1m# override an external environment variable, or something in the callers configuration file, which then wouldn't [0m
+2025-07-20T04:59:58.7255989Z [36;1m# match the configuration priority that is documented.[0m
+2025-07-20T04:59:58.7256311Z [36;1mset_env_var_if_provided() {[0m
+2025-07-20T04:59:58.7256626Z [36;1m  local var_name="$1"[0m
+2025-07-20T04:59:58.7257185Z [36;1m  local input_value="$2"[0m
+2025-07-20T04:59:58.7257450Z [36;1m  local default_value="$3"[0m
+2025-07-20T04:59:58.7257683Z [36;1m[0m
+2025-07-20T04:59:58.7257939Z [36;1m  if [ ! -z "$input_value" ] && [ "$input_value" != "$default_value" ]; then[0m
+2025-07-20T04:59:58.7258387Z [36;1m    # If action was provided with explicit input by the caller set that[0m
+2025-07-20T04:59:58.7258786Z [36;1m    echo "export $var_name=$input_value" >> trivy_envs.txt[0m
+2025-07-20T04:59:58.7259082Z [36;1m  fi[0m
+2025-07-20T04:59:58.7259258Z [36;1m}[0m
+2025-07-20T04:59:58.7259424Z [36;1m[0m
+2025-07-20T04:59:58.7259690Z [36;1m# Set environment variables, handling those with default values[0m
+2025-07-20T04:59:58.7260233Z [36;1m# cf. https://aquasecurity.github.io/trivy/latest/docs/configuration/#environment-variables[0m
+2025-07-20T04:59:58.7260719Z [36;1mset_env_var_if_provided "TRIVY_INPUT" "" ""[0m
+2025-07-20T04:59:58.7261039Z [36;1mset_env_var_if_provided "TRIVY_EXIT_CODE" "" ""[0m
+2025-07-20T04:59:58.7261413Z [36;1mset_env_var_if_provided "TRIVY_IGNORE_UNFIXED" "false" "false"[0m
+2025-07-20T04:59:58.7261842Z [36;1mset_env_var_if_provided "TRIVY_PKG_TYPES" "os,library" "os,library"[0m
+2025-07-20T04:59:58.7262430Z [36;1mset_env_var_if_provided "TRIVY_SEVERITY" "UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL" "UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL"[0m
+2025-07-20T04:59:58.7262974Z [36;1mset_env_var_if_provided "TRIVY_FORMAT" "sarif" "table"[0m
+2025-07-20T04:59:58.7263324Z [36;1mset_env_var_if_provided "TRIVY_TEMPLATE" "" ""[0m
+2025-07-20T04:59:58.7263687Z [36;1mset_env_var_if_provided "TRIVY_OUTPUT" "trivy-results.sarif" ""[0m
+2025-07-20T04:59:58.7264066Z [36;1mset_env_var_if_provided "TRIVY_SKIP_DIRS" "" ""[0m
+2025-07-20T04:59:58.7264398Z [36;1mset_env_var_if_provided "TRIVY_SKIP_FILES" "" ""[0m
+2025-07-20T04:59:58.7264727Z [36;1mset_env_var_if_provided "TRIVY_TIMEOUT" "" ""[0m
+2025-07-20T04:59:58.7265065Z [36;1mset_env_var_if_provided "TRIVY_IGNORE_POLICY" "" ""[0m
+2025-07-20T04:59:58.7265398Z [36;1mset_env_var_if_provided "TRIVY_QUIET" "" ""[0m
+2025-07-20T04:59:58.7265749Z [36;1mset_env_var_if_provided "TRIVY_LIST_ALL_PKGS" "false" "false"[0m
+2025-07-20T04:59:58.7266107Z [36;1mset_env_var_if_provided "TRIVY_SCANNERS" "" ""[0m
+2025-07-20T04:59:58.7266419Z [36;1mset_env_var_if_provided "TRIVY_CONFIG" "" ""[0m
+2025-07-20T04:59:58.7266914Z [36;1mset_env_var_if_provided "TRIVY_TF_VARS" "" ""[0m
+2025-07-20T04:59:58.7267272Z [36;1mset_env_var_if_provided "TRIVY_DOCKER_HOST" "" ""[0m
+2025-07-20T04:59:58.7293047Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2025-07-20T04:59:58.7293496Z env:
+2025-07-20T04:59:58.7293680Z   REGISTRY: ghcr.io
+2025-07-20T04:59:58.7293887Z   IMAGE_NAME: patrg444/Cygni
+2025-07-20T04:59:58.7294111Z ##[endgroup]
+2025-07-20T04:59:58.7361647Z ##[group]Run entrypoint.sh
+2025-07-20T04:59:58.7361900Z [36;1mentrypoint.sh[0m
+2025-07-20T04:59:58.7387045Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2025-07-20T04:59:58.7387368Z env:
+2025-07-20T04:59:58.7387541Z   REGISTRY: ghcr.io
+2025-07-20T04:59:58.7387770Z   IMAGE_NAME: patrg444/Cygni
+2025-07-20T04:59:58.7388010Z   INPUT_SCAN_TYPE: fs
+2025-07-20T04:59:58.7388210Z   INPUT_IMAGE_REF: 
+2025-07-20T04:59:58.7388393Z   INPUT_SCAN_REF: .
+2025-07-20T04:59:58.7388592Z   INPUT_TRIVYIGNORES: 
+2025-07-20T04:59:58.7388794Z   INPUT_GITHUB_PAT: 
+2025-07-20T04:59:58.7389011Z   INPUT_LIMIT_SEVERITIES_FOR_SARIF: 
+2025-07-20T04:59:58.7389324Z   TRIVY_CACHE_DIR: /home/runner/work/Cygni/Cygni/.cache/trivy
+2025-07-20T04:59:58.7389627Z ##[endgroup]
+2025-07-20T04:59:58.7447134Z Building SARIF report with all severities
+2025-07-20T04:59:58.7447669Z Running Trivy with options: trivy fs .
+2025-07-20T04:59:58.7969859Z 2025-07-20T04:59:58Z	INFO	[vulndb] Need to update DB
+2025-07-20T04:59:58.7970425Z 2025-07-20T04:59:58Z	INFO	[vulndb] Downloading vulnerability DB...
+2025-07-20T04:59:58.7971093Z 2025-07-20T04:59:58Z	INFO	[vulndb] Downloading artifact...	repo="mirror.gcr.io/aquasec/trivy-db:2"
+2025-07-20T05:00:03.7746277Z 20.10 MiB / 66.99 MiB [------------------>__________________________________________] 30.01% ? p/s ?62.16 MiB / 66.99 MiB [-------------------------------------------------------->____] 92.79% ? p/s ?66.99 MiB / 66.99 MiB [----------------------------------------------------------->] 100.00% ? p/s ?66.99 MiB / 66.99 MiB [---------------------------------------------->] 100.00% 78.12 MiB p/s ETA 0s66.99 MiB / 66.99 MiB [---------------------------------------------->] 100.00% 78.12 MiB p/s ETA 0s66.99 MiB / 66.99 MiB [---------------------------------------------->] 100.00% 78.12 MiB p/s ETA 0s66.99 MiB / 66.99 MiB [---------------------------------------------->] 100.00% 73.08 MiB p/s ETA 0s66.99 MiB / 66.99 MiB [---------------------------------------------->] 100.00% 73.08 MiB p/s ETA 0s66.99 MiB / 66.99 MiB [---------------------------------------------->] 100.00% 73.08 MiB p/s ETA 0s66.99 MiB / 66.99 MiB [---------------------------------------------->] 100.00% 68.37 MiB p/s ETA 0s66.99 MiB / 66.99 MiB [---------------------------------------------->] 100.00% 68.37 MiB p/s ETA 0s66.99 MiB / 66.99 MiB [---------------------------------------------->] 100.00% 68.37 MiB p/s ETA 0s66.99 MiB / 66.99 MiB [-------------------------------------------------] 100.00% 29.73 MiB p/s 2.5s2025-07-20T05:00:03Z	INFO	[vulndb] Artifact successfully downloaded	repo="mirror.gcr.io/aquasec/trivy-db:2"
+2025-07-20T05:00:03.7751257Z 2025-07-20T05:00:03Z	INFO	[vuln] Vulnerability scanning is enabled
+2025-07-20T05:00:03.7751975Z 2025-07-20T05:00:03Z	INFO	[secret] Secret scanning is enabled
+2025-07-20T05:00:03.7752855Z 2025-07-20T05:00:03Z	INFO	[secret] If your scanning is slow, please try '--scanners vuln' to disable secret scanning
+2025-07-20T05:00:03.7754197Z 2025-07-20T05:00:03Z	INFO	[secret] Please see also https://trivy.dev/v0.64/docs/scanner/secret#recommendation for faster secret detection
+2025-07-20T05:00:03.8944843Z 2025-07-20T05:00:03Z	INFO	[pnpm] To collect the license information of packages, "pnpm install" needs to be performed beforehand	dir="node_modules"
+2025-07-20T05:00:03.9222811Z 2025-07-20T05:00:03Z	INFO	[npm] To collect the license information of packages, "npm install" needs to be performed beforehand	dir="examples/express-demo/node_modules"
+2025-07-20T05:00:03.9254891Z 2025-07-20T05:00:03Z	INFO	[npm] To collect the license information of packages, "npm install" needs to be performed beforehand	dir="node_modules"
+2025-07-20T05:00:03.9557042Z 2025-07-20T05:00:03Z	INFO	Suppressing dependencies for development and testing. To display them, try the '--include-dev-deps' flag.
+2025-07-20T05:00:03.9560330Z 2025-07-20T05:00:03Z	INFO	Number of language-specific files	num=3
+2025-07-20T05:00:03.9561265Z 2025-07-20T05:00:03Z	INFO	[npm] Detecting vulnerabilities...
+2025-07-20T05:00:03.9675324Z 2025-07-20T05:00:03Z	INFO	[pnpm] Detecting vulnerabilities...
+2025-07-20T05:00:03.9883161Z ##[group]Run rm -f trivy_envs.txt
+2025-07-20T05:00:03.9883451Z [36;1mrm -f trivy_envs.txt[0m
+2025-07-20T05:00:03.9910801Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2025-07-20T05:00:03.9911132Z env:
+2025-07-20T05:00:03.9911308Z   REGISTRY: ghcr.io
+2025-07-20T05:00:03.9911514Z   IMAGE_NAME: patrg444/Cygni
+2025-07-20T05:00:03.9911733Z ##[endgroup]
+2025-07-20T05:00:04.0022223Z ##[group]Run github/codeql-action/upload-sarif@v3
+2025-07-20T05:00:04.0022518Z with:
+2025-07-20T05:00:04.0022709Z   sarif_file: trivy-results.sarif
+2025-07-20T05:00:04.0022983Z   checkout_path: /home/runner/work/Cygni/Cygni
+2025-07-20T05:00:04.0023398Z   token: ***
+2025-07-20T05:00:04.0023588Z   matrix: null
+2025-07-20T05:00:04.0023787Z   wait-for-processing: true
+2025-07-20T05:00:04.0024382Z env:
+2025-07-20T05:00:04.0024733Z   REGISTRY: ghcr.io
+2025-07-20T05:00:04.0025038Z   IMAGE_NAME: patrg444/Cygni
+2025-07-20T05:00:04.0025262Z ##[endgroup]
+2025-07-20T05:00:04.7211905Z ##[group]Uploading code scanning results
+2025-07-20T05:00:04.7212481Z Processing sarif files: ["trivy-results.sarif"]
+2025-07-20T05:00:04.7217073Z Validating trivy-results.sarif
+2025-07-20T05:00:04.7902043Z Adding fingerprints to SARIF file. See https://docs.github.com/en/enterprise-cloud@latest/code-security/code-scanning/integrating-with-code-scanning/sarif-support-for-code-scanning#providing-data-to-track-code-scanning-alerts-across-runs for more information.
+2025-07-20T05:00:04.9818322Z Uploading results
+2025-07-20T05:00:05.4104411Z Successfully uploaded results
+2025-07-20T05:00:05.4118574Z ##[endgroup]
+2025-07-20T05:00:05.4119171Z ##[group]Waiting for processing to finish
+2025-07-20T05:00:05.5085918Z Analysis upload status is pending.
+2025-07-20T05:00:10.6613047Z Analysis upload status is complete.
+2025-07-20T05:00:10.6613849Z ##[endgroup]
+2025-07-20T05:00:10.7910905Z ##[group]Run echo "Checking for package.json files..."
+2025-07-20T05:00:10.7911327Z [36;1mecho "Checking for package.json files..."[0m
+2025-07-20T05:00:10.7911748Z [36;1mls -la services/api/package.json || echo "No package.json in api"[0m
+2025-07-20T05:00:10.7912218Z [36;1mls -la services/auth/package.json || echo "No package.json in auth"[0m
+2025-07-20T05:00:10.7912701Z [36;1mls -la services/builder/package.json || echo "No package.json in builder"[0m
+2025-07-20T05:00:10.7941732Z shell: /usr/bin/bash -e {0}
+2025-07-20T05:00:10.7941973Z env:
+2025-07-20T05:00:10.7942150Z   REGISTRY: ghcr.io
+2025-07-20T05:00:10.7942358Z   IMAGE_NAME: patrg444/Cygni
+2025-07-20T05:00:10.7942614Z   CODEQL_ACTION_FEATURE_MULTI_LANGUAGE: false
+2025-07-20T05:00:10.7942904Z   CODEQL_ACTION_FEATURE_SANDWICH: false
+2025-07-20T05:00:10.7943173Z   CODEQL_ACTION_FEATURE_SARIF_COMBINE: true
+2025-07-20T05:00:10.7943447Z   CODEQL_ACTION_FEATURE_WILL_UPLOAD: true
+2025-07-20T05:00:10.7943737Z   CODEQL_ACTION_VERSION: 3.29.2
+2025-07-20T05:00:10.7944049Z   CODEQL_ACTION_ANALYSIS_KEY: .github/workflows/ci.yml:security
+2025-07-20T05:00:10.7944415Z   CODEQL_WORKFLOW_STARTED_AT: 2025-07-20T05:00:04.278Z
+2025-07-20T05:00:10.7944949Z   CODEQL_UPLOAD_SARIF__GITHUB_WORKFLOWS_CI_YML_SECURITY__TRIVY: CODEQL_UPLOAD_SARIF__GITHUB_WORKFLOWS_CI_YML_SECURITY__TRIVY
+2025-07-20T05:00:10.7945440Z ##[endgroup]
+2025-07-20T05:00:10.7992449Z Checking for package.json files...
+2025-07-20T05:00:10.8005885Z -rw-r--r-- 1 runner docker 1198 Jul 20 04:59 services/api/package.json
+2025-07-20T05:00:10.8019663Z -rw-r--r-- 1 runner docker 636 Jul 20 04:59 services/auth/package.json
+2025-07-20T05:00:10.8033023Z -rw-r--r-- 1 runner docker 815 Jul 20 04:59 services/builder/package.json
+2025-07-20T05:00:10.8073167Z Post job cleanup.
+2025-07-20T05:00:11.1671355Z ##[group]Uploading combined SARIF debug artifact
+2025-07-20T05:00:11.1673919Z ##[endgroup]
+2025-07-20T05:00:11.1902552Z Post job cleanup.
+2025-07-20T05:00:11.1929569Z Post job cleanup.
+2025-07-20T05:00:11.3181188Z Cache hit occurred on the primary key cache-trivy-2025-07-20, not saving cache.
+2025-07-20T05:00:11.3279997Z Post job cleanup.
+2025-07-20T05:00:11.3305755Z Post job cleanup.
+2025-07-20T05:00:11.4558471Z Cache hit occurred on the primary key trivy-binary-v0.64.1-Linux-X64, not saving cache.
+2025-07-20T05:00:11.4656448Z Post job cleanup.
+2025-07-20T05:00:11.5711912Z [command]/usr/bin/git version
+2025-07-20T05:00:11.5749290Z git version 2.50.1
+2025-07-20T05:00:11.5794661Z Temporarily overriding HOME='/home/runner/work/_temp/8e4093ae-29c3-4e93-8c00-82fe43b9fcaa' before making global git config changes
+2025-07-20T05:00:11.5795987Z Adding repository directory to the temporary git global config as a safe directory
+2025-07-20T05:00:11.5807822Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/Cygni/Cygni
+2025-07-20T05:00:11.5842772Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2025-07-20T05:00:11.5875473Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2025-07-20T05:00:11.6100528Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-07-20T05:00:11.6120952Z http.https://github.com/.extraheader
+2025-07-20T05:00:11.6133060Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2025-07-20T05:00:11.6164366Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2025-07-20T05:00:11.6485885Z Cleaning up orphan processes

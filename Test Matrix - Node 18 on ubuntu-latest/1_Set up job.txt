@@ -1,0 +1,39 @@
+﻿2025-07-20T04:59:47.8911981Z Current runner version: '2.326.0'
+2025-07-20T04:59:47.8939520Z ##[group]Runner Image Provisioner
+2025-07-20T04:59:47.8940421Z Hosted Compute Agent
+2025-07-20T04:59:47.8940972Z Version: 20250711.363
+2025-07-20T04:59:47.8941641Z Commit: 6785254374ce925a23743850c1cb91912ce5c14c
+2025-07-20T04:59:47.8942372Z Build Date: 2025-07-11T20:04:25Z
+2025-07-20T04:59:47.8942931Z ##[endgroup]
+2025-07-20T04:59:47.8943542Z ##[group]Operating System
+2025-07-20T04:59:47.8944376Z Ubuntu
+2025-07-20T04:59:47.8944905Z 24.04.2
+2025-07-20T04:59:47.8945479Z LTS
+2025-07-20T04:59:47.8945907Z ##[endgroup]
+2025-07-20T04:59:47.8946405Z ##[group]Runner Image
+2025-07-20T04:59:47.8946967Z Image: ubuntu-24.04
+2025-07-20T04:59:47.8947500Z Version: 20250710.1.0
+2025-07-20T04:59:47.8948469Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20250710.1/images/ubuntu/Ubuntu2404-Readme.md
+2025-07-20T04:59:47.8949845Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20250710.1
+2025-07-20T04:59:47.8951142Z ##[endgroup]
+2025-07-20T04:59:47.8952625Z ##[group]GITHUB_TOKEN Permissions
+2025-07-20T04:59:47.8955161Z Contents: read
+2025-07-20T04:59:47.8955811Z Metadata: read
+2025-07-20T04:59:47.8956315Z Packages: read
+2025-07-20T04:59:47.8956818Z ##[endgroup]
+2025-07-20T04:59:47.8959780Z Secret source: Actions
+2025-07-20T04:59:47.8960569Z Prepare workflow directory
+2025-07-20T04:59:47.9473342Z Prepare all required actions
+2025-07-20T04:59:47.9510668Z Getting action download info
+2025-07-20T04:59:48.4296637Z ##[group]Download immutable action package 'actions/checkout@v4'
+2025-07-20T04:59:48.4298210Z Version: 4.2.2
+2025-07-20T04:59:48.4299364Z Digest: sha256:ccb2698953eaebd21c7bf6268a94f9c26518a7e38e27e0b83c1fe1ad049819b1
+2025-07-20T04:59:48.4300552Z Source commit SHA: 11bd71901bbe5b1630ceea73d27597364c9af683
+2025-07-20T04:59:48.4301372Z ##[endgroup]
+2025-07-20T04:59:48.5166431Z Download action repository 'pnpm/action-setup@v2' (SHA:eae0cfeb286e66ffb5155f1a79b90583a127a68b)
+2025-07-20T04:59:48.7953775Z ##[group]Download immutable action package 'actions/setup-node@v4'
+2025-07-20T04:59:48.7954992Z Version: 4.4.0
+2025-07-20T04:59:48.7955816Z Digest: sha256:9427cefe82346e992fb5b949e3569b39d537ae41aa3086483b14eceebfc16bc1
+2025-07-20T04:59:48.7956896Z Source commit SHA: 49933ea5288caeca8642d1e84afbd3f7d6820020
+2025-07-20T04:59:48.7957585Z ##[endgroup]
+2025-07-20T04:59:49.0130975Z Complete job name: Test Matrix - Node 18 on ubuntu-latest

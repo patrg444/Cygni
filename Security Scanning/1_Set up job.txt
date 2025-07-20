@@ -1,0 +1,47 @@
+﻿2025-07-20T04:59:48.0881576Z Current runner version: '2.326.0'
+2025-07-20T04:59:48.0906670Z ##[group]Runner Image Provisioner
+2025-07-20T04:59:48.0907864Z Hosted Compute Agent
+2025-07-20T04:59:48.0908371Z Version: 20250711.363
+2025-07-20T04:59:48.0909024Z Commit: 6785254374ce925a23743850c1cb91912ce5c14c
+2025-07-20T04:59:48.0909667Z Build Date: 2025-07-11T20:04:25Z
+2025-07-20T04:59:48.0910242Z ##[endgroup]
+2025-07-20T04:59:48.0910788Z ##[group]Operating System
+2025-07-20T04:59:48.0911366Z Ubuntu
+2025-07-20T04:59:48.0911804Z 24.04.2
+2025-07-20T04:59:48.0912296Z LTS
+2025-07-20T04:59:48.0912757Z ##[endgroup]
+2025-07-20T04:59:48.0913193Z ##[group]Runner Image
+2025-07-20T04:59:48.0913786Z Image: ubuntu-24.04
+2025-07-20T04:59:48.0914282Z Version: 20250710.1.0
+2025-07-20T04:59:48.0915274Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20250710.1/images/ubuntu/Ubuntu2404-Readme.md
+2025-07-20T04:59:48.0916574Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20250710.1
+2025-07-20T04:59:48.0918097Z ##[endgroup]
+2025-07-20T04:59:48.0919274Z ##[group]GITHUB_TOKEN Permissions
+2025-07-20T04:59:48.0921402Z Contents: read
+2025-07-20T04:59:48.0921935Z Metadata: read
+2025-07-20T04:59:48.0922498Z SecurityEvents: write
+2025-07-20T04:59:48.0923016Z ##[endgroup]
+2025-07-20T04:59:48.0924979Z Secret source: Actions
+2025-07-20T04:59:48.0925781Z Prepare workflow directory
+2025-07-20T04:59:48.1445870Z Prepare all required actions
+2025-07-20T04:59:48.1483441Z Getting action download info
+2025-07-20T04:59:48.4906562Z ##[group]Download immutable action package 'actions/checkout@v4'
+2025-07-20T04:59:48.4907757Z Version: 4.2.2
+2025-07-20T04:59:48.4908857Z Digest: sha256:ccb2698953eaebd21c7bf6268a94f9c26518a7e38e27e0b83c1fe1ad049819b1
+2025-07-20T04:59:48.4910010Z Source commit SHA: 11bd71901bbe5b1630ceea73d27597364c9af683
+2025-07-20T04:59:48.4910718Z ##[endgroup]
+2025-07-20T04:59:48.5909911Z Download action repository 'aquasecurity/trivy-action@master' (SHA:77137e9dc3ab1b329b7c8a38c2eb7475850a14e8)
+2025-07-20T04:59:48.8881853Z ##[group]Download immutable action package 'github/codeql-action@v3'
+2025-07-20T04:59:48.8882684Z Version: 3.29.2
+2025-07-20T04:59:48.8883470Z Digest: sha256:617a9ad0698ba03fb7c3febbfd3b22a70991075522cc2e00cf6d2863a54536d7
+2025-07-20T04:59:48.8884430Z Source commit SHA: 181d5eefc20863364f96762470ba6f862bdef56b
+2025-07-20T04:59:48.8885100Z ##[endgroup]
+2025-07-20T04:59:53.9625031Z Getting action download info
+2025-07-20T04:59:54.1403042Z Download action repository 'aquasecurity/setup-trivy@ff1b8b060f23b650436d419b5e13f67f5d4c3087' (SHA:ff1b8b060f23b650436d419b5e13f67f5d4c3087)
+2025-07-20T04:59:54.4527436Z ##[group]Download immutable action package 'actions/cache@v4'
+2025-07-20T04:59:54.4527872Z Version: 4.2.3
+2025-07-20T04:59:54.4528250Z Digest: sha256:c8a3bb963e1f1826d8fcc8d1354f0dd29d8ac1db1d4f6f20247055ae11b81ed9
+2025-07-20T04:59:54.4528750Z Source commit SHA: 5a3ec84eff668545956fd18022155c47e93e2684
+2025-07-20T04:59:54.4529070Z ##[endgroup]
+2025-07-20T04:59:54.5638441Z Getting action download info
+2025-07-20T04:59:54.7318338Z Complete job name: Security Scanning

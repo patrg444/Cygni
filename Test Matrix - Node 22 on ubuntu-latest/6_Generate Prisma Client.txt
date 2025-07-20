@@ -1,0 +1,34 @@
+﻿2025-07-20T05:00:01.2271618Z ##[group]Run pnpm run prisma:generate
+2025-07-20T05:00:01.2271930Z [36;1mpnpm run prisma:generate[0m
+2025-07-20T05:00:01.2300656Z shell: /usr/bin/bash -e {0}
+2025-07-20T05:00:01.2300878Z env:
+2025-07-20T05:00:01.2301036Z   REGISTRY: ghcr.io
+2025-07-20T05:00:01.2301230Z   IMAGE_NAME: patrg444/Cygni
+2025-07-20T05:00:01.2301488Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2025-07-20T05:00:01.2301764Z ##[endgroup]
+2025-07-20T05:00:01.6127446Z 
+2025-07-20T05:00:01.6128248Z > cloudexpress@0.1.0 prisma:generate /home/runner/work/Cygni/Cygni
+2025-07-20T05:00:01.6128746Z > ./scripts/generate-prisma.sh
+2025-07-20T05:00:01.6128904Z 
+2025-07-20T05:00:01.6171852Z Generating Prisma clients...
+2025-07-20T05:00:01.6186680Z Generating Prisma client for services/api
+2025-07-20T05:00:05.2783463Z Prisma schema loaded from prisma/schema.prisma
+2025-07-20T05:00:05.6733016Z 
+2025-07-20T05:00:05.6734423Z ✔ Generated Prisma Client (v5.22.0) to ./../../node_modules/@prisma/client-api in 162ms
+2025-07-20T05:00:05.6735161Z 
+2025-07-20T05:00:05.6735893Z Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+2025-07-20T05:00:05.6736480Z 
+2025-07-20T05:00:05.6737735Z Tip: Want to react to database changes in your app as they happen? Discover how with Pulse: https://pris.ly/tip-1-pulse
+2025-07-20T05:00:05.6738441Z 
+2025-07-20T05:00:05.9327529Z Generating Prisma client for services/builder
+2025-07-20T05:00:08.9867612Z sh: 1: prisma: not found
+2025-07-20T05:00:09.0037103Z Generating Prisma client for packages/api
+2025-07-20T05:00:12.3942116Z Prisma schema loaded from prisma/schema.prisma
+2025-07-20T05:00:12.7370293Z 
+2025-07-20T05:00:12.7371923Z ✔ Generated Prisma Client (v5.22.0) to ./../../node_modules/.pnpm/@prisma+client@5.22.0_prisma@5.22.0/node_modules/@prisma/client in 135ms
+2025-07-20T05:00:12.7372716Z 
+2025-07-20T05:00:12.7373245Z Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+2025-07-20T05:00:12.7373749Z 
+2025-07-20T05:00:12.7374363Z Tip: Easily identify and fix slow SQL queries in your app. Optimize helps you enhance your visibility: https://pris.ly/--optimize
+2025-07-20T05:00:12.7374926Z 
+2025-07-20T05:00:12.9654229Z Prisma client generation complete!

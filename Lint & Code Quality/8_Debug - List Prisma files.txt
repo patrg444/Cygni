@@ -1,0 +1,41 @@
+﻿2025-07-20T05:00:26.3969051Z ##[group]Run echo "=== Checking Prisma client generation ==="
+2025-07-20T05:00:26.3969488Z [36;1mecho "=== Checking Prisma client generation ==="[0m
+2025-07-20T05:00:26.3970018Z [36;1mls -la node_modules/.pnpm/@prisma+client*/node_modules/@prisma/client/ || echo "No Prisma client found"[0m
+2025-07-20T05:00:26.3970521Z [36;1mecho "=== Checking services/api Prisma ==="[0m
+2025-07-20T05:00:26.3970954Z [36;1mls -la services/api/node_modules/.prisma/client/ || echo "No .prisma/client found"[0m
+2025-07-20T05:00:26.3999956Z shell: /usr/bin/bash -e {0}
+2025-07-20T05:00:26.4000192Z env:
+2025-07-20T05:00:26.4000356Z   REGISTRY: ghcr.io
+2025-07-20T05:00:26.4000567Z   IMAGE_NAME: patrg444/Cygni
+2025-07-20T05:00:26.4000856Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2025-07-20T05:00:26.4001152Z ##[endgroup]
+2025-07-20T05:00:26.4168372Z === Checking Prisma client generation ===
+2025-07-20T05:00:26.4198261Z total 112
+2025-07-20T05:00:26.4198941Z drwxr-xr-x 6 runner docker  4096 Jul 20 05:00 .
+2025-07-20T05:00:26.4201965Z drwxr-xr-x 3 runner docker  4096 Jul 20 04:59 ..
+2025-07-20T05:00:26.4202793Z -rw-r--r-- 1 runner docker 11357 Jul 20 04:59 LICENSE
+2025-07-20T05:00:26.4203422Z -rw-r--r-- 1 runner docker  2553 Jul 20 04:59 README.md
+2025-07-20T05:00:26.4203839Z -rw-r--r-- 1 runner docker    39 Jul 20 04:59 default.d.ts
+2025-07-20T05:00:26.4204237Z -rw-r--r-- 1 runner docker    61 Jul 20 04:59 default.js
+2025-07-20T05:00:26.4204602Z -rw-r--r-- 1 runner docker    36 Jul 20 04:59 edge.d.ts
+2025-07-20T05:00:26.4204961Z -rw-r--r-- 1 runner docker   107 Jul 20 04:59 edge.js
+2025-07-20T05:00:26.4205338Z -rw-r--r-- 1 runner docker    40 Jul 20 04:59 extension.d.ts
+2025-07-20T05:00:26.4205726Z -rw-r--r-- 1 runner docker   111 Jul 20 04:59 extension.js
+2025-07-20T05:00:26.4206128Z drwxr-xr-x 2 runner docker  4096 Jul 20 04:59 generator-build
+2025-07-20T05:00:26.4206564Z -rw-r--r-- 1 runner docker    80 Jul 20 04:59 index-browser.js
+2025-07-20T05:00:26.4206948Z -rw-r--r-- 1 runner docker    39 Jul 20 04:59 index.d.ts
+2025-07-20T05:00:26.4207306Z -rw-r--r-- 1 runner docker   110 Jul 20 04:59 index.js
+2025-07-20T05:00:26.4207680Z drwxr-xr-x 3 runner docker  4096 Jul 20 05:00 node_modules
+2025-07-20T05:00:26.4208060Z -rw-r--r-- 1 runner docker  8156 Jul 20 04:59 package.json
+2025-07-20T05:00:26.4208463Z -rw-r--r-- 1 runner docker    44 Jul 20 04:59 react-native.d.ts
+2025-07-20T05:00:26.4208869Z -rw-r--r-- 1 runner docker    66 Jul 20 04:59 react-native.js
+2025-07-20T05:00:26.4209250Z drwxr-xr-x 2 runner docker  4096 Jul 20 04:59 runtime
+2025-07-20T05:00:26.4209609Z drwxr-xr-x 2 runner docker  4096 Jul 20 04:59 scripts
+2025-07-20T05:00:26.4209954Z -rw-r--r-- 1 runner docker    35 Jul 20 04:59 sql.d.ts
+2025-07-20T05:00:26.4210305Z -rw-r--r-- 1 runner docker    70 Jul 20 04:59 sql.js
+2025-07-20T05:00:26.4210656Z -rw-r--r-- 1 runner docker    51 Jul 20 04:59 sql.mjs
+2025-07-20T05:00:26.4211184Z -rw-r--r-- 1 runner docker    36 Jul 20 04:59 wasm.d.ts
+2025-07-20T05:00:26.4211807Z -rw-r--r-- 1 runner docker   107 Jul 20 04:59 wasm.js
+2025-07-20T05:00:26.4212516Z === Checking services/api Prisma ===
+2025-07-20T05:00:26.4214604Z ls: cannot access 'services/api/node_modules/.prisma/client/': No such file or directory
+2025-07-20T05:00:26.4216628Z No .prisma/client found

@@ -1,0 +1,21 @@
+﻿2025-07-20T04:59:52.8161705Z ##[group]Run actions/setup-node@v4
+2025-07-20T04:59:52.8162060Z with:
+2025-07-20T04:59:52.8162331Z   node-version: 20
+2025-07-20T04:59:52.8162679Z   cache: pnpm
+2025-07-20T04:59:52.8162975Z   always-auth: false
+2025-07-20T04:59:52.8163287Z   check-latest: false
+2025-07-20T04:59:52.8163694Z   token: ***
+2025-07-20T04:59:52.8163983Z env:
+2025-07-20T04:59:52.8164207Z   REGISTRY: ghcr.io
+2025-07-20T04:59:52.8164535Z   IMAGE_NAME: patrg444/Cygni
+2025-07-20T04:59:52.8164961Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2025-07-20T04:59:52.8165303Z ##[endgroup]
+2025-07-20T04:59:52.9897692Z Found in cache @ /opt/hostedtoolcache/node/20.19.3/x64
+2025-07-20T04:59:52.9903161Z ##[group]Environment details
+2025-07-20T04:59:53.3411712Z node: v20.19.3
+2025-07-20T04:59:53.3412377Z npm: 10.8.2
+2025-07-20T04:59:53.3413018Z yarn: 1.22.22
+2025-07-20T04:59:53.3413979Z ##[endgroup]
+2025-07-20T04:59:53.3437369Z [command]/home/runner/setup-pnpm/node_modules/.bin/pnpm store path --silent
+2025-07-20T04:59:53.8423230Z /home/runner/setup-pnpm/node_modules/.bin/store/v3
+2025-07-20T04:59:54.0910588Z pnpm cache is not found

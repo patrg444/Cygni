@@ -1,0 +1,39 @@
+﻿2025-07-20T04:59:48.2551420Z Current runner version: '2.326.0'
+2025-07-20T04:59:48.2586733Z ##[group]Runner Image Provisioner
+2025-07-20T04:59:48.2587871Z Hosted Compute Agent
+2025-07-20T04:59:48.2588777Z Version: 20250711.363
+2025-07-20T04:59:48.2589870Z Commit: 6785254374ce925a23743850c1cb91912ce5c14c
+2025-07-20T04:59:48.2591010Z Build Date: 2025-07-11T20:04:25Z
+2025-07-20T04:59:48.2591924Z ##[endgroup]
+2025-07-20T04:59:48.2593223Z ##[group]Operating System
+2025-07-20T04:59:48.2594288Z Ubuntu
+2025-07-20T04:59:48.2595205Z 24.04.2
+2025-07-20T04:59:48.2596160Z LTS
+2025-07-20T04:59:48.2596931Z ##[endgroup]
+2025-07-20T04:59:48.2597755Z ##[group]Runner Image
+2025-07-20T04:59:48.2598698Z Image: ubuntu-24.04
+2025-07-20T04:59:48.2599516Z Version: 20250710.1.0
+2025-07-20T04:59:48.2601225Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20250710.1/images/ubuntu/Ubuntu2404-Readme.md
+2025-07-20T04:59:48.2603956Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20250710.1
+2025-07-20T04:59:48.2605839Z ##[endgroup]
+2025-07-20T04:59:48.2607744Z ##[group]GITHUB_TOKEN Permissions
+2025-07-20T04:59:48.2610460Z Contents: read
+2025-07-20T04:59:48.2611416Z Metadata: read
+2025-07-20T04:59:48.2612381Z Packages: read
+2025-07-20T04:59:48.2613194Z ##[endgroup]
+2025-07-20T04:59:48.2616071Z Secret source: Actions
+2025-07-20T04:59:48.2617115Z Prepare workflow directory
+2025-07-20T04:59:48.3353027Z Prepare all required actions
+2025-07-20T04:59:48.3409279Z Getting action download info
+2025-07-20T04:59:48.6250984Z ##[group]Download immutable action package 'actions/checkout@v4'
+2025-07-20T04:59:48.6252453Z Version: 4.2.2
+2025-07-20T04:59:48.6253614Z Digest: sha256:ccb2698953eaebd21c7bf6268a94f9c26518a7e38e27e0b83c1fe1ad049819b1
+2025-07-20T04:59:48.6254753Z Source commit SHA: 11bd71901bbe5b1630ceea73d27597364c9af683
+2025-07-20T04:59:48.6255531Z ##[endgroup]
+2025-07-20T04:59:48.7191694Z Download action repository 'pnpm/action-setup@v2' (SHA:eae0cfeb286e66ffb5155f1a79b90583a127a68b)
+2025-07-20T04:59:49.0233530Z ##[group]Download immutable action package 'actions/setup-node@v4'
+2025-07-20T04:59:49.0234375Z Version: 4.4.0
+2025-07-20T04:59:49.0235109Z Digest: sha256:9427cefe82346e992fb5b949e3569b39d537ae41aa3086483b14eceebfc16bc1
+2025-07-20T04:59:49.0236184Z Source commit SHA: 49933ea5288caeca8642d1e84afbd3f7d6820020
+2025-07-20T04:59:49.0236855Z ##[endgroup]
+2025-07-20T04:59:49.2479698Z Complete job name: Lint & Code Quality

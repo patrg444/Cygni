@@ -1,0 +1,72 @@
+﻿2025-07-20T05:00:46.8604244Z ##[group]Run actions/checkout@v4
+2025-07-20T05:00:46.8605072Z with:
+2025-07-20T05:00:46.8605519Z   repository: patrg444/Cygni
+2025-07-20T05:00:46.8606135Z   token: ***
+2025-07-20T05:00:46.8606513Z   ssh-strict: true
+2025-07-20T05:00:46.8607068Z   ssh-user: git
+2025-07-20T05:00:46.8607469Z   persist-credentials: true
+2025-07-20T05:00:46.8607898Z   clean: true
+2025-07-20T05:00:46.8608292Z   sparse-checkout-cone-mode: true
+2025-07-20T05:00:46.8608768Z   fetch-depth: 1
+2025-07-20T05:00:46.8609159Z   fetch-tags: false
+2025-07-20T05:00:46.8609546Z   show-progress: true
+2025-07-20T05:00:46.8609946Z   lfs: false
+2025-07-20T05:00:46.8610304Z   submodules: false
+2025-07-20T05:00:46.8610695Z   set-safe-directory: true
+2025-07-20T05:00:46.8611386Z env:
+2025-07-20T05:00:46.8611737Z   REGISTRY: ghcr.io
+2025-07-20T05:00:46.8612158Z   IMAGE_NAME: patrg444/Cygni
+2025-07-20T05:00:46.8612590Z ##[endgroup]
+2025-07-20T05:00:46.9696545Z Syncing repository: patrg444/Cygni
+2025-07-20T05:00:46.9699296Z ##[group]Getting Git version info
+2025-07-20T05:00:46.9700493Z Working directory is '/home/runner/work/Cygni/Cygni'
+2025-07-20T05:00:46.9702089Z [command]/usr/bin/git version
+2025-07-20T05:00:46.9723582Z git version 2.50.1
+2025-07-20T05:00:46.9750010Z ##[endgroup]
+2025-07-20T05:00:46.9765081Z Temporarily overriding HOME='/home/runner/work/_temp/f3870950-ad14-417a-b12e-7af5138b606b' before making global git config changes
+2025-07-20T05:00:46.9767718Z Adding repository directory to the temporary git global config as a safe directory
+2025-07-20T05:00:46.9779005Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/Cygni/Cygni
+2025-07-20T05:00:46.9811439Z Deleting the contents of '/home/runner/work/Cygni/Cygni'
+2025-07-20T05:00:46.9815238Z ##[group]Initializing the repository
+2025-07-20T05:00:46.9820078Z [command]/usr/bin/git init /home/runner/work/Cygni/Cygni
+2025-07-20T05:00:46.9872788Z hint: Using 'master' as the name for the initial branch. This default branch name
+2025-07-20T05:00:46.9874302Z hint: is subject to change. To configure the initial branch name to use in all
+2025-07-20T05:00:46.9875695Z hint: of your new repositories, which will suppress this warning, call:
+2025-07-20T05:00:46.9876497Z hint:
+2025-07-20T05:00:46.9877492Z hint: 	git config --global init.defaultBranch <name>
+2025-07-20T05:00:46.9878624Z hint:
+2025-07-20T05:00:46.9879612Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2025-07-20T05:00:46.9881229Z hint: 'development'. The just-created branch can be renamed via this command:
+2025-07-20T05:00:46.9882544Z hint:
+2025-07-20T05:00:46.9883208Z hint: 	git branch -m <name>
+2025-07-20T05:00:46.9883927Z hint:
+2025-07-20T05:00:46.9884915Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2025-07-20T05:00:46.9886796Z Initialized empty Git repository in /home/runner/work/Cygni/Cygni/.git/
+2025-07-20T05:00:46.9889457Z [command]/usr/bin/git remote add origin https://github.com/patrg444/Cygni
+2025-07-20T05:00:46.9920987Z ##[endgroup]
+2025-07-20T05:00:46.9921711Z ##[group]Disabling automatic garbage collection
+2025-07-20T05:00:46.9924870Z [command]/usr/bin/git config --local gc.auto 0
+2025-07-20T05:00:46.9952325Z ##[endgroup]
+2025-07-20T05:00:46.9953028Z ##[group]Setting up auth
+2025-07-20T05:00:46.9959039Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2025-07-20T05:00:46.9988545Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2025-07-20T05:00:47.0233785Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-07-20T05:00:47.0264347Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2025-07-20T05:00:47.0480709Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2025-07-20T05:00:47.0521285Z ##[endgroup]
+2025-07-20T05:00:47.0522504Z ##[group]Fetching the repository
+2025-07-20T05:00:47.0530961Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +ed550598453f64cb10e7ffd14d06b4707a350876:refs/remotes/origin/main
+2025-07-20T05:00:47.5694012Z From https://github.com/patrg444/Cygni
+2025-07-20T05:00:47.5695706Z  * [new ref]         ed550598453f64cb10e7ffd14d06b4707a350876 -> origin/main
+2025-07-20T05:00:47.5719767Z ##[endgroup]
+2025-07-20T05:00:47.5721073Z ##[group]Determining the checkout info
+2025-07-20T05:00:47.5724462Z ##[endgroup]
+2025-07-20T05:00:47.5728248Z [command]/usr/bin/git sparse-checkout disable
+2025-07-20T05:00:47.5771897Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2025-07-20T05:00:47.5805138Z ##[group]Checking out the ref
+2025-07-20T05:00:47.5810256Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2025-07-20T05:00:47.6045761Z Switched to a new branch 'main'
+2025-07-20T05:00:47.6048442Z branch 'main' set up to track 'origin/main'.
+2025-07-20T05:00:47.6055541Z ##[endgroup]
+2025-07-20T05:00:47.6088260Z [command]/usr/bin/git log -1 --format=%H
+2025-07-20T05:00:47.6109730Z ed550598453f64cb10e7ffd14d06b4707a350876

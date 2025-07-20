@@ -1,0 +1,131 @@
+﻿2025-07-20T05:00:15.9333030Z ##[group]Run pnpm run lint
+2025-07-20T05:00:15.9333311Z [36;1mpnpm run lint[0m
+2025-07-20T05:00:15.9361763Z shell: /usr/bin/bash -e {0}
+2025-07-20T05:00:15.9362001Z env:
+2025-07-20T05:00:15.9362394Z   REGISTRY: ghcr.io
+2025-07-20T05:00:15.9362617Z   IMAGE_NAME: patrg444/Cygni
+2025-07-20T05:00:15.9362890Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2025-07-20T05:00:15.9363186Z ##[endgroup]
+2025-07-20T05:00:16.3233924Z 
+2025-07-20T05:00:16.3234641Z > cloudexpress@0.1.0 lint /home/runner/work/Cygni/Cygni
+2025-07-20T05:00:16.3235124Z > npx turbo run lint
+2025-07-20T05:00:16.3235637Z 
+2025-07-20T05:00:16.6579090Z 
+2025-07-20T05:00:16.6579558Z Attention:
+2025-07-20T05:00:16.6580307Z Turborepo now collects completely anonymous telemetry regarding usage.
+2025-07-20T05:00:16.6581237Z This information is used to shape the Turborepo roadmap and prioritize features.
+2025-07-20T05:00:16.6582692Z You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+2025-07-20T05:00:16.6583712Z https://turbo.build/repo/docs/telemetry
+2025-07-20T05:00:16.6584006Z 
+2025-07-20T05:00:16.7169325Z • Packages in scope: @cloudexpress/api, @cloudexpress/auth, @cloudexpress/builder, @cloudexpress/services-api, @cloudexpress/web-ui, @cygni/cli, @cygni/sdk, cygni-nextjs-starter, express-demo, fullstack-demo
+2025-07-20T05:00:16.7170960Z • Running lint in 10 packages
+2025-07-20T05:00:16.7171444Z • Remote caching disabled
+2025-07-20T05:00:21.7452350Z ##[group]@cygni/sdk:lint
+2025-07-20T05:00:21.7483824Z cache miss, executing e8bc04abbdaa4db3
+2025-07-20T05:00:21.7485382Z 
+2025-07-20T05:00:21.7487023Z > @cygni/sdk@0.1.0 lint /home/runner/work/Cygni/Cygni/packages/sdk
+2025-07-20T05:00:21.7488856Z > eslint src --ext .ts,.tsx
+2025-07-20T05:00:21.7490280Z 
+2025-07-20T05:00:21.7491842Z ##[endgroup]
+2025-07-20T05:00:21.8556482Z ##[group]@cloudexpress/auth:lint
+2025-07-20T05:00:21.8557505Z cache miss, executing 794a36302561f59c
+2025-07-20T05:00:21.8558098Z 
+2025-07-20T05:00:21.8558785Z > @cloudexpress/auth@0.1.0 lint /home/runner/work/Cygni/Cygni/services/auth
+2025-07-20T05:00:21.8559609Z > eslint src --ext .ts
+2025-07-20T05:00:21.8559998Z 
+2025-07-20T05:00:21.8560667Z ##[endgroup]
+2025-07-20T05:00:22.5716892Z ##[group]@cloudexpress/builder:lint
+2025-07-20T05:00:22.5721295Z cache miss, executing a916e3155ea2dfd9
+2025-07-20T05:00:22.5725322Z 
+2025-07-20T05:00:22.5729653Z > @cloudexpress/builder@0.1.0 lint /home/runner/work/Cygni/Cygni/services/builder
+2025-07-20T05:00:22.5731725Z > eslint src --ext .ts
+2025-07-20T05:00:22.5747941Z 
+2025-07-20T05:00:22.5748627Z ##[endgroup]
+2025-07-20T05:00:23.8376363Z ##[group]@cygni/cli:lint
+2025-07-20T05:00:23.8378219Z cache miss, executing c9e133f7238b51a2
+2025-07-20T05:00:23.8379573Z 
+2025-07-20T05:00:23.8381099Z > @cygni/cli@0.1.0 lint /home/runner/work/Cygni/Cygni/packages/cli
+2025-07-20T05:00:23.8463113Z > eslint src --ext .ts
+2025-07-20T05:00:23.8463784Z 
+2025-07-20T05:00:23.8464439Z ##[endgroup]
+2025-07-20T05:00:23.9355626Z ##[group]@cygni/sdk:build
+2025-07-20T05:00:23.9359982Z cache miss, executing 7c13eef4e550ea9c
+2025-07-20T05:00:23.9361493Z 
+2025-07-20T05:00:23.9365824Z > @cygni/sdk@0.1.0 build /home/runner/work/Cygni/Cygni/packages/sdk
+2025-07-20T05:00:23.9371130Z > tsc
+2025-07-20T05:00:23.9371521Z 
+2025-07-20T05:00:23.9394269Z ##[endgroup]
+2025-07-20T05:00:23.9727194Z ##[group]@cloudexpress/services-api:lint
+2025-07-20T05:00:23.9729579Z cache miss, executing 9a932e92a7c80115
+2025-07-20T05:00:23.9730220Z 
+2025-07-20T05:00:23.9730945Z > @cloudexpress/services-api@0.1.0 lint /home/runner/work/Cygni/Cygni/services/api
+2025-07-20T05:00:23.9731694Z > eslint src --ext .ts
+2025-07-20T05:00:23.9731931Z 
+2025-07-20T05:00:23.9732462Z ##[endgroup]
+2025-07-20T05:00:24.5438448Z ##[group]@cloudexpress/web-ui:lint
+2025-07-20T05:00:24.5439694Z cache miss, executing 86844e9d0eaa5ead
+2025-07-20T05:00:24.5454241Z 
+2025-07-20T05:00:24.5454851Z > @cloudexpress/web-ui@0.1.0 lint /home/runner/work/Cygni/Cygni/packages/web-ui
+2025-07-20T05:00:24.5455512Z > next lint
+2025-07-20T05:00:24.5456036Z 
+2025-07-20T05:00:24.5456587Z Attention: Next.js now collects completely anonymous telemetry regarding usage.
+2025-07-20T05:00:24.5457597Z This information is used to shape Next.js' roadmap and prioritize features.
+2025-07-20T05:00:24.5458834Z You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+2025-07-20T05:00:24.5459719Z https://nextjs.org/telemetry
+2025-07-20T05:00:24.5459970Z 
+2025-07-20T05:00:24.5460423Z ✔ No ESLint warnings or errors
+2025-07-20T05:00:24.5461343Z ##[endgroup]
+2025-07-20T05:00:25.3167269Z ##[group]@cloudexpress/api:lint
+2025-07-20T05:00:25.3168208Z cache miss, executing d0897d38137714c3
+2025-07-20T05:00:25.3168654Z 
+2025-07-20T05:00:25.3169382Z > @cloudexpress/api@1.0.0 lint /home/runner/work/Cygni/Cygni/packages/api
+2025-07-20T05:00:25.3170220Z > eslint src --ext .ts
+2025-07-20T05:00:25.3170595Z 
+2025-07-20T05:00:25.3170687Z 
+2025-07-20T05:00:25.3171198Z /home/runner/work/Cygni/Cygni/packages/api/src/routes/auth.ts
+2025-07-20T05:00:25.3204179Z ##[warning]  209:55  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-07-20T05:00:25.3213828Z 
+2025-07-20T05:00:25.3214274Z /home/runner/work/Cygni/Cygni/packages/api/src/server.ts
+2025-07-20T05:00:25.3215750Z ##[warning]   34:19  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-07-20T05:00:25.3217961Z ##[warning]   70:21  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-07-20T05:00:25.3220114Z ##[warning]  126:12  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-07-20T05:00:25.3221354Z 
+2025-07-20T05:00:25.3221974Z /home/runner/work/Cygni/Cygni/packages/api/src/services/auth/jwt-rotation.service.ts
+2025-07-20T05:00:25.3223908Z ##[warning]  127:22  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-07-20T05:00:25.3226079Z ##[warning]  139:45  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-07-20T05:00:25.3228246Z ##[warning]  257:22  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-07-20T05:00:25.3230345Z ##[warning]  257:32  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-07-20T05:00:25.3232639Z ##[warning]  257:43  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-07-20T05:00:25.3233952Z 
+2025-07-20T05:00:25.3234569Z /home/runner/work/Cygni/Cygni/packages/api/src/services/billing/budget-monitor.ts
+2025-07-20T05:00:25.3236248Z ##[warning]  280:42  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-07-20T05:00:25.3237642Z 
+2025-07-20T05:00:25.3238380Z /home/runner/work/Cygni/Cygni/packages/api/src/services/notification/notification.service.ts
+2025-07-20T05:00:25.3240110Z ##[warning]   9:10  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-07-20T05:00:25.3242491Z ##[warning]  16:10  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-07-20T05:00:25.3243848Z 
+2025-07-20T05:00:25.3244432Z /home/runner/work/Cygni/Cygni/packages/api/src/templates/emails/drip-campaign.ts
+2025-07-20T05:00:25.3246113Z ##[warning]  3:16  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-07-20T05:00:25.3248391Z ##[warning]  4:17  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+2025-07-20T05:00:25.3249706Z 
+2025-07-20T05:00:25.3250268Z ✖ 14 problems (0 errors, 14 warnings)
+2025-07-20T05:00:25.3250585Z 
+2025-07-20T05:00:25.3250970Z ##[endgroup]
+2025-07-20T05:00:26.2501925Z ##[group]cygni-nextjs-starter:lint
+2025-07-20T05:00:26.2502844Z cache miss, executing 481092355008c117
+2025-07-20T05:00:26.2503164Z 
+2025-07-20T05:00:26.2503574Z > cygni-nextjs-starter@0.1.0 lint /home/runner/work/Cygni/Cygni/examples/nextjs-starter
+2025-07-20T05:00:26.2504390Z > next lint
+2025-07-20T05:00:26.2504567Z 
+2025-07-20T05:00:26.2504877Z Attention: Next.js now collects completely anonymous telemetry regarding usage.
+2025-07-20T05:00:26.2505459Z This information is used to shape Next.js' roadmap and prioritize features.
+2025-07-20T05:00:26.2506226Z You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+2025-07-20T05:00:26.2506776Z https://nextjs.org/telemetry
+2025-07-20T05:00:26.2506942Z 
+2025-07-20T05:00:26.2507470Z ✔ No ESLint warnings or errors
+2025-07-20T05:00:26.2507861Z ##[endgroup]
+2025-07-20T05:00:26.2538467Z 
+2025-07-20T05:00:26.2538712Z  Tasks:    9 successful, 9 total
+2025-07-20T05:00:26.2539131Z Cached:    0 cached, 9 total
+2025-07-20T05:00:26.2539374Z   Time:    9.589s 
+2025-07-20T05:00:26.2539494Z 
