@@ -16,7 +16,8 @@
     "lint": "npx turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md}\"",
-    "typecheck": "npx turbo run typecheck"
+    "typecheck": "npx turbo run typecheck",
+    "prisma:generate": "./scripts/generate-prisma.sh"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
