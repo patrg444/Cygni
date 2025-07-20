@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@prisma/client-api";
 import { logger } from "./logger";
 
 declare global {
