@@ -1,25 +1,25 @@
-﻿2025-07-20T04:41:13.1609710Z ##[group]Run echo "=== Checking for test files ==="
-2025-07-20T04:41:13.1610166Z [36;1mecho "=== Checking for test files ==="[0m
-2025-07-20T04:41:13.1610553Z [36;1mfind . -name "*.test.*" -o -name "*.spec.*" | grep -v node_modules | head -20[0m
-2025-07-20T04:41:13.1638986Z shell: /usr/bin/bash -e {0}
-2025-07-20T04:41:13.1639205Z env:
-2025-07-20T04:41:13.1639368Z   REGISTRY: ghcr.io
-2025-07-20T04:41:13.1639567Z   IMAGE_NAME: patrg444/Cygni
-2025-07-20T04:41:13.1639830Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
-2025-07-20T04:41:13.1640103Z ##[endgroup]
-2025-07-20T04:41:13.1688067Z === Checking for test files ===
-2025-07-20T04:41:13.3913116Z ./examples/nextjs-starter/src/dummy.test.ts
-2025-07-20T04:41:13.3913794Z ./packages/web-ui/src/dummy.test.ts
-2025-07-20T04:41:13.3914415Z ./packages/cli/src/tests/framework-detector.test.ts
-2025-07-20T04:41:13.3915120Z ./packages/cli/src/tests/deploy-helpers.test.ts
-2025-07-20T04:41:13.3915996Z ./packages/cli/src/tests/runtime-validator.test.ts
-2025-07-20T04:41:13.3916693Z ./packages/cli/src/tests/builder.test.ts
-2025-07-20T04:41:13.3917211Z ./packages/cli/src/dummy.test.ts
-2025-07-20T04:41:13.3917866Z ./packages/sdk/src/sdk.test.ts
-2025-07-20T04:41:13.3918387Z ./packages/api/docker-compose.test.yml
-2025-07-20T04:41:13.3918992Z ./packages/api/tests/unit/budget-monitor.test.ts
-2025-07-20T04:41:13.3919618Z ./packages/api/tests/e2e/waitlist.test.ts
-2025-07-20T04:41:13.3920206Z ./packages/api/tests/e2e/health-auth.test.ts
-2025-07-20T04:41:13.3920727Z ./services/auth/src/auth.test.ts
-2025-07-20T04:41:13.3921236Z ./services/builder/src/builder.test.ts
-2025-07-20T04:41:13.3921762Z ./services/api/src/health.test.ts
+﻿2025-07-20T04:47:23.8536096Z ##[group]Run echo "=== Checking for test files ==="
+2025-07-20T04:47:23.8536491Z [36;1mecho "=== Checking for test files ==="[0m
+2025-07-20T04:47:23.8536885Z [36;1mfind . -name "*.test.*" -o -name "*.spec.*" | grep -v node_modules | head -20[0m
+2025-07-20T04:47:23.8564726Z shell: /usr/bin/bash -e {0}
+2025-07-20T04:47:23.8564968Z env:
+2025-07-20T04:47:23.8565140Z   REGISTRY: ghcr.io
+2025-07-20T04:47:23.8565353Z   IMAGE_NAME: patrg444/Cygni
+2025-07-20T04:47:23.8565639Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2025-07-20T04:47:23.8565932Z ##[endgroup]
+2025-07-20T04:47:23.8613870Z === Checking for test files ===
+2025-07-20T04:47:24.0888663Z ./examples/nextjs-starter/src/dummy.test.ts
+2025-07-20T04:47:24.0889607Z ./packages/web-ui/src/dummy.test.ts
+2025-07-20T04:47:24.0890518Z ./packages/cli/src/tests/framework-detector.test.ts
+2025-07-20T04:47:24.0891139Z ./packages/cli/src/tests/deploy-helpers.test.ts
+2025-07-20T04:47:24.0891588Z ./packages/cli/src/tests/runtime-validator.test.ts
+2025-07-20T04:47:24.0892012Z ./packages/cli/src/tests/builder.test.ts
+2025-07-20T04:47:24.0892330Z ./packages/cli/src/dummy.test.ts
+2025-07-20T04:47:24.0892615Z ./packages/sdk/src/sdk.test.ts
+2025-07-20T04:47:24.0893092Z ./packages/api/docker-compose.test.yml
+2025-07-20T04:47:24.0893714Z ./packages/api/tests/unit/budget-monitor.test.ts
+2025-07-20T04:47:24.0894466Z ./packages/api/tests/e2e/waitlist.test.ts
+2025-07-20T04:47:24.0895074Z ./packages/api/tests/e2e/health-auth.test.ts
+2025-07-20T04:47:24.0895567Z ./services/auth/src/auth.test.ts
+2025-07-20T04:47:24.0895891Z ./services/builder/src/builder.test.ts
+2025-07-20T04:47:24.0896197Z ./services/api/src/health.test.ts

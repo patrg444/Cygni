@@ -152,11 +152,11 @@ export const buildWorker = new Worker(
 );
 
 // Queue event handlers
-buildQueue.on("completed", (job) => {
+buildQueue.on("completed" as any, (job: any) => {
   logger.info({ jobId: job.id, buildId: job.data.buildId }, "Build job completed");
 });
 
-buildQueue.on("failed", (job, err) => {
+buildQueue.on("failed" as any, (job: any, err: any) => {
   logger.error({ jobId: job?.id, buildId: job?.data.buildId, error: err }, "Build job failed");
 });
 

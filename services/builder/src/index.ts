@@ -44,7 +44,7 @@ app.get("/ready", async () => {
 });
 
 // Metrics endpoint for Prometheus
-app.get("/metrics", async (request, reply) => {
+app.get("/metrics", async (_request, reply) => {
   const queueStats = await buildQueue.getJobCounts();
   
   // Return Prometheus-formatted metrics

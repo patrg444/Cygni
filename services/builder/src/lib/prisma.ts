@@ -2,7 +2,8 @@ import { PrismaClient } from "@prisma/client";
 import { logger } from "./logger";
 
 declare global {
-  let prisma: PrismaClient | undefined;
+  // eslint-disable-next-line no-var
+  var prisma: PrismaClient | undefined;
 }
 
 export const prisma =
@@ -34,7 +35,7 @@ if (process.env.NODE_ENV !== "production") {
 
 // Log Prisma queries in development
 if (process.env.NODE_ENV === "development") {
-  prisma.$on("query", (e) => {
+  (prisma as any).$on("query", (e: any) => {
     logger.debug({
       query: e.query,
       params: e.params,
@@ -43,7 +44,7 @@ if (process.env.NODE_ENV === "development") {
   });
 }
 
-prisma.$on("error", (e) => {
+(prisma as any).$on("error", (e: any) => {
   logger.error({ error: e }, "Prisma error");
 });
 

@@ -59,7 +59,9 @@ export class KanikoBuilder {
       imageName,
       repoUrl: options.gitUrl,
       commitSha: options.gitRef,
-      ...options,
+      dockerfilePath: options.dockerfilePath,
+      buildArgs: options.buildArgs,
+      cacheKey: options.cacheKey,
     });
 
     // Wait for job completion

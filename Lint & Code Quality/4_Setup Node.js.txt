@@ -1,21 +1,28 @@
-﻿2025-07-20T04:40:44.7870357Z ##[group]Run actions/setup-node@v4
-2025-07-20T04:40:44.7870750Z with:
-2025-07-20T04:40:44.7870985Z   node-version: 20
-2025-07-20T04:40:44.7871333Z   cache: pnpm
-2025-07-20T04:40:44.7871637Z   always-auth: false
-2025-07-20T04:40:44.7871932Z   check-latest: false
-2025-07-20T04:40:44.7872395Z   token: ***
-2025-07-20T04:40:44.7872633Z env:
-2025-07-20T04:40:44.7872891Z   REGISTRY: ghcr.io
-2025-07-20T04:40:44.7873179Z   IMAGE_NAME: patrg444/Cygni
-2025-07-20T04:40:44.7873571Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
-2025-07-20T04:40:44.7873977Z ##[endgroup]
-2025-07-20T04:40:44.9599432Z Found in cache @ /opt/hostedtoolcache/node/20.19.3/x64
-2025-07-20T04:40:44.9605580Z ##[group]Environment details
-2025-07-20T04:40:45.2618094Z node: v20.19.3
-2025-07-20T04:40:45.2618904Z npm: 10.8.2
-2025-07-20T04:40:45.2619313Z yarn: 1.22.22
-2025-07-20T04:40:45.2620303Z ##[endgroup]
-2025-07-20T04:40:45.2650817Z [command]/home/runner/setup-pnpm/node_modules/.bin/pnpm store path --silent
-2025-07-20T04:40:45.6552492Z /home/runner/setup-pnpm/node_modules/.bin/store/v3
-2025-07-20T04:40:45.8734982Z pnpm cache is not found
+﻿2025-07-20T04:46:57.1627106Z ##[group]Run actions/setup-node@v4
+2025-07-20T04:46:57.1627501Z with:
+2025-07-20T04:46:57.1627807Z   node-version: 20
+2025-07-20T04:46:57.1628184Z   cache: pnpm
+2025-07-20T04:46:57.1628483Z   always-auth: false
+2025-07-20T04:46:57.1628851Z   check-latest: false
+2025-07-20T04:46:57.1629304Z   token: ***
+2025-07-20T04:46:57.1629625Z env:
+2025-07-20T04:46:57.1629876Z   REGISTRY: ghcr.io
+2025-07-20T04:46:57.1630244Z   IMAGE_NAME: patrg444/Cygni
+2025-07-20T04:46:57.1630635Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2025-07-20T04:46:57.1631076Z ##[endgroup]
+2025-07-20T04:46:57.3402696Z Found in cache @ /opt/hostedtoolcache/node/20.19.3/x64
+2025-07-20T04:46:57.3408056Z ##[group]Environment details
+2025-07-20T04:46:57.6746372Z node: v20.19.3
+2025-07-20T04:46:57.6747097Z npm: 10.8.2
+2025-07-20T04:46:57.6747571Z yarn: 1.22.22
+2025-07-20T04:46:57.6748706Z ##[endgroup]
+2025-07-20T04:46:57.6774613Z [command]/home/runner/setup-pnpm/node_modules/.bin/pnpm store path --silent
+2025-07-20T04:46:58.0592800Z /home/runner/setup-pnpm/node_modules/.bin/store/v3
+2025-07-20T04:46:58.4062272Z Cache hit for: node-cache-Linux-x64-pnpm-2fbc1cabd4faa1f63684f0f65015922f3546c054627c9a27ee52424ef26d49c8
+2025-07-20T04:46:59.7469793Z Received 0 of 194747390 (0.0%), 0.0 MBs/sec
+2025-07-20T04:47:00.7473119Z Received 121634816 of 194747390 (62.5%), 58.0 MBs/sec
+2025-07-20T04:47:01.4200991Z Received 194747390 of 194747390 (100.0%), 69.5 MBs/sec
+2025-07-20T04:47:01.4202747Z Cache Size: ~186 MB (194747390 B)
+2025-07-20T04:47:01.4318174Z [command]/usr/bin/tar -xf /home/runner/work/_temp/12030f4b-8f91-4d9c-879a-d4200dfdcedb/cache.tzst -P -C /home/runner/work/Cygni/Cygni --use-compress-program unzstd
+2025-07-20T04:47:03.6928718Z Cache restored successfully
+2025-07-20T04:47:03.7370522Z Cache restored from key: node-cache-Linux-x64-pnpm-2fbc1cabd4faa1f63684f0f65015922f3546c054627c9a27ee52424ef26d49c8

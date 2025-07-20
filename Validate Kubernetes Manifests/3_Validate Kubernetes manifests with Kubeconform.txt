@@ -1,10 +1,10 @@
-﻿2025-07-20T04:40:42.1929453Z ##[group]Run echo "Kubernetes validation would run here"
-2025-07-20T04:40:42.1930326Z [36;1mecho "Kubernetes validation would run here"[0m
-2025-07-20T04:40:42.1931429Z [36;1mecho "Skipping CRDs and Helm values files"[0m
-2025-07-20T04:40:42.1964063Z shell: /usr/bin/bash -e {0}
-2025-07-20T04:40:42.1964610Z env:
-2025-07-20T04:40:42.1965001Z   REGISTRY: ghcr.io
-2025-07-20T04:40:42.1965445Z   IMAGE_NAME: patrg444/Cygni
-2025-07-20T04:40:42.1965940Z ##[endgroup]
-2025-07-20T04:40:42.2041705Z Kubernetes validation would run here
-2025-07-20T04:40:42.2044933Z Skipping CRDs and Helm values files
+﻿2025-07-20T04:46:56.7413163Z ##[group]Run echo "Kubernetes validation would run here"
+2025-07-20T04:46:56.7414699Z [36;1mecho "Kubernetes validation would run here"[0m
+2025-07-20T04:46:56.7416087Z [36;1mecho "Skipping CRDs and Helm values files"[0m
+2025-07-20T04:46:56.7448166Z shell: /usr/bin/bash -e {0}
+2025-07-20T04:46:56.7449322Z env:
+2025-07-20T04:46:56.7450016Z   REGISTRY: ghcr.io
+2025-07-20T04:46:56.7450847Z   IMAGE_NAME: patrg444/Cygni
+2025-07-20T04:46:56.7451762Z ##[endgroup]
+2025-07-20T04:46:56.7524604Z Kubernetes validation would run here
+2025-07-20T04:46:56.7526669Z Skipping CRDs and Helm values files

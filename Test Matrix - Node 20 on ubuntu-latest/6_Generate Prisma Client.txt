@@ -1,34 +1,34 @@
-﻿2025-07-20T04:41:00.8738215Z ##[group]Run pnpm run prisma:generate
-2025-07-20T04:41:00.8738549Z [36;1mpnpm run prisma:generate[0m
-2025-07-20T04:41:00.8766813Z shell: /usr/bin/bash -e {0}
-2025-07-20T04:41:00.8767041Z env:
-2025-07-20T04:41:00.8767203Z   REGISTRY: ghcr.io
-2025-07-20T04:41:00.8767409Z   IMAGE_NAME: patrg444/Cygni
-2025-07-20T04:41:00.8767671Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
-2025-07-20T04:41:00.8767944Z ##[endgroup]
-2025-07-20T04:41:01.2592703Z 
-2025-07-20T04:41:01.2593543Z > cloudexpress@0.1.0 prisma:generate /home/runner/work/Cygni/Cygni
-2025-07-20T04:41:01.2594324Z > ./scripts/generate-prisma.sh
-2025-07-20T04:41:01.2594625Z 
-2025-07-20T04:41:01.2642129Z Generating Prisma clients...
-2025-07-20T04:41:01.2656995Z Generating Prisma client for services/api
-2025-07-20T04:41:06.4381687Z Prisma schema loaded from prisma/schema.prisma
-2025-07-20T04:41:06.8548811Z 
-2025-07-20T04:41:06.8550043Z ✔ Generated Prisma Client (v5.22.0) to ./../../node_modules/@prisma/client-api in 145ms
-2025-07-20T04:41:06.8550573Z 
-2025-07-20T04:41:06.8551162Z Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
-2025-07-20T04:41:06.8551646Z 
-2025-07-20T04:41:06.8552392Z Tip: Easily identify and fix slow SQL queries in your app. Optimize helps you enhance your visibility: https://pris.ly/--optimize
-2025-07-20T04:41:06.8553099Z 
-2025-07-20T04:41:07.0835359Z Generating Prisma client for services/builder
-2025-07-20T04:41:10.2881468Z sh: 1: prisma: not found
-2025-07-20T04:41:10.3053420Z Generating Prisma client for packages/api
-2025-07-20T04:41:13.8494419Z Prisma schema loaded from prisma/schema.prisma
-2025-07-20T04:41:14.2106008Z 
-2025-07-20T04:41:14.2107840Z ✔ Generated Prisma Client (v5.22.0) to ./../../node_modules/.pnpm/@prisma+client@5.22.0_prisma@5.22.0/node_modules/@prisma/client in 117ms
-2025-07-20T04:41:14.2108621Z 
-2025-07-20T04:41:14.2109222Z Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
-2025-07-20T04:41:14.2109736Z 
-2025-07-20T04:41:14.2110579Z Help us improve the Prisma ORM for everyone. Share your feedback in a short 2-min survey: https://pris.ly/orm/survey/release-5-22
-2025-07-20T04:41:14.2111599Z 
-2025-07-20T04:41:14.4376219Z Prisma client generation complete!
+﻿2025-07-20T04:47:12.4365171Z ##[group]Run pnpm run prisma:generate
+2025-07-20T04:47:12.4365644Z [36;1mpnpm run prisma:generate[0m
+2025-07-20T04:47:12.4402775Z shell: /usr/bin/bash -e {0}
+2025-07-20T04:47:12.4403117Z env:
+2025-07-20T04:47:12.4403377Z   REGISTRY: ghcr.io
+2025-07-20T04:47:12.4403715Z   IMAGE_NAME: patrg444/Cygni
+2025-07-20T04:47:12.4404139Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2025-07-20T04:47:12.4404579Z ##[endgroup]
+2025-07-20T04:47:12.8619589Z 
+2025-07-20T04:47:12.8620489Z > cloudexpress@0.1.0 prisma:generate /home/runner/work/Cygni/Cygni
+2025-07-20T04:47:12.8621256Z > ./scripts/generate-prisma.sh
+2025-07-20T04:47:12.8621556Z 
+2025-07-20T04:47:12.8669310Z Generating Prisma clients...
+2025-07-20T04:47:12.8687910Z Generating Prisma client for services/api
+2025-07-20T04:47:17.1467869Z Prisma schema loaded from prisma/schema.prisma
+2025-07-20T04:47:17.5633252Z 
+2025-07-20T04:47:17.5634681Z ✔ Generated Prisma Client (v5.22.0) to ./../../node_modules/@prisma/client-api in 146ms
+2025-07-20T04:47:17.5635225Z 
+2025-07-20T04:47:17.5635822Z Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+2025-07-20T04:47:17.5636327Z 
+2025-07-20T04:47:17.5637112Z Help us improve the Prisma ORM for everyone. Share your feedback in a short 2-min survey: https://pris.ly/orm/survey/release-5-22
+2025-07-20T04:47:17.5637541Z 
+2025-07-20T04:47:17.7918558Z Generating Prisma client for services/builder
+2025-07-20T04:47:21.0438788Z sh: 1: prisma: not found
+2025-07-20T04:47:21.0596305Z Generating Prisma client for packages/api
+2025-07-20T04:47:24.6785202Z Prisma schema loaded from prisma/schema.prisma
+2025-07-20T04:47:25.0501022Z 
+2025-07-20T04:47:25.0502754Z ✔ Generated Prisma Client (v5.22.0) to ./../../node_modules/.pnpm/@prisma+client@5.22.0_prisma@5.22.0/node_modules/@prisma/client in 118ms
+2025-07-20T04:47:25.0504950Z 
+2025-07-20T04:47:25.0507013Z Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+2025-07-20T04:47:25.0507522Z 
+2025-07-20T04:47:25.0512687Z Tip: Curious about the SQL queries Prisma ORM generates? Optimize helps you enhance your visibility: https://pris.ly/tip-2-optimize
+2025-07-20T04:47:25.0513527Z 
+2025-07-20T04:47:25.2763521Z Prisma client generation complete!

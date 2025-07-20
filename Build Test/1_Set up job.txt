@@ -1,38 +1,38 @@
-﻿2025-07-20T04:41:24.0963441Z Current runner version: '2.326.0'
-2025-07-20T04:41:24.0987307Z ##[group]Runner Image Provisioner
-2025-07-20T04:41:24.0988132Z Hosted Compute Agent
-2025-07-20T04:41:24.0988770Z Version: 20250711.363
-2025-07-20T04:41:24.0989376Z Commit: 6785254374ce925a23743850c1cb91912ce5c14c
-2025-07-20T04:41:24.0990055Z Build Date: 2025-07-11T20:04:25Z
-2025-07-20T04:41:24.0990705Z ##[endgroup]
-2025-07-20T04:41:24.0991226Z ##[group]Operating System
-2025-07-20T04:41:24.0991783Z Ubuntu
-2025-07-20T04:41:24.0992258Z 24.04.2
-2025-07-20T04:41:24.0992734Z LTS
-2025-07-20T04:41:24.0993151Z ##[endgroup]
-2025-07-20T04:41:24.0993670Z ##[group]Runner Image
-2025-07-20T04:41:24.0994222Z Image: ubuntu-24.04
-2025-07-20T04:41:24.0994725Z Version: 20250710.1.0
-2025-07-20T04:41:24.0995954Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20250710.1/images/ubuntu/Ubuntu2404-Readme.md
-2025-07-20T04:41:24.0997428Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20250710.1
-2025-07-20T04:41:24.0998603Z ##[endgroup]
-2025-07-20T04:41:24.0999686Z ##[group]GITHUB_TOKEN Permissions
-2025-07-20T04:41:24.1001441Z Contents: read
-2025-07-20T04:41:24.1002105Z Metadata: read
-2025-07-20T04:41:24.1002572Z Packages: read
-2025-07-20T04:41:24.1003044Z ##[endgroup]
-2025-07-20T04:41:24.1005062Z Secret source: Actions
-2025-07-20T04:41:24.1006004Z Prepare workflow directory
-2025-07-20T04:41:24.1528862Z Prepare all required actions
-2025-07-20T04:41:24.1566636Z Getting action download info
-2025-07-20T04:41:24.5789831Z ##[group]Download immutable action package 'actions/checkout@v4'
-2025-07-20T04:41:24.5791526Z Version: 4.2.2
-2025-07-20T04:41:24.5793129Z Digest: sha256:ccb2698953eaebd21c7bf6268a94f9c26518a7e38e27e0b83c1fe1ad049819b1
-2025-07-20T04:41:24.5795080Z Source commit SHA: 11bd71901bbe5b1630ceea73d27597364c9af683
-2025-07-20T04:41:24.5796607Z ##[endgroup]
-2025-07-20T04:41:24.6866084Z ##[group]Download immutable action package 'docker/setup-buildx-action@v3'
-2025-07-20T04:41:24.6866981Z Version: 3.11.1
-2025-07-20T04:41:24.6867704Z Digest: sha256:b58e632d2d812e161c8abeba6def9f56b420aa9ae41d825a8408241bcad0f303
-2025-07-20T04:41:24.6868802Z Source commit SHA: e468171a9de216ec08956ac3ada2f0791b6bd435
-2025-07-20T04:41:24.6869446Z ##[endgroup]
-2025-07-20T04:41:25.1896624Z Complete job name: Build Test
+﻿2025-07-20T04:47:57.0030778Z Current runner version: '2.326.0'
+2025-07-20T04:47:57.0065228Z ##[group]Runner Image Provisioner
+2025-07-20T04:47:57.0067069Z Hosted Compute Agent
+2025-07-20T04:47:57.0068006Z Version: 20250711.363
+2025-07-20T04:47:57.0069056Z Commit: 6785254374ce925a23743850c1cb91912ce5c14c
+2025-07-20T04:47:57.0070259Z Build Date: 2025-07-11T20:04:25Z
+2025-07-20T04:47:57.0071281Z ##[endgroup]
+2025-07-20T04:47:57.0072177Z ##[group]Operating System
+2025-07-20T04:47:57.0073216Z Ubuntu
+2025-07-20T04:47:57.0074038Z 24.04.2
+2025-07-20T04:47:57.0074786Z LTS
+2025-07-20T04:47:57.0075840Z ##[endgroup]
+2025-07-20T04:47:57.0076740Z ##[group]Runner Image
+2025-07-20T04:47:57.0077762Z Image: ubuntu-24.04
+2025-07-20T04:47:57.0078735Z Version: 20250710.1.0
+2025-07-20T04:47:57.0080488Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20250710.1/images/ubuntu/Ubuntu2404-Readme.md
+2025-07-20T04:47:57.0083080Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20250710.1
+2025-07-20T04:47:57.0085118Z ##[endgroup]
+2025-07-20T04:47:57.0087436Z ##[group]GITHUB_TOKEN Permissions
+2025-07-20T04:47:57.0090331Z Contents: read
+2025-07-20T04:47:57.0091418Z Metadata: read
+2025-07-20T04:47:57.0092347Z Packages: read
+2025-07-20T04:47:57.0093200Z ##[endgroup]
+2025-07-20T04:47:57.0096416Z Secret source: Actions
+2025-07-20T04:47:57.0097504Z Prepare workflow directory
+2025-07-20T04:47:57.0851945Z Prepare all required actions
+2025-07-20T04:47:57.0910203Z Getting action download info
+2025-07-20T04:47:57.2882769Z ##[group]Download immutable action package 'actions/checkout@v4'
+2025-07-20T04:47:57.2884073Z Version: 4.2.2
+2025-07-20T04:47:57.2884995Z Digest: sha256:ccb2698953eaebd21c7bf6268a94f9c26518a7e38e27e0b83c1fe1ad049819b1
+2025-07-20T04:47:57.2886345Z Source commit SHA: 11bd71901bbe5b1630ceea73d27597364c9af683
+2025-07-20T04:47:57.2887152Z ##[endgroup]
+2025-07-20T04:47:57.3796747Z ##[group]Download immutable action package 'docker/setup-buildx-action@v3'
+2025-07-20T04:47:57.3797629Z Version: 3.11.1
+2025-07-20T04:47:57.3798546Z Digest: sha256:b58e632d2d812e161c8abeba6def9f56b420aa9ae41d825a8408241bcad0f303
+2025-07-20T04:47:57.3799482Z Source commit SHA: e468171a9de216ec08956ac3ada2f0791b6bd435
+2025-07-20T04:47:57.3800165Z ##[endgroup]
+2025-07-20T04:47:57.6938625Z Complete job name: Build Test

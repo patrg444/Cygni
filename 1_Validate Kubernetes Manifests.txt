@@ -1,0 +1,128 @@
+﻿2025-07-20T04:46:54.9839754Z Current runner version: '2.326.0'
+2025-07-20T04:46:54.9862414Z ##[group]Runner Image Provisioner
+2025-07-20T04:46:54.9863242Z Hosted Compute Agent
+2025-07-20T04:46:54.9863866Z Version: 20250711.363
+2025-07-20T04:46:54.9864475Z Commit: 6785254374ce925a23743850c1cb91912ce5c14c
+2025-07-20T04:46:54.9865120Z Build Date: 2025-07-11T20:04:25Z
+2025-07-20T04:46:54.9865772Z ##[endgroup]
+2025-07-20T04:46:54.9866359Z ##[group]Operating System
+2025-07-20T04:46:54.9866896Z Ubuntu
+2025-07-20T04:46:54.9867433Z 24.04.2
+2025-07-20T04:46:54.9867876Z LTS
+2025-07-20T04:46:54.9868341Z ##[endgroup]
+2025-07-20T04:46:54.9868846Z ##[group]Runner Image
+2025-07-20T04:46:54.9869740Z Image: ubuntu-24.04
+2025-07-20T04:46:54.9870229Z Version: 20250710.1.0
+2025-07-20T04:46:54.9871273Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20250710.1/images/ubuntu/Ubuntu2404-Readme.md
+2025-07-20T04:46:54.9872765Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20250710.1
+2025-07-20T04:46:54.9873787Z ##[endgroup]
+2025-07-20T04:46:54.9874868Z ##[group]GITHUB_TOKEN Permissions
+2025-07-20T04:46:54.9876681Z Contents: read
+2025-07-20T04:46:54.9877222Z Metadata: read
+2025-07-20T04:46:54.9877751Z Packages: read
+2025-07-20T04:46:54.9878209Z ##[endgroup]
+2025-07-20T04:46:54.9880590Z Secret source: Actions
+2025-07-20T04:46:54.9881305Z Prepare workflow directory
+2025-07-20T04:46:55.0388901Z Prepare all required actions
+2025-07-20T04:46:55.0425603Z Getting action download info
+2025-07-20T04:46:55.5676353Z ##[group]Download immutable action package 'actions/checkout@v4'
+2025-07-20T04:46:55.5677521Z Version: 4.2.2
+2025-07-20T04:46:55.5678573Z Digest: sha256:ccb2698953eaebd21c7bf6268a94f9c26518a7e38e27e0b83c1fe1ad049819b1
+2025-07-20T04:46:55.5679954Z Source commit SHA: 11bd71901bbe5b1630ceea73d27597364c9af683
+2025-07-20T04:46:55.5680815Z ##[endgroup]
+2025-07-20T04:46:55.7244522Z Complete job name: Validate Kubernetes Manifests
+2025-07-20T04:46:55.7940745Z ##[group]Run actions/checkout@v4
+2025-07-20T04:46:55.7941610Z with:
+2025-07-20T04:46:55.7942053Z   repository: patrg444/Cygni
+2025-07-20T04:46:55.7942730Z   token: ***
+2025-07-20T04:46:55.7943154Z   ssh-strict: true
+2025-07-20T04:46:55.7943589Z   ssh-user: git
+2025-07-20T04:46:55.7944036Z   persist-credentials: true
+2025-07-20T04:46:55.7944539Z   clean: true
+2025-07-20T04:46:55.7944998Z   sparse-checkout-cone-mode: true
+2025-07-20T04:46:55.7945563Z   fetch-depth: 1
+2025-07-20T04:46:55.7945981Z   fetch-tags: false
+2025-07-20T04:46:55.7946408Z   show-progress: true
+2025-07-20T04:46:55.7946851Z   lfs: false
+2025-07-20T04:46:55.7947248Z   submodules: false
+2025-07-20T04:46:55.7947698Z   set-safe-directory: true
+2025-07-20T04:46:55.7948348Z env:
+2025-07-20T04:46:55.7948772Z   REGISTRY: ghcr.io
+2025-07-20T04:46:55.7949422Z   IMAGE_NAME: patrg444/Cygni
+2025-07-20T04:46:55.7949913Z ##[endgroup]
+2025-07-20T04:46:55.9003529Z Syncing repository: patrg444/Cygni
+2025-07-20T04:46:55.9005421Z ##[group]Getting Git version info
+2025-07-20T04:46:55.9006147Z Working directory is '/home/runner/work/Cygni/Cygni'
+2025-07-20T04:46:55.9007147Z [command]/usr/bin/git version
+2025-07-20T04:46:55.9076976Z git version 2.50.1
+2025-07-20T04:46:55.9102932Z ##[endgroup]
+2025-07-20T04:46:55.9116360Z Temporarily overriding HOME='/home/runner/work/_temp/e2a7f30b-b467-47c6-9156-9d3d1e7e1a8f' before making global git config changes
+2025-07-20T04:46:55.9117813Z Adding repository directory to the temporary git global config as a safe directory
+2025-07-20T04:46:55.9127984Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/Cygni/Cygni
+2025-07-20T04:46:55.9162623Z Deleting the contents of '/home/runner/work/Cygni/Cygni'
+2025-07-20T04:46:55.9166266Z ##[group]Initializing the repository
+2025-07-20T04:46:55.9170088Z [command]/usr/bin/git init /home/runner/work/Cygni/Cygni
+2025-07-20T04:46:55.9240107Z hint: Using 'master' as the name for the initial branch. This default branch name
+2025-07-20T04:46:55.9241463Z hint: is subject to change. To configure the initial branch name to use in all
+2025-07-20T04:46:55.9242973Z hint: of your new repositories, which will suppress this warning, call:
+2025-07-20T04:46:55.9243837Z hint:
+2025-07-20T04:46:55.9244499Z hint: 	git config --global init.defaultBranch <name>
+2025-07-20T04:46:55.9245625Z hint:
+2025-07-20T04:46:55.9246675Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2025-07-20T04:46:55.9248323Z hint: 'development'. The just-created branch can be renamed via this command:
+2025-07-20T04:46:55.9249384Z hint:
+2025-07-20T04:46:55.9249897Z hint: 	git branch -m <name>
+2025-07-20T04:46:55.9250711Z hint:
+2025-07-20T04:46:55.9251886Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2025-07-20T04:46:55.9253060Z Initialized empty Git repository in /home/runner/work/Cygni/Cygni/.git/
+2025-07-20T04:46:55.9256589Z [command]/usr/bin/git remote add origin https://github.com/patrg444/Cygni
+2025-07-20T04:46:55.9288813Z ##[endgroup]
+2025-07-20T04:46:55.9290022Z ##[group]Disabling automatic garbage collection
+2025-07-20T04:46:55.9292773Z [command]/usr/bin/git config --local gc.auto 0
+2025-07-20T04:46:55.9320158Z ##[endgroup]
+2025-07-20T04:46:55.9320963Z ##[group]Setting up auth
+2025-07-20T04:46:55.9326739Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2025-07-20T04:46:55.9355447Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2025-07-20T04:46:55.9692628Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-07-20T04:46:55.9720476Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2025-07-20T04:46:55.9935018Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2025-07-20T04:46:55.9968785Z ##[endgroup]
+2025-07-20T04:46:55.9969987Z ##[group]Fetching the repository
+2025-07-20T04:46:55.9986793Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +e9793da0b90ef38c269d7b012a260d9a8f69c8ed:refs/remotes/origin/main
+2025-07-20T04:46:56.6730418Z From https://github.com/patrg444/Cygni
+2025-07-20T04:46:56.6733517Z  * [new ref]         e9793da0b90ef38c269d7b012a260d9a8f69c8ed -> origin/main
+2025-07-20T04:46:56.6756850Z ##[endgroup]
+2025-07-20T04:46:56.6758268Z ##[group]Determining the checkout info
+2025-07-20T04:46:56.6760085Z ##[endgroup]
+2025-07-20T04:46:56.6763444Z [command]/usr/bin/git sparse-checkout disable
+2025-07-20T04:46:56.6803773Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2025-07-20T04:46:56.6831752Z ##[group]Checking out the ref
+2025-07-20T04:46:56.6834245Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2025-07-20T04:46:56.7148586Z Switched to a new branch 'main'
+2025-07-20T04:46:56.7150760Z branch 'main' set up to track 'origin/main'.
+2025-07-20T04:46:56.7157956Z ##[endgroup]
+2025-07-20T04:46:56.7191441Z [command]/usr/bin/git log -1 --format=%H
+2025-07-20T04:46:56.7213620Z e9793da0b90ef38c269d7b012a260d9a8f69c8ed
+2025-07-20T04:46:56.7413181Z ##[group]Run echo "Kubernetes validation would run here"
+2025-07-20T04:46:56.7414703Z [36;1mecho "Kubernetes validation would run here"[0m
+2025-07-20T04:46:56.7416091Z [36;1mecho "Skipping CRDs and Helm values files"[0m
+2025-07-20T04:46:56.7448184Z shell: /usr/bin/bash -e {0}
+2025-07-20T04:46:56.7449328Z env:
+2025-07-20T04:46:56.7450020Z   REGISTRY: ghcr.io
+2025-07-20T04:46:56.7450850Z   IMAGE_NAME: patrg444/Cygni
+2025-07-20T04:46:56.7451765Z ##[endgroup]
+2025-07-20T04:46:56.7524640Z Kubernetes validation would run here
+2025-07-20T04:46:56.7526679Z Skipping CRDs and Helm values files
+2025-07-20T04:46:56.7672574Z Post job cleanup.
+2025-07-20T04:46:56.8612451Z [command]/usr/bin/git version
+2025-07-20T04:46:56.8648045Z git version 2.50.1
+2025-07-20T04:46:56.8691569Z Temporarily overriding HOME='/home/runner/work/_temp/42f78492-73b2-41d9-83e3-e50e940441f8' before making global git config changes
+2025-07-20T04:46:56.8694436Z Adding repository directory to the temporary git global config as a safe directory
+2025-07-20T04:46:56.8697000Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/Cygni/Cygni
+2025-07-20T04:46:56.8730627Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2025-07-20T04:46:56.8762705Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2025-07-20T04:46:56.8987450Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2025-07-20T04:46:56.9007490Z http.https://github.com/.extraheader
+2025-07-20T04:46:56.9019955Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2025-07-20T04:46:56.9051390Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2025-07-20T04:46:56.9380244Z Cleaning up orphan processes

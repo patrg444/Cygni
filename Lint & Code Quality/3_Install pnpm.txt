@@ -1,26 +1,26 @@
-﻿2025-07-20T04:40:43.1458410Z ##[group]Run pnpm/action-setup@v2
-2025-07-20T04:40:43.1459274Z with:
-2025-07-20T04:40:43.1459785Z   version: 8
-2025-07-20T04:40:43.1460320Z   dest: ~/setup-pnpm
-2025-07-20T04:40:43.1460918Z   run_install: null
-2025-07-20T04:40:43.1461532Z   package_json_file: package.json
-2025-07-20T04:40:43.1462491Z   standalone: false
-2025-07-20T04:40:43.1463052Z env:
-2025-07-20T04:40:43.1463530Z   REGISTRY: ghcr.io
-2025-07-20T04:40:43.1464141Z   IMAGE_NAME: patrg444/Cygni
-2025-07-20T04:40:43.1464855Z ##[endgroup]
-2025-07-20T04:40:43.2335397Z ##[group]Running self-installer...
-2025-07-20T04:40:43.7577464Z Progress: resolved 1, reused 0, downloaded 0, added 0
-2025-07-20T04:40:43.7667741Z Packages: +1
-2025-07-20T04:40:43.7668661Z +
-2025-07-20T04:40:44.4012025Z Packages are hard linked from the content-addressable store to the virtual store.
-2025-07-20T04:40:44.4015290Z   Content-addressable store is at: /home/runner/.local/share/pnpm/store/v3
-2025-07-20T04:40:44.4016115Z   Virtual store is at:             node_modules/.pnpm
-2025-07-20T04:40:44.4279741Z 
-2025-07-20T04:40:44.4280020Z dependencies:
-2025-07-20T04:40:44.4280506Z + pnpm 8.15.9 (10.13.1 is available)
-2025-07-20T04:40:44.4280902Z 
-2025-07-20T04:40:44.4308155Z Done in 1s
-2025-07-20T04:40:44.7588924Z Progress: resolved 1, reused 0, downloaded 1, added 1, done
-2025-07-20T04:40:44.7721860Z ##[endgroup]
-2025-07-20T04:40:44.7723119Z Installation Completed!
+﻿2025-07-20T04:46:55.5238981Z ##[group]Run pnpm/action-setup@v2
+2025-07-20T04:46:55.5240189Z with:
+2025-07-20T04:46:55.5240968Z   version: 8
+2025-07-20T04:46:55.5241927Z   dest: ~/setup-pnpm
+2025-07-20T04:46:55.5242827Z   run_install: null
+2025-07-20T04:46:55.5243755Z   package_json_file: package.json
+2025-07-20T04:46:55.5245051Z   standalone: false
+2025-07-20T04:46:55.5245895Z env:
+2025-07-20T04:46:55.5246656Z   REGISTRY: ghcr.io
+2025-07-20T04:46:55.5247559Z   IMAGE_NAME: patrg444/Cygni
+2025-07-20T04:46:55.5248571Z ##[endgroup]
+2025-07-20T04:46:55.6129564Z ##[group]Running self-installer...
+2025-07-20T04:46:56.1320946Z Progress: resolved 1, reused 0, downloaded 0, added 0
+2025-07-20T04:46:56.1412743Z Packages: +1
+2025-07-20T04:46:56.1413254Z +
+2025-07-20T04:46:56.7532033Z Packages are hard linked from the content-addressable store to the virtual store.
+2025-07-20T04:46:56.7543550Z   Content-addressable store is at: /home/runner/.local/share/pnpm/store/v3
+2025-07-20T04:46:56.7545003Z   Virtual store is at:             node_modules/.pnpm
+2025-07-20T04:46:56.7760722Z 
+2025-07-20T04:46:56.7761055Z dependencies:
+2025-07-20T04:46:56.7761964Z + pnpm 8.15.9 (10.13.1 is available)
+2025-07-20T04:46:56.7762323Z 
+2025-07-20T04:46:56.7788954Z Done in 998ms
+2025-07-20T04:46:57.1339705Z Progress: resolved 1, reused 0, downloaded 1, added 1, done
+2025-07-20T04:46:57.1474636Z ##[endgroup]
+2025-07-20T04:46:57.1477817Z Installation Completed!

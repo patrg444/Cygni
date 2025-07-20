@@ -1,74 +1,46 @@
-﻿2025-07-20T04:40:47.1966481Z ##[group]Run pnpm install --no-frozen-lockfile
-2025-07-20T04:40:47.1966932Z [36;1mpnpm install --no-frozen-lockfile[0m
-2025-07-20T04:40:47.2000845Z shell: /usr/bin/bash -e {0}
-2025-07-20T04:40:47.2061060Z env:
-2025-07-20T04:40:47.2061338Z   REGISTRY: ghcr.io
-2025-07-20T04:40:47.2061577Z   IMAGE_NAME: patrg444/Cygni
-2025-07-20T04:40:47.2061900Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
-2025-07-20T04:40:47.2062196Z ##[endgroup]
-2025-07-20T04:40:47.6304550Z Scope: all 11 workspace projects
-2025-07-20T04:40:47.9343811Z Progress: resolved 1, reused 0, downloaded 0, added 0
-2025-07-20T04:40:48.2380201Z examples/nextjs-starter                  |  WARN  deprecated eslint@8.57.1
-2025-07-20T04:40:49.0296379Z Progress: resolved 40, reused 0, downloaded 35, added 0
-2025-07-20T04:40:50.1052380Z Progress: resolved 84, reused 0, downloaded 84, added 0
-2025-07-20T04:40:51.1092684Z Progress: resolved 404, reused 0, downloaded 403, added 0
-2025-07-20T04:40:52.1119152Z Progress: resolved 613, reused 0, downloaded 595, added 0
-2025-07-20T04:40:53.1113352Z Progress: resolved 798, reused 0, downloaded 744, added 0
-2025-07-20T04:40:54.1113365Z Progress: resolved 1134, reused 0, downloaded 1051, added 0
-2025-07-20T04:40:55.2217284Z  WARN  14 deprecated subdependencies found: @humanwhocodes/config-array@0.13.0, @humanwhocodes/object-schema@2.0.3, are-we-there-yet@2.0.0, gauge@3.0.2, glob@7.1.7, glob@7.2.3, glob@8.1.0, har-validator@5.1.5, inflight@1.0.6, npmlog@5.0.1, request@2.88.2, rimraf@2.7.1, rimraf@3.0.2, uuid@3.4.0
-2025-07-20T04:40:55.2455282Z Progress: resolved 1282, reused 0, downloaded 1185, added 0
-2025-07-20T04:40:55.2639189Z Packages: +1181
-2025-07-20T04:40:55.2640353Z ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-2025-07-20T04:40:56.2458347Z Progress: resolved 1282, reused 0, downloaded 1186, added 1152
-2025-07-20T04:40:56.2736525Z Progress: resolved 1282, reused 0, downloaded 1186, added 1181, done
-2025-07-20T04:40:56.5497488Z .../node_modules/@prisma/engines postinstall$ node scripts/postinstall.js
-2025-07-20T04:40:56.5793535Z .../bcrypt@5.1.1/node_modules/bcrypt install$ node-pre-gyp install --fallback-to-build
-2025-07-20T04:40:56.5999682Z .../argon2@0.31.2/node_modules/argon2 install$ node-pre-gyp install --fallback-to-build
-2025-07-20T04:40:56.6690750Z .../bcrypt@5.1.1/node_modules/bcrypt install: node-pre-gyp info it worked if it ends with ok
-2025-07-20T04:40:56.6707199Z .../bcrypt@5.1.1/node_modules/bcrypt install: node-pre-gyp info using node-pre-gyp@1.0.11
-2025-07-20T04:40:56.6709330Z .../bcrypt@5.1.1/node_modules/bcrypt install: node-pre-gyp info using node@22.17.0 | linux | x64
-2025-07-20T04:40:56.6970874Z .../argon2@0.31.2/node_modules/argon2 install: node-pre-gyp info it worked if it ends with ok
-2025-07-20T04:40:56.6978711Z .../argon2@0.31.2/node_modules/argon2 install: node-pre-gyp info using node-pre-gyp@1.0.11
-2025-07-20T04:40:56.6983691Z .../argon2@0.31.2/node_modules/argon2 install: node-pre-gyp info using node@22.17.0 | linux | x64
-2025-07-20T04:40:56.7495110Z .../bcrypt@5.1.1/node_modules/bcrypt install: node-pre-gyp info check checked for "/home/runner/work/Cygni/Cygni/node_modules/.pnpm/bcrypt@5.1.1/node_modules/bcrypt/lib/binding/napi-v3/bcrypt_lib.node" (not found)
-2025-07-20T04:40:56.7504024Z .../bcrypt@5.1.1/node_modules/bcrypt install: node-pre-gyp http GET https://github.com/kelektiv/node.bcrypt.js/releases/download/v5.1.1/bcrypt_lib-v5.1.1-napi-v3-linux-x64-glibc.tar.gz
-2025-07-20T04:40:56.7624807Z .../argon2@0.31.2/node_modules/argon2 install: node-pre-gyp info check checked for "/home/runner/work/Cygni/Cygni/node_modules/.pnpm/argon2@0.31.2/node_modules/argon2/lib/binding/napi-v3/argon2.node" (not found)
-2025-07-20T04:40:56.7634738Z .../argon2@0.31.2/node_modules/argon2 install: node-pre-gyp http GET https://github.com/ranisalt/node-argon2/releases/download/v0.31.2/argon2-v0.31.2-napi-v3-linux-x64-glibc.tar.gz
-2025-07-20T04:40:56.8272047Z .../bcrypt@5.1.1/node_modules/bcrypt install: node-pre-gyp info install unpacking napi-v3/bcrypt_lib.node
-2025-07-20T04:40:56.8363883Z .../bcrypt@5.1.1/node_modules/bcrypt install: node-pre-gyp info extracted file count: 1 
-2025-07-20T04:40:56.8365482Z .../bcrypt@5.1.1/node_modules/bcrypt install: node-pre-gyp info ok 
-2025-07-20T04:40:56.8376053Z .../bcrypt@5.1.1/node_modules/bcrypt install: [bcrypt] Success: "/home/runner/work/Cygni/Cygni/node_modules/.pnpm/bcrypt@5.1.1/node_modules/bcrypt/lib/binding/napi-v3/bcrypt_lib.node" is installed via remote
-2025-07-20T04:40:56.8438244Z .../bcrypt@5.1.1/node_modules/bcrypt install: Done
-2025-07-20T04:40:56.8863356Z .../argon2@0.31.2/node_modules/argon2 install: node-pre-gyp info install unpacking napi-v3/argon2.node
-2025-07-20T04:40:56.8944394Z .../argon2@0.31.2/node_modules/argon2 install: node-pre-gyp info extracted file count: 1 
-2025-07-20T04:40:56.8945914Z .../argon2@0.31.2/node_modules/argon2 install: node-pre-gyp info ok 
-2025-07-20T04:40:56.8950336Z .../argon2@0.31.2/node_modules/argon2 install: [argon2] Success: "/home/runner/work/Cygni/Cygni/node_modules/.pnpm/argon2@0.31.2/node_modules/argon2/lib/binding/napi-v3/argon2.node" is installed via remote
-2025-07-20T04:40:56.9018281Z .../argon2@0.31.2/node_modules/argon2 install: Done
-2025-07-20T04:40:57.2416521Z .../node_modules/@prisma/engines postinstall: Done
-2025-07-20T04:40:57.3363168Z .../node_modules/msgpackr-extract install$ node-gyp-build-optional-packages
-2025-07-20T04:40:57.3366899Z .../esbuild@0.18.20/node_modules/esbuild postinstall$ node install.js
-2025-07-20T04:40:57.3369021Z .../esbuild@0.21.5/node_modules/esbuild postinstall$ node install.js
-2025-07-20T04:40:57.3923831Z .../prisma@5.22.0/node_modules/prisma preinstall$ node scripts/preinstall-entry.js
-2025-07-20T04:40:57.4219586Z .../esbuild@0.18.20/node_modules/esbuild postinstall: Done
-2025-07-20T04:40:57.4403165Z .../node_modules/msgpackr-extract install: Done
-2025-07-20T04:40:57.4479792Z .../esbuild@0.21.5/node_modules/esbuild postinstall: Done
-2025-07-20T04:40:57.4616462Z .../prisma@5.22.0/node_modules/prisma preinstall: Done
-2025-07-20T04:40:57.4976677Z .../node_modules/@prisma/client postinstall$ node scripts/postinstall.js
-2025-07-20T04:40:57.9316982Z .../node_modules/@prisma/client postinstall: prisma:warn We could not find your Prisma schema in the default locations (see: https://pris.ly/d/prisma-schema-location).
-2025-07-20T04:40:57.9319621Z .../node_modules/@prisma/client postinstall: If you have a Prisma schema file in a custom path, you will need to run
-2025-07-20T04:40:57.9321908Z .../node_modules/@prisma/client postinstall: `prisma generate --schema=./path/to/your/schema.prisma` to generate Prisma Client.
-2025-07-20T04:40:57.9323336Z .../node_modules/@prisma/client postinstall: If you do not have a Prisma schema file yet, you can ignore this message.
-2025-07-20T04:40:57.9461877Z .../node_modules/@prisma/client postinstall: Done
-2025-07-20T04:40:57.9716463Z .../node_modules/unrs-resolver postinstall$ napi-postinstall unrs-resolver 1.11.1 check
-2025-07-20T04:40:58.0253958Z .../node_modules/unrs-resolver postinstall: Done
-2025-07-20T04:40:59.1934186Z 
-2025-07-20T04:40:59.1946183Z devDependencies:
-2025-07-20T04:40:59.1946594Z + @types/node 20.19.9
-2025-07-20T04:40:59.1947034Z + @typescript-eslint/eslint-plugin 6.21.0
-2025-07-20T04:40:59.1947395Z + @typescript-eslint/parser 6.21.0
-2025-07-20T04:40:59.1947954Z + eslint-config-prettier 10.1.8
-2025-07-20T04:40:59.1948293Z + lint-staged 16.1.2
-2025-07-20T04:40:59.1948518Z + prettier 3.6.2
-2025-07-20T04:40:59.1948701Z + turbo 1.13.4
-2025-07-20T04:40:59.1948815Z 
-2025-07-20T04:40:59.1951476Z Done in 11.9s
+﻿2025-07-20T04:47:03.3621994Z ##[group]Run pnpm install --no-frozen-lockfile
+2025-07-20T04:47:03.3622708Z [36;1mpnpm install --no-frozen-lockfile[0m
+2025-07-20T04:47:03.3657872Z shell: /usr/bin/bash -e {0}
+2025-07-20T04:47:03.3658135Z env:
+2025-07-20T04:47:03.3658315Z   REGISTRY: ghcr.io
+2025-07-20T04:47:03.3658542Z   IMAGE_NAME: patrg444/Cygni
+2025-07-20T04:47:03.3658823Z   PNPM_HOME: /home/runner/setup-pnpm/node_modules/.bin
+2025-07-20T04:47:03.3659116Z ##[endgroup]
+2025-07-20T04:47:03.7952541Z Scope: all 11 workspace projects
+2025-07-20T04:47:04.0496454Z Progress: resolved 0, reused 1, downloaded 0, added 0
+2025-07-20T04:47:04.0641930Z examples/nextjs-starter                  |  WARN  deprecated eslint@8.57.1
+2025-07-20T04:47:05.0504821Z Progress: resolved 145, reused 138, downloaded 0, added 0
+2025-07-20T04:47:06.0511765Z Progress: resolved 1035, reused 1028, downloaded 0, added 0
+2025-07-20T04:47:07.0506918Z Progress: resolved 1282, reused 1186, downloaded 0, added 0
+2025-07-20T04:47:07.2608516Z  WARN  14 deprecated subdependencies found: @humanwhocodes/config-array@0.13.0, @humanwhocodes/object-schema@2.0.3, are-we-there-yet@2.0.0, gauge@3.0.2, glob@7.1.7, glob@7.2.3, glob@8.1.0, har-validator@5.1.5, inflight@1.0.6, npmlog@5.0.1, request@2.88.2, rimraf@2.7.1, rimraf@3.0.2, uuid@3.4.0
+2025-07-20T04:47:07.2979601Z Packages: +1181
+2025-07-20T04:47:07.2980277Z ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+2025-07-20T04:47:08.0512465Z Progress: resolved 1282, reused 1186, downloaded 0, added 772
+2025-07-20T04:47:08.4950191Z Progress: resolved 1282, reused 1186, downloaded 0, added 1181, done
+2025-07-20T04:47:08.7608102Z .../node_modules/msgpackr-extract install$ node-gyp-build-optional-packages
+2025-07-20T04:47:08.7612524Z .../esbuild@0.21.5/node_modules/esbuild postinstall$ node install.js
+2025-07-20T04:47:08.7630288Z .../esbuild@0.18.20/node_modules/esbuild postinstall$ node install.js
+2025-07-20T04:47:08.7930400Z .../prisma@5.22.0/node_modules/prisma preinstall$ node scripts/preinstall-entry.js
+2025-07-20T04:47:08.8337086Z .../esbuild@0.21.5/node_modules/esbuild postinstall: Done
+2025-07-20T04:47:08.8421661Z .../prisma@5.22.0/node_modules/prisma preinstall: Done
+2025-07-20T04:47:08.8601577Z .../esbuild@0.18.20/node_modules/esbuild postinstall: Done
+2025-07-20T04:47:08.8938551Z .../node_modules/msgpackr-extract install: Done
+2025-07-20T04:47:08.9316418Z .../node_modules/@prisma/client postinstall$ node scripts/postinstall.js
+2025-07-20T04:47:09.2917139Z .../node_modules/@prisma/client postinstall: prisma:warn We could not find your Prisma schema in the default locations (see: https://pris.ly/d/prisma-schema-location).
+2025-07-20T04:47:09.2920183Z .../node_modules/@prisma/client postinstall: If you have a Prisma schema file in a custom path, you will need to run
+2025-07-20T04:47:09.2923232Z .../node_modules/@prisma/client postinstall: `prisma generate --schema=./path/to/your/schema.prisma` to generate Prisma Client.
+2025-07-20T04:47:09.2925092Z .../node_modules/@prisma/client postinstall: If you do not have a Prisma schema file yet, you can ignore this message.
+2025-07-20T04:47:09.3058976Z .../node_modules/@prisma/client postinstall: Done
+2025-07-20T04:47:09.3492756Z .../node_modules/unrs-resolver postinstall$ napi-postinstall unrs-resolver 1.11.1 check
+2025-07-20T04:47:09.3937355Z .../node_modules/unrs-resolver postinstall: Done
+2025-07-20T04:47:10.6500207Z 
+2025-07-20T04:47:10.6500762Z devDependencies:
+2025-07-20T04:47:10.6501221Z + @types/node 20.19.9
+2025-07-20T04:47:10.6501729Z + @typescript-eslint/eslint-plugin 6.21.0
+2025-07-20T04:47:10.6502339Z + @typescript-eslint/parser 6.21.0
+2025-07-20T04:47:10.6502849Z + eslint-config-prettier 10.1.8
+2025-07-20T04:47:10.6503274Z + lint-staged 16.1.2
+2025-07-20T04:47:10.6503611Z + prettier 3.6.2
+2025-07-20T04:47:10.6503911Z + turbo 1.13.4
+2025-07-20T04:47:10.6504100Z 
+2025-07-20T04:47:10.6515084Z Done in 7.2s
