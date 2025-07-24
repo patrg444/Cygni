@@ -66,7 +66,7 @@ CMD ["cat", "/hello.txt"]
           "X-API-Key": process.env.API_KEY || "test-api-key",
           "Content-Type": "application/json",
         },
-      }
+      },
     );
 
     expect(createResponse.status).toBe(202);
@@ -88,7 +88,7 @@ CMD ["cat", "/hello.txt"]
         `${API_URL}/api/builds/${buildId}`,
         {
           headers: { "X-API-Key": process.env.API_KEY || "test-api-key" },
-        }
+        },
       );
 
       status = statusResponse.data.status;
@@ -107,7 +107,7 @@ CMD ["cat", "/hello.txt"]
     const imageTag = imageUrl!.split(":").pop() || "latest";
 
     const registryResponse = await axios.get(
-      `http://${REGISTRY_URL}/v2/${imageName}/tags/list`
+      `http://${REGISTRY_URL}/v2/${imageName}/tags/list`,
     );
 
     expect(registryResponse.status).toBe(200);
@@ -115,7 +115,7 @@ CMD ["cat", "/hello.txt"]
 
     // 5. Pull and run the image to verify it works
     const { stdout } = await execAsync(
-      `docker pull ${imageUrl} && docker run --rm ${imageUrl}`
+      `docker pull ${imageUrl} && docker run --rm ${imageUrl}`,
     );
 
     expect(stdout).toContain("Hello from Cygni E2E test");
@@ -139,7 +139,7 @@ CMD ["cat", "/hello.txt"]
           "X-API-Key": process.env.API_KEY || "test-api-key",
           "Content-Type": "application/json",
         },
-      }
+      },
     );
 
     expect(createResponse.status).toBe(202);
@@ -157,7 +157,7 @@ CMD ["cat", "/hello.txt"]
         `${API_URL}/api/builds/${buildId}`,
         {
           headers: { "X-API-Key": process.env.API_KEY || "test-api-key" },
-        }
+        },
       );
 
       status = statusResponse.data.status;

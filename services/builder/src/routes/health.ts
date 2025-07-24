@@ -39,7 +39,7 @@ export const healthRoutes: FastifyPluginAsync = async (app) => {
         maxRetriesPerRequest: 1,
         retryStrategy: () => null,
       });
-      
+
       await redis.ping();
       checks.redis = "healthy";
       await redis.quit();
@@ -55,14 +55,14 @@ export const healthRoutes: FastifyPluginAsync = async (app) => {
       checks.worker = "unhealthy";
     }
 
-    const allHealthy = Object.values(checks).every((status) => status === "healthy");
-    
-    return reply
-      .status(allHealthy ? 200 : 503)
-      .send({
-        status: allHealthy ? "ready" : "not ready",
-        checks,
-      });
+    const allHealthy = Object.values(checks).every(
+      (status) => status === "healthy",
+    );
+
+    return reply.status(allHealthy ? 200 : 503).send({
+      status: allHealthy ? "ready" : "not ready",
+      checks,
+    });
   });
 
   // Liveness check - simple check to verify the service is running

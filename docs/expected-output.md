@@ -92,6 +92,7 @@ $ cx deploy --aws --name demo-app --rollback
 ## Error Scenarios
 
 ### Missing AWS Credentials
+
 ```
 🚀 Deploying demo-app to AWS
 
@@ -106,6 +107,7 @@ Or use environment variables:
 ```
 
 ### Docker Not Running
+
 ```
 🚀 Deploying demo-app to AWS
 
@@ -118,6 +120,7 @@ Start Docker Desktop or run:
 ```
 
 ### Unsupported Framework
+
 ```
 🚀 Deploying demo-app to AWS
 

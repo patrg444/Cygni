@@ -31,7 +31,7 @@ describe("Build Routes", () => {
 
   beforeAll(async () => {
     app = fastify({ logger: false });
-    
+
     // Add authenticate decorator
     app.decorate("authenticate", async (request: any, reply: any) => {
       if (!request.headers["x-api-key"] && !request.headers.authorization) {
@@ -46,7 +46,7 @@ describe("Build Routes", () => {
         },
       };
     });
-    
+
     await app.register(buildRoutes);
   });
 
@@ -98,14 +98,14 @@ describe("Build Routes", () => {
       const body = JSON.parse(response.body);
       expect(body).toHaveProperty("id", "test-build-id");
       expect(body).toHaveProperty("status", BuildStatus.pending);
-      
+
       // Verify axios was called to builder service
       expect(axios.post).toHaveBeenCalledWith(
         expect.stringContaining("/api/builds"),
         expect.objectContaining({
           buildId: "test-build-id",
           projectId: "test-project-id",
-        })
+        }),
       );
     });
 
@@ -116,7 +116,7 @@ describe("Build Routes", () => {
         organizationId: "test-org",
         repository: null,
       } as any);
-      
+
       const response = await app.inject({
         method: "POST",
         url: "/builds",
@@ -178,8 +178,10 @@ describe("Build Routes", () => {
         },
       };
 
-      vi.mocked(prisma.build.findUnique).mockResolvedValueOnce(mockBuild as any);
-      
+      vi.mocked(prisma.build.findUnique).mockResolvedValueOnce(
+        mockBuild as any,
+      );
+
       // Mock verifyProjectAccess - second call to findUnique
       vi.mocked(prisma.project.findUnique).mockResolvedValueOnce({
         id: "test-project-id",
@@ -225,9 +227,11 @@ describe("Build Routes", () => {
         logs: "Build completed successfully",
       };
 
-      vi.mocked(prisma.build.findUnique).mockResolvedValueOnce(mockBuild as any);
-      vi.mocked(axios.get).mockResolvedValueOnce({ 
-        data: { logs: "Detailed build logs from builder service" } 
+      vi.mocked(prisma.build.findUnique).mockResolvedValueOnce(
+        mockBuild as any,
+      );
+      vi.mocked(axios.get).mockResolvedValueOnce({
+        data: { logs: "Detailed build logs from builder service" },
       });
 
       // Mock verifyProjectAccess
@@ -260,7 +264,9 @@ describe("Build Routes", () => {
         status: BuildStatus.running,
       };
 
-      vi.mocked(prisma.build.findUnique).mockResolvedValueOnce(mockBuild as any);
+      vi.mocked(prisma.build.findUnique).mockResolvedValueOnce(
+        mockBuild as any,
+      );
       vi.mocked(axios.post).mockResolvedValueOnce({ data: { success: true } });
       vi.mocked(prisma.build.update).mockResolvedValueOnce({
         ...mockBuild,
@@ -294,7 +300,9 @@ describe("Build Routes", () => {
         status: BuildStatus.success,
       };
 
-      vi.mocked(prisma.build.findUnique).mockResolvedValueOnce(mockBuild as any);
+      vi.mocked(prisma.build.findUnique).mockResolvedValueOnce(
+        mockBuild as any,
+      );
 
       // Mock verifyProjectAccess
       vi.mocked(prisma.project.findUnique).mockResolvedValueOnce({

@@ -1,7 +1,7 @@
 import Fastify from "fastify";
 import { logger } from "./lib/logger";
 import buildsRoutes from "./routes/builds";
-import { buildQueue, buildWorker } from "./services/queue";
+import { buildWorker, getQueueMetrics } from "./services/queue";
 import { prisma } from "./lib/prisma";
 
 const app = Fastify({
@@ -21,13 +21,13 @@ app.get("/ready", async () => {
   try {
     // Check database connection
     await prisma.$queryRaw`SELECT 1`;
-    
+
     // Check Redis connection
-    const queueHealth = await buildQueue.getJobCounts();
-    
+    const queueHealth = await getQueueMetrics();
+
     // Check worker status
     const workerRunning = buildWorker.isRunning();
-    
+
     return {
       status: "ready",
       checks: {
@@ -45,18 +45,22 @@ app.get("/ready", async () => {
 
 // Metrics endpoint for Prometheus
 app.get("/metrics", async (_request, reply) => {
-  const queueStats = await buildQueue.getJobCounts();
-  
+  const queueStats = await getQueueMetrics();
+
   // Return Prometheus-formatted metrics
   reply.type("text/plain");
   return `
 # HELP cygni_builder_queue_jobs_total Total number of jobs in each state
 # TYPE cygni_builder_queue_jobs_total gauge
-cygni_builder_queue_jobs_total{state="waiting"} ${queueStats.waiting}
-cygni_builder_queue_jobs_total{state="active"} ${queueStats.active}
+cygni_builder_queue_jobs_total{state="waiting"} ${queueStats.waiting || 0}
+cygni_builder_queue_jobs_total{state="active"} ${queueStats.active || 0}
 cygni_builder_queue_jobs_total{state="completed"} ${queueStats.completed}
 cygni_builder_queue_jobs_total{state="failed"} ${queueStats.failed}
-cygni_builder_queue_jobs_total{state="delayed"} ${queueStats.delayed}
+cygni_builder_queue_jobs_total{state="delayed"} ${queueStats.delayed || 0}
+
+# HELP cygni_builder_queue_total_processed Total number of jobs processed (completed + failed)
+# TYPE cygni_builder_queue_total_processed gauge
+cygni_builder_queue_total_processed ${queueStats.totalProcessed}
 
 # HELP cygni_builder_worker_running Whether the worker is running
 # TYPE cygni_builder_worker_running gauge
@@ -69,14 +73,17 @@ app.register(buildsRoutes);
 
 // Error handler
 app.setErrorHandler((error, request, reply) => {
-  logger.error({
-    error,
-    request: {
-      method: request.method,
-      url: request.url,
-      headers: request.headers,
+  logger.error(
+    {
+      error,
+      request: {
+        method: request.method,
+        url: request.url,
+        headers: request.headers,
+      },
     },
-  }, "Request error");
+    "Request error",
+  );
 
   const statusCode = error.statusCode || 500;
   reply.status(statusCode).send({
@@ -99,17 +106,17 @@ const start = async () => {
 // Graceful shutdown
 const shutdown = async (signal: string) => {
   logger.info({ signal }, "Shutting down");
-  
+
   try {
     // Stop accepting new requests
     await app.close();
-    
+
     // Close worker gracefully
     await buildWorker.close();
-    
+
     // Close database connection
     await prisma.$disconnect();
-    
+
     logger.info("Shutdown complete");
     process.exit(0);
   } catch (error) {

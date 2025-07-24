@@ -3,6 +3,7 @@ import { PrismaClient } from "@prisma/client";
 import { createServer } from "./server";
 import { jwtService } from "./routes/auth";
 import { initializeBudgetCheckJob } from "./jobs/budget-check.job";
+import logger from "./lib/logger";
 
 // Load environment variables
 dotenv.config();
@@ -15,41 +16,81 @@ async function startServer() {
   try {
     // Initialize database connection
     await prisma.$connect();
-    console.log(" Database connected");
+    logger.info("Database connected", { 
+      database: process.env.DATABASE_URL?.split("@")[1]?.split("/")[1] 
+    });
 
     // Create Express app
     const app = createServer();
 
     // Initialize background jobs
     initializeBudgetCheckJob();
-    console.log(" Background jobs initialized");
+    logger.info("Background jobs initialized", { 
+      jobs: ["budget-check"] 
+    });
 
     // Start JWT rotation
     jwtService.startRotationJob();
-    console.log(" JWT rotation job started");
+    logger.info("JWT rotation job started", { 
+      rotationInterval: "24h" 
+    });
 
     // Start Express server
     app.listen(PORT, () => {
-      console.log(` CloudExpress API running on http://localhost:${PORT}`);
-      console.log(` Health check: http://localhost:${PORT}/api/health`);
-      console.log(
-        ` Waitlist signup: POST http://localhost:${PORT}/api/waitlist`,
-      );
-      console.log(
-        ` JWKS: http://localhost:${PORT}/api/auth/.well-known/jwks.json`,
-      );
+      logger.info("CloudExpress API started", {
+        port: PORT,
+        environment: process.env.NODE_ENV || "development",
+        endpoints: {
+          health: `http://localhost:${PORT}/api/health`,
+          waitlist: `http://localhost:${PORT}/api/waitlist`,
+          jwks: `http://localhost:${PORT}/api/auth/.well-known/jwks.json`,
+        },
+        features: {
+          cors: process.env.CORS_ORIGIN || "*",
+          stripeEnabled: !!process.env.STRIPE_SECRET_KEY,
+          emailEnabled: !!process.env.SENDGRID_API_KEY,
+        },
+      });
     });
   } catch (error) {
-    console.error("Failed to start server:", error);
+    logger.error("Failed to start server", {
+      error: error instanceof Error ? error.message : error,
+      stack: error instanceof Error ? error.stack : undefined,
+    });
     process.exit(1);
   }
 }
 
 // Handle graceful shutdown
 process.on("SIGINT", async () => {
-  console.log("\nShutting down gracefully...");
-  await prisma.$disconnect();
-  process.exit(0);
+  logger.info("Shutdown signal received, closing connections...");
+  
+  try {
+    await prisma.$disconnect();
+    logger.info("Database connection closed");
+    process.exit(0);
+  } catch (error) {
+    logger.error("Error during shutdown", {
+      error: error instanceof Error ? error.message : error,
+    });
+    process.exit(1);
+  }
+});
+
+process.on("unhandledRejection", (reason, promise) => {
+  logger.error("Unhandled Promise Rejection", {
+    reason: reason instanceof Error ? reason.message : reason,
+    stack: reason instanceof Error ? reason.stack : undefined,
+    promise: promise.toString(),
+  });
+});
+
+process.on("uncaughtException", (error) => {
+  logger.error("Uncaught Exception", {
+    error: error.message,
+    stack: error.stack,
+  });
+  process.exit(1);
 });
 
 // Start the server

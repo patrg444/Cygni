@@ -5,6 +5,10 @@ import { KanikoBuilder } from "./kaniko-builder";
 import { prisma } from "../lib/prisma";
 import { logger } from "../lib/logger";
 
+// Track completed jobs count manually
+let completedJobsCount = 0;
+let failedJobsCount = 0;
+
 // Redis connection
 const connection = new Redis({
   host: process.env.REDIS_HOST || "localhost",
@@ -36,7 +40,15 @@ export const buildQueue = new Queue("builds", {
 export const buildWorker = new Worker(
   "builds",
   async (job: Job) => {
-    const { buildId, projectId, repoUrl, commitSha, branch, dockerfilePath, buildArgs } = job.data;
+    const {
+      buildId,
+      projectId,
+      repoUrl,
+      commitSha,
+      branch,
+      dockerfilePath,
+      buildArgs,
+    } = job.data;
 
     logger.info({ buildId, projectId }, "Starting build job");
 
@@ -50,7 +62,7 @@ export const buildWorker = new Worker(
       // Initialize Kaniko builder
       const kanikoBuilder = new KanikoBuilder(
         process.env.ECR_REPOSITORY_URI || "",
-        process.env.K8S_NAMESPACE || "cygni-builds"
+        process.env.K8S_NAMESPACE || "cygni-builds",
       );
 
       // Execute build
@@ -72,7 +84,8 @@ export const buildWorker = new Worker(
           imageUrl: result.imageUrl,
           logs: result.logs,
           metadata: {
-            ...((await prisma.build.findUnique({ where: { id: buildId } }))?.metadata as any || {}),
+            ...(((await prisma.build.findUnique({ where: { id: buildId } }))
+              ?.metadata as any) || {}),
             imageSha: result.imageSha,
             buildDuration: result.duration,
           },
@@ -82,26 +95,32 @@ export const buildWorker = new Worker(
       // Notify API service about build completion
       if (process.env.API_SERVICE_URL) {
         try {
-          await fetch(`${process.env.API_SERVICE_URL}/internal/builds/complete`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "X-Internal-Secret": process.env.INTERNAL_SECRET || "",
+          await fetch(
+            `${process.env.API_SERVICE_URL}/internal/builds/complete`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "X-Internal-Secret": process.env.INTERNAL_SECRET || "",
+              },
+              body: JSON.stringify({
+                buildId,
+                projectId,
+                status: BuildStatus.SUCCESS,
+                imageUrl: result.imageUrl,
+                imageSha: result.imageSha,
+              }),
             },
-            body: JSON.stringify({
-              buildId,
-              projectId,
-              status: BuildStatus.SUCCESS,
-              imageUrl: result.imageUrl,
-              imageSha: result.imageSha,
-            }),
-          });
+          );
         } catch (error) {
           logger.error({ error, buildId }, "Failed to notify API service");
         }
       }
 
-      logger.info({ buildId, imageUrl: result.imageUrl }, "Build completed successfully");
+      logger.info(
+        { buildId, imageUrl: result.imageUrl },
+        "Build completed successfully",
+      );
 
       return {
         success: true,
@@ -123,21 +142,27 @@ export const buildWorker = new Worker(
       // Notify API service about build failure
       if (process.env.API_SERVICE_URL) {
         try {
-          await fetch(`${process.env.API_SERVICE_URL}/internal/builds/complete`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "X-Internal-Secret": process.env.INTERNAL_SECRET || "",
+          await fetch(
+            `${process.env.API_SERVICE_URL}/internal/builds/complete`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "X-Internal-Secret": process.env.INTERNAL_SECRET || "",
+              },
+              body: JSON.stringify({
+                buildId,
+                projectId,
+                status: BuildStatus.FAILED,
+                error: error instanceof Error ? error.message : "Build failed",
+              }),
             },
-            body: JSON.stringify({
-              buildId,
-              projectId,
-              status: BuildStatus.FAILED,
-              error: error instanceof Error ? error.message : "Build failed",
-            }),
-          });
+          );
         } catch (notifyError) {
-          logger.error({ notifyError, buildId }, "Failed to notify API service");
+          logger.error(
+            { notifyError, buildId },
+            "Failed to notify API service",
+          );
         }
       }
 
@@ -148,16 +173,40 @@ export const buildWorker = new Worker(
     connection,
     concurrency: parseInt(process.env.BUILD_CONCURRENCY || "5"),
     autorun: true,
-  }
+  },
 );
 
 // Queue event handlers
 buildQueue.on("completed" as any, (job: any) => {
-  logger.info({ jobId: job.id, buildId: job.data.buildId }, "Build job completed");
+  logger.info(
+    { jobId: job.id, buildId: job.data.buildId },
+    "Build job completed",
+  );
+  completedJobsCount++;
 });
 
+// Export function to get metrics including manual count
+export async function getQueueMetrics() {
+  const stats = await buildQueue.getJobCounts();
+  return {
+    waiting: stats.waiting || 0,
+    active: stats.active || 0,
+    completed: completedJobsCount, // Use our manual count
+    failed: Math.max(stats.failed || 0, failedJobsCount), // Use the larger of the two
+    delayed: stats.delayed || 0,
+    paused: stats.paused || 0,
+    prioritized: stats.prioritized || 0,
+    "waiting-children": stats["waiting-children"] || 0,
+    totalProcessed: completedJobsCount + failedJobsCount, // Total jobs processed
+  };
+}
+
 buildQueue.on("failed" as any, (job: any, err: any) => {
-  logger.error({ jobId: job?.id, buildId: job?.data.buildId, error: err }, "Build job failed");
+  logger.error(
+    { jobId: job?.id, buildId: job?.data.buildId, error: err },
+    "Build job failed",
+  );
+  failedJobsCount++;
 });
 
 // Worker event handlers

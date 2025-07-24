@@ -27,8 +27,8 @@ services:
 
   builder:
     build:
-      context: ./services/builder
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./services/builder/Dockerfile.dev
     environment:
       NODE_ENV: test
       DATABASE_URL: postgresql://postgres:postgres@postgres:5432/cygni_integration
@@ -58,15 +58,15 @@ services:
 
   api:
     build:
-      context: ./services/api
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./services/api/Dockerfile.dev
     environment:
       NODE_ENV: test
       DATABASE_URL: postgresql://postgres:postgres@postgres:5432/cygni_integration
       REDIS_HOST: redis
       REDIS_PORT: 6379
       PORT: 3000
-      JWT_SECRET: integration-test-jwt-secret
+      JWT_SECRET: integration-test-jwt-secret-that-is-at-least-32-characters-long
       INTERNAL_SECRET: integration-test-secret
       BUILDER_SERVICE_URL: http://builder:3001
       LOG_LEVEL: debug
@@ -78,7 +78,7 @@ services:
       redis:
         condition: service_healthy
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
       interval: 10s
       timeout: 5s
       retries: 5

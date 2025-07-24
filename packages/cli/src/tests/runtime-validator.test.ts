@@ -52,8 +52,11 @@ detect: package.json
       expect(result.errors).toBeDefined();
       expect(result.errors!.length).toBeGreaterThan(0);
       // Check that at least one error mentions a missing field
-      const hasRequiredError = result.errors!.some(e => 
-        e.includes("Required") || e.includes("required") || e.includes("Expected")
+      const hasRequiredError = result.errors!.some(
+        (e) =>
+          e.includes("Required") ||
+          e.includes("required") ||
+          e.includes("Expected"),
       );
       expect(hasRequiredError).toBe(true);
     });
@@ -73,7 +76,7 @@ run:
 
       const result = await validateRuntimeSpec(specPath);
       expect(result.valid).toBe(false);
-      expect(result.errors?.some(e => e.includes("version"))).toBe(true);
+      expect(result.errors?.some((e) => e.includes("version"))).toBe(true);
     });
 
     it("should fail on invalid YAML", async () => {
@@ -88,7 +91,9 @@ name: node-20
 
       const result = await validateRuntimeSpec(specPath);
       expect(result.valid).toBe(false);
-      expect(result.errors?.some(e => e.includes("YAML parsing error"))).toBe(true);
+      expect(result.errors?.some((e) => e.includes("YAML parsing error"))).toBe(
+        true,
+      );
     });
   });
 
@@ -96,7 +101,7 @@ name: node-20
     it("should detect Node.js project", async () => {
       await fs.writeFile(
         path.join(tempDir, "package.json"),
-        JSON.stringify({ name: "test-app", version: "1.0.0" })
+        JSON.stringify({ name: "test-app", version: "1.0.0" }),
       );
 
       const runtime = await detectRuntime(tempDir);
@@ -107,13 +112,16 @@ name: node-20
     it("should detect Next.js project", async () => {
       await fs.writeFile(
         path.join(tempDir, "package.json"),
-        JSON.stringify({ 
-          name: "test-app", 
+        JSON.stringify({
+          name: "test-app",
           version: "1.0.0",
-          dependencies: { next: "14.0.0" }
-        })
+          dependencies: { next: "14.0.0" },
+        }),
       );
-      await fs.writeFile(path.join(tempDir, "next.config.js"), "module.exports = {}");
+      await fs.writeFile(
+        path.join(tempDir, "next.config.js"),
+        "module.exports = {}",
+      );
 
       const runtime = await detectRuntime(tempDir);
       expect(runtime).not.toBeNull();
@@ -123,7 +131,7 @@ name: node-20
     it("should prefer custom runtime.yaml over auto-detection", async () => {
       await fs.writeFile(
         path.join(tempDir, "package.json"),
-        JSON.stringify({ name: "test-app", version: "1.0.0" })
+        JSON.stringify({ name: "test-app", version: "1.0.0" }),
       );
 
       const customSpec = `
@@ -145,7 +153,10 @@ run:
     });
 
     it("should return null for unsupported project", async () => {
-      await fs.writeFile(path.join(tempDir, "Gemfile"), "source 'https://rubygems.org'");
+      await fs.writeFile(
+        path.join(tempDir, "Gemfile"),
+        "source 'https://rubygems.org'",
+      );
 
       const runtime = await detectRuntime(tempDir);
       expect(runtime).toBeNull();

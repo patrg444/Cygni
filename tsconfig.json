@@ -24,11 +24,5 @@
     { "path": "./services/api" },
     { "path": "./services/builder" }
   ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "build",
-    ".turbo",
-    "coverage"
-  ]
+  "exclude": ["node_modules", "dist", "build", ".turbo", "coverage"]
 }

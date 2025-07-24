@@ -19,6 +19,10 @@ export const deployCommand = new Command("deploy")
   .description("Deploy your application to CloudExpress")
   .option("-w, --watch", "Watch deployment logs")
   .option("-e, --env <environment>", "Target environment", "production")
+  .option(
+    "--namespace <namespace>",
+    "Deploy to a specific namespace (e.g., preview-123)",
+  )
   .option("--rollback", "Rollback to previous deployment")
   .option(
     "--health-gate <level>",
@@ -68,6 +72,7 @@ export const deployCommand = new Command("deploy")
         config,
         buildResult,
         environment: options.env,
+        namespace: options.namespace,
         strategy: options.strategy,
         cachedImageId: cachedBuild?.imageId,
       });

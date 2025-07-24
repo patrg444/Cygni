@@ -1,5 +1,4 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
-import { Job } from "bullmq";
 import { BuildStatus } from "../../src/types/build";
 import { prisma } from "../../src/lib/prisma";
 import { logger } from "../../src/lib/logger";
@@ -29,19 +28,47 @@ vi.mock("../../src/services/kaniko-builder", () => ({
   })),
 }));
 
+// Mock Redis
+vi.mock("ioredis", () => {
+  return {
+    default: vi.fn().mockImplementation(() => ({
+      on: vi.fn(),
+      connect: vi.fn(),
+      disconnect: vi.fn(),
+    })),
+  };
+});
+
+// Mock bullmq before any imports
+vi.mock("bullmq", () => ({
+  Queue: vi.fn().mockImplementation(() => ({
+    on: vi.fn(),
+    add: vi.fn(),
+  })),
+  Worker: vi.fn().mockImplementation(() => ({
+    on: vi.fn(),
+  })),
+  Job: vi.fn(),
+}));
+
 // Mock fetch globally
 global.fetch = vi.fn();
 
 // Import after mocks
 import { KanikoBuilder } from "../../src/services/kaniko-builder";
+import { Worker } from "bullmq";
 
 describe("Build Queue Worker", () => {
-  let mockJob: Partial<Job>;
-  let buildWorkerProcessor: (job: Job) => Promise<any>;
+  let mockJob: any;
+  let buildWorkerProcessor: (job: any) => Promise<any>;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     vi.clearAllMocks();
-    
+
+    // Set environment variables needed for tests
+    process.env.API_SERVICE_URL = "http://api:3000";
+    process.env.INTERNAL_SECRET = "test-secret";
+
     mockJob = {
       id: "test-job-id",
       data: {
@@ -55,17 +82,16 @@ describe("Build Queue Worker", () => {
       },
     };
 
-    // Get the worker processor function
-    vi.doMock("bullmq", () => ({
-      Queue: vi.fn(),
-      Worker: vi.fn().mockImplementation((_name, processor) => {
-        buildWorkerProcessor = processor;
-        return {
-          on: vi.fn(),
-        };
-      }),
-      Job: vi.fn(),
-    }));
+    // Capture the worker processor function when Worker is instantiated
+    vi.mocked(Worker).mockImplementation((_name: string, processor: any) => {
+      buildWorkerProcessor = processor;
+      return {
+        on: vi.fn(),
+      } as any;
+    });
+
+    // Import the queue module to trigger Worker instantiation
+    await import("../../src/services/queue");
   });
 
   afterEach(() => {
@@ -73,9 +99,6 @@ describe("Build Queue Worker", () => {
   });
 
   it("should process build job successfully", async () => {
-    // Reimport to get fresh module with mocks
-    const { buildWorker } = await import("../../src/services/queue");
-    
     const mockBuildResult = {
       imageUrl: "registry.example.com/test:abc123",
       imageSha: "sha256:abcdef",
@@ -83,8 +106,13 @@ describe("Build Queue Worker", () => {
       duration: 120,
     };
 
-    const mockKanikoBuilder = new KanikoBuilder("", "");
-    vi.mocked(mockKanikoBuilder.build).mockResolvedValueOnce(mockBuildResult);
+    // Mock KanikoBuilder to return the expected result
+    vi.mocked(KanikoBuilder).mockImplementation(
+      () =>
+        ({
+          build: vi.fn().mockResolvedValueOnce(mockBuildResult),
+        }) as any,
+    );
 
     vi.mocked(prisma.build.findUnique).mockResolvedValueOnce({
       id: "test-build-id",
@@ -97,7 +125,7 @@ describe("Build Queue Worker", () => {
       json: async () => ({ success: true }),
     } as any);
 
-    const result = await buildWorkerProcessor(mockJob as Job);
+    const result = await buildWorkerProcessor(mockJob);
 
     // Verify build status was updated to running
     expect(prisma.build.update).toHaveBeenCalledWith({
@@ -106,7 +134,8 @@ describe("Build Queue Worker", () => {
     });
 
     // Verify Kaniko builder was called with correct params
-    expect(mockKanikoBuilder.build).toHaveBeenCalledWith({
+    const kanikoInstance = vi.mocked(KanikoBuilder).mock.results[0].value;
+    expect(kanikoInstance.build).toHaveBeenCalledWith({
       buildId: "test-build-id",
       gitUrl: "https://github.com/test/repo",
       gitRef: "abc123",
@@ -140,7 +169,7 @@ describe("Build Queue Worker", () => {
           "Content-Type": "application/json",
         }),
         body: expect.stringContaining("test-build-id"),
-      })
+      }),
     );
 
     expect(result).toEqual({
@@ -151,11 +180,15 @@ describe("Build Queue Worker", () => {
   });
 
   it("should handle build failure", async () => {
-    const { buildWorker } = await import("../../src/services/queue");
-    
     const mockError = new Error("Kaniko build failed");
-    const mockKanikoBuilder = new KanikoBuilder("", "");
-    vi.mocked(mockKanikoBuilder.build).mockRejectedValueOnce(mockError);
+
+    // Mock KanikoBuilder to throw error
+    vi.mocked(KanikoBuilder).mockImplementation(
+      () =>
+        ({
+          build: vi.fn().mockRejectedValueOnce(mockError),
+        }) as any,
+    );
 
     vi.mocked(prisma.build.update).mockResolvedValue({} as any);
     vi.mocked(fetch).mockResolvedValueOnce({
@@ -163,7 +196,9 @@ describe("Build Queue Worker", () => {
       json: async () => ({ success: true }),
     } as any);
 
-    await expect(buildWorkerProcessor(mockJob as Job)).rejects.toThrow("Kaniko build failed");
+    await expect(buildWorkerProcessor(mockJob)).rejects.toThrow(
+      "Kaniko build failed",
+    );
 
     // Verify build was updated with failure
     expect(prisma.build.update).toHaveBeenCalledWith({
@@ -179,14 +214,12 @@ describe("Build Queue Worker", () => {
       expect.stringContaining("/internal/builds/complete"),
       expect.objectContaining({
         method: "POST",
-        body: expect.stringContaining("FAILED"),
-      })
+        body: expect.stringContaining("failed"),
+      }),
     );
   });
 
   it("should handle API notification failure gracefully", async () => {
-    const { buildWorker } = await import("../../src/services/queue");
-    
     const mockBuildResult = {
       imageUrl: "registry.example.com/test:abc123",
       imageSha: "sha256:abcdef",
@@ -194,8 +227,13 @@ describe("Build Queue Worker", () => {
       duration: 120,
     };
 
-    const mockKanikoBuilder = new KanikoBuilder("", "");
-    vi.mocked(mockKanikoBuilder.build).mockResolvedValueOnce(mockBuildResult);
+    // Mock KanikoBuilder to return the expected result
+    vi.mocked(KanikoBuilder).mockImplementation(
+      () =>
+        ({
+          build: vi.fn().mockResolvedValueOnce(mockBuildResult),
+        }) as any,
+    );
 
     vi.mocked(prisma.build.findUnique).mockResolvedValueOnce({
       id: "test-build-id",
@@ -203,11 +241,11 @@ describe("Build Queue Worker", () => {
     } as any);
 
     vi.mocked(prisma.build.update).mockResolvedValueOnce({} as any);
-    
+
     // API notification fails
     vi.mocked(fetch).mockRejectedValueOnce(new Error("Network error"));
 
-    const result = await buildWorkerProcessor(mockJob as Job);
+    const result = await buildWorkerProcessor(mockJob);
 
     // Build should still succeed even if notification fails
     expect(result).toEqual({
@@ -221,7 +259,7 @@ describe("Build Queue Worker", () => {
       expect.objectContaining({
         buildId: "test-build-id",
       }),
-      "Failed to notify API service"
+      "Failed to notify API service",
     );
   });
 });

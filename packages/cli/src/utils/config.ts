@@ -42,8 +42,11 @@ export async function loadConfig(dir: string = "."): Promise<CygniConfig> {
       } else {
         return yaml.load(content) as CygniConfig;
       }
-    } catch (error) {
+    } catch (error: any) {
       // File doesn't exist or parse error, continue
+      if (process.env.DEBUG) {
+        console.error(`Failed to load ${filename}:`, error.message);
+      }
     }
   }
 

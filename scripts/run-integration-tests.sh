@@ -49,6 +49,10 @@ echo -e "\n${YELLOW}Running database migrations...${NC}"
 docker compose -f docker-compose.integration.yml exec -T api pnpm prisma:migrate || true
 docker compose -f docker-compose.integration.yml exec -T builder pnpm prisma:migrate || true
 
+# Step 2.5: Seed test data
+echo -e "\n${YELLOW}Seeding test data...${NC}"
+docker compose -f docker-compose.integration.yml exec -T api pnpm tsx prisma/seed-test.ts || true
+
 # Step 3: Run integration tests
 echo -e "\n${YELLOW}Running Builder ↔ Redis ↔ Postgres integration tests...${NC}"
 export API_URL=http://localhost:3000

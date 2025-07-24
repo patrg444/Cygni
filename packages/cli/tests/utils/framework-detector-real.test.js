@@ -1,0 +1,333 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const vitest_1 = require("vitest");
+const framework_detector_1 = require("../../src/utils/framework-detector");
+const real_file_system_1 = require("../services/real-file-system");
+const path_1 = __importDefault(require("path"));
+(0, vitest_1.describe)("Framework Detector - Real Implementation", () => {
+    let fileSystem;
+    let testDir;
+    (0, vitest_1.beforeEach)(async () => {
+        fileSystem = new real_file_system_1.RealFileSystem("framework-detector");
+        testDir = await fileSystem.createTestDir();
+    });
+    (0, vitest_1.afterEach)(async () => {
+        await fileSystem.cleanup();
+    });
+    (0, vitest_1.describe)("detectFramework", () => {
+        (0, vitest_1.describe)("Next.js detection", () => {
+            (0, vitest_1.it)("should detect Next.js by next.config.js", async () => {
+                await fileSystem.createFile("next.config.js", "module.exports = {};");
+                const result = await (0, framework_detector_1.detectFramework)(testDir);
+                (0, vitest_1.expect)(result).toBe("nextjs");
+            });
+            (0, vitest_1.it)("should detect Next.js by next.config.mjs", async () => {
+                await fileSystem.createFile("next.config.mjs", "export default {};");
+                const result = await (0, framework_detector_1.detectFramework)(testDir);
+                (0, vitest_1.expect)(result).toBe("nextjs");
+            });
+            (0, vitest_1.it)("should detect Next.js by next.config.ts", async () => {
+                await fileSystem.createFile("next.config.ts", "export default {};");
+                const result = await (0, framework_detector_1.detectFramework)(testDir);
+                (0, vitest_1.expect)(result).toBe("nextjs");
+            });
+            (0, vitest_1.it)("should detect Next.js by package.json dependencies", async () => {
+                await fileSystem.createFile("package.json", JSON.stringify({
+                    dependencies: {
+                        next: "^13.0.0",
+                        react: "^18.0.0",
+                        "react-dom": "^18.0.0",
+                    },
+                }));
+                const result = await (0, framework_detector_1.detectFramework)(testDir);
+                (0, vitest_1.expect)(result).toBe("nextjs");
+            });
+        });
+        (0, vitest_1.describe)("React detection", () => {
+            (0, vitest_1.it)("should detect React with vite.config.js", async () => {
+                await fileSystem.createFile("vite.config.js", "export default {};");
+                const result = await (0, framework_detector_1.detectFramework)(testDir);
+                (0, vitest_1.expect)(result).toBe("react");
+            });
+            (0, vitest_1.it)("should detect React by dependencies when no config files", async () => {
+                await fileSystem.createFile("package.json", JSON.stringify({
+                    dependencies: {
+                        react: "^18.0.0",
+                        "react-dom": "^18.0.0",
+                    },
+                }));
+                const result = await (0, framework_detector_1.detectFramework)(testDir);
+                (0, vitest_1.expect)(result).toBe("react");
+            });
+            (0, vitest_1.it)("should detect React by react-scripts", async () => {
+                await fileSystem.createFile("package.json", JSON.stringify({
+                    scripts: {
+                        start: "react-scripts start",
+                        build: "react-scripts build",
+                    },
+                }));
+                const result = await (0, framework_detector_1.detectFramework)(testDir);
+                (0, vitest_1.expect)(result).toBe("react");
+            });
+        });
+        (0, vitest_1.describe)("Django detection", () => {
+            (0, vitest_1.it)("should detect Django by manage.py", async () => {
+                await fileSystem.createFile("manage.py", "#!/usr/bin/env python\n# Django manage file");
+                const result = await (0, framework_detector_1.detectFramework)(testDir);
+                (0, vitest_1.expect)(result).toBe("django");
+            });
+            (0, vitest_1.it)("should detect Django by requirements.txt", async () => {
+                await fileSystem.createFile("requirements.txt", "django>=4.0\npsycopg2-binary\n");
+                const result = await (0, framework_detector_1.detectFramework)(testDir);
+                (0, vitest_1.expect)(result).toBe("django");
+            });
+        });
+        (0, vitest_1.describe)("Flask detection", () => {
+            (0, vitest_1.it)("should detect Flask by app.py file", async () => {
+                await fileSystem.createFile("app.py", "from flask import Flask\napp = Flask(__name__)");
+                const result = await (0, framework_detector_1.detectFramework)(testDir);
+                (0, vitest_1.expect)(result).toBe("flask");
+            });
+            (0, vitest_1.it)("should detect Flask from package.json dependencies", async () => {
+                // Flask can also be in a Node.js project as a backend
+                await fileSystem.createFile("package.json", JSON.stringify({
+                    dependencies: {
+                        flask: "^2.0.0",
+                    },
+                }));
+                const result = await (0, framework_detector_1.detectFramework)(testDir);
+                (0, vitest_1.expect)(result).toBe("flask");
+            });
+            (0, vitest_1.it)("should detect Flask by application.py", async () => {
+                await fileSystem.createFile("application.py", "from flask import Flask\napp = Flask(__name__)");
+                const result = await (0, framework_detector_1.detectFramework)(testDir);
+                (0, vitest_1.expect)(result).toBe("flask");
+            });
+        });
+        (0, vitest_1.describe)("Rails detection", () => {
+            (0, vitest_1.it)("should detect Rails by Gemfile", async () => {
+                await fileSystem.createFile("Gemfile", 'source "https://rubygems.org"\ngem "rails", "~> 7.0.0"');
+                const result = await (0, framework_detector_1.detectFramework)(testDir);
+                (0, vitest_1.expect)(result).toBe("rails");
+            });
+            (0, vitest_1.it)("should detect Rails by config.ru", async () => {
+                await fileSystem.createFile("config.ru", "require_relative 'config/environment'\nrun Rails.application");
+                const result = await (0, framework_detector_1.detectFramework)(testDir);
+                (0, vitest_1.expect)(result).toBe("rails");
+            });
+        });
+        (0, vitest_1.describe)("Vue detection", () => {
+            (0, vitest_1.it)("should detect Vue by vue.config.js", async () => {
+                await fileSystem.createFile("vue.config.js", "module.exports = {};");
+                const result = await (0, framework_detector_1.detectFramework)(testDir);
+                (0, vitest_1.expect)(result).toBe("vue");
+            });
+            (0, vitest_1.it)("should detect Vue by dependencies", async () => {
+                await fileSystem.createFile("package.json", JSON.stringify({
+                    dependencies: {
+                        vue: "^3.0.0",
+                    },
+                }));
+                const result = await (0, framework_detector_1.detectFramework)(testDir);
+                (0, vitest_1.expect)(result).toBe("vue");
+            });
+        });
+        (0, vitest_1.describe)("Express detection", () => {
+            (0, vitest_1.it)("should detect Express by dependencies", async () => {
+                await fileSystem.createFile("package.json", JSON.stringify({
+                    dependencies: {
+                        express: "^4.18.0",
+                    },
+                }));
+                const result = await (0, framework_detector_1.detectFramework)(testDir);
+                (0, vitest_1.expect)(result).toBe("express");
+            });
+        });
+        (0, vitest_1.describe)("Framework priority", () => {
+            (0, vitest_1.it)("should prioritize file-based detection over dependencies", async () => {
+                // Create both Next.js config and React dependencies
+                await fileSystem.createFile("next.config.js", "module.exports = {};");
+                await fileSystem.createFile("package.json", JSON.stringify({
+                    dependencies: {
+                        react: "^18.0.0",
+                        "react-dom": "^18.0.0",
+                    },
+                }));
+                const result = await (0, framework_detector_1.detectFramework)(testDir);
+                (0, vitest_1.expect)(result).toBe("nextjs"); // Should detect Next.js first
+            });
+            (0, vitest_1.it)("should handle projects with multiple framework files", async () => {
+                // Create config files for multiple frameworks
+                await fileSystem.createFile("next.config.js", "module.exports = {};");
+                await fileSystem.createFile("vue.config.js", "module.exports = {};");
+                await fileSystem.createFile("angular.json", "{}");
+                const result = await (0, framework_detector_1.detectFramework)(testDir);
+                (0, vitest_1.expect)(result).toBe("nextjs"); // First in the list wins
+            });
+        });
+        (0, vitest_1.describe)("Edge cases", () => {
+            (0, vitest_1.it)("should return undefined for unknown project", async () => {
+                await fileSystem.createFile("index.html", "<html></html>");
+                await fileSystem.createFile("style.css", "body { margin: 0; }");
+                const result = await (0, framework_detector_1.detectFramework)(testDir);
+                (0, vitest_1.expect)(result).toBeUndefined();
+            });
+            (0, vitest_1.it)("should handle empty directory", async () => {
+                const result = await (0, framework_detector_1.detectFramework)(testDir);
+                (0, vitest_1.expect)(result).toBeUndefined();
+            });
+            (0, vitest_1.it)("should handle invalid package.json", async () => {
+                await fileSystem.createFile("package.json", "{ invalid json");
+                const result = await (0, framework_detector_1.detectFramework)(testDir);
+                (0, vitest_1.expect)(result).toBeUndefined();
+            });
+            (0, vitest_1.it)("should handle package.json without dependencies", async () => {
+                await fileSystem.createFile("package.json", JSON.stringify({
+                    name: "my-project",
+                    version: "1.0.0",
+                }));
+                const result = await (0, framework_detector_1.detectFramework)(testDir);
+                (0, vitest_1.expect)(result).toBeUndefined();
+            });
+            (0, vitest_1.it)("should detect from devDependencies", async () => {
+                await fileSystem.createFile("package.json", JSON.stringify({
+                    devDependencies: {
+                        next: "^13.0.0",
+                    },
+                }));
+                const result = await (0, framework_detector_1.detectFramework)(testDir);
+                (0, vitest_1.expect)(result).toBe("nextjs");
+            });
+        });
+        (0, vitest_1.describe)("Real project structures", () => {
+            (0, vitest_1.it)("should detect a typical Next.js project", async () => {
+                await fileSystem.createStructure({
+                    "package.json": JSON.stringify({
+                        dependencies: {
+                            next: "13.4.0",
+                            react: "18.2.0",
+                            "react-dom": "18.2.0",
+                        },
+                    }),
+                    "next.config.js": "module.exports = { reactStrictMode: true };",
+                    pages: {
+                        "index.js": "export default function Home() { return <h1>Home</h1>; }",
+                        "_app.js": "export default function App({ Component, pageProps }) { return <Component {...pageProps} />; }",
+                    },
+                    public: {
+                        "favicon.ico": "",
+                    },
+                });
+                const result = await (0, framework_detector_1.detectFramework)(testDir);
+                (0, vitest_1.expect)(result).toBe("nextjs");
+            });
+            (0, vitest_1.it)("should detect a typical Django project", async () => {
+                await fileSystem.createStructure({
+                    "manage.py": `#!/usr/bin/env python
+import os
+import sys
+
+if __name__ == '__main__':
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'myproject.settings')
+    from django.core.management import execute_from_command_line
+    execute_from_command_line(sys.argv)
+`,
+                    "requirements.txt": `Django==4.2.0
+djangorestframework==3.14.0
+psycopg2-binary==2.9.6
+gunicorn==20.1.0
+`,
+                    myproject: {
+                        "__init__.py": "",
+                        "settings.py": "# Django settings",
+                        "urls.py": "# URL configuration",
+                        "wsgi.py": "# WSGI config",
+                    },
+                });
+                const result = await (0, framework_detector_1.detectFramework)(testDir);
+                (0, vitest_1.expect)(result).toBe("django");
+            });
+            (0, vitest_1.it)("should detect a Create React App project", async () => {
+                await fileSystem.createStructure({
+                    "package.json": JSON.stringify({
+                        dependencies: {
+                            react: "^18.2.0",
+                            "react-dom": "^18.2.0",
+                            "react-scripts": "5.0.1",
+                        },
+                        scripts: {
+                            start: "react-scripts start",
+                            build: "react-scripts build",
+                            test: "react-scripts test",
+                            eject: "react-scripts eject",
+                        },
+                    }),
+                    public: {
+                        "index.html": '<!DOCTYPE html><html><head><title>React App</title></head><body><div id="root"></div></body></html>',
+                    },
+                    src: {
+                        "App.js": "function App() { return <div>Hello</div>; }",
+                        "index.js": "ReactDOM.render(<App />, document.getElementById('root'));",
+                    },
+                });
+                const result = await (0, framework_detector_1.detectFramework)(testDir);
+                (0, vitest_1.expect)(result).toBe("react");
+            });
+        });
+        (0, vitest_1.describe)("Custom project paths", () => {
+            (0, vitest_1.it)("should detect framework in subdirectory", async () => {
+                const subdir = await fileSystem.createTestDir("subproject");
+                await fileSystem.createFile(path_1.default.join("subproject", "manage.py"), "#!/usr/bin/env python");
+                const result = await (0, framework_detector_1.detectFramework)(subdir);
+                (0, vitest_1.expect)(result).toBe("django");
+            });
+            (0, vitest_1.it)("should handle absolute paths", async () => {
+                await fileSystem.createFile("next.config.js", "module.exports = {};");
+                // Use absolute path to test directory
+                const result = await (0, framework_detector_1.detectFramework)(testDir);
+                (0, vitest_1.expect)(result).toBe("nextjs");
+            });
+        });
+    });
+    (0, vitest_1.describe)("getFrameworkDefaults", () => {
+        (0, vitest_1.it)("should return Next.js defaults", () => {
+            const defaults = (0, framework_detector_1.getFrameworkDefaults)("nextjs");
+            (0, vitest_1.expect)(defaults).toEqual({
+                buildCommand: "npm run build",
+                startCommand: "npm start",
+                port: 3000,
+                outputDir: ".next",
+            });
+        });
+        (0, vitest_1.it)("should return Django defaults", () => {
+            const defaults = (0, framework_detector_1.getFrameworkDefaults)("django");
+            (0, vitest_1.expect)(defaults).toEqual({
+                startCommand: "python manage.py runserver 0.0.0.0:8000",
+                port: 8000,
+            });
+        });
+        (0, vitest_1.it)("should return empty object for unknown framework", () => {
+            const defaults = (0, framework_detector_1.getFrameworkDefaults)("unknown-framework");
+            (0, vitest_1.expect)(defaults).toEqual({});
+        });
+        (0, vitest_1.it)("should return Express defaults", () => {
+            const defaults = (0, framework_detector_1.getFrameworkDefaults)("express");
+            (0, vitest_1.expect)(defaults).toEqual({
+                startCommand: "node index.js",
+                port: 3000,
+            });
+        });
+        (0, vitest_1.it)("should return Laravel defaults", () => {
+            const defaults = (0, framework_detector_1.getFrameworkDefaults)("laravel");
+            (0, vitest_1.expect)(defaults).toEqual({
+                buildCommand: "npm run build",
+                startCommand: "php artisan serve --host=0.0.0.0",
+                port: 8000,
+            });
+        });
+    });
+});
+//# sourceMappingURL=framework-detector-real.test.js.map

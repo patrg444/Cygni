@@ -1,0 +1,15 @@
+{
+  "CygniStagingStack-staging": {
+    "VPCId": "vpc-12345678",
+    "DatabaseEndpoint": "cygni-db.cluster-abc123.us-east-1.rds.amazonaws.com",
+    "DatabaseSecretArn": "arn:aws:secretsmanager:us-east-1:123456789012:secret:DBSecret-abc123",
+    "ECRRepositoryUri": "123456789012.dkr.ecr.us-east-1.amazonaws.com/cygni-backend",
+    "ECSClusterName": "CygniStagingStack-staging-EcsCluster",
+    "ECSServiceName": "CygniStagingStack-staging-BackendService",
+    "LoadBalancerUrl": "http://cygni-alb-123456.us-east-1.elb.amazonaws.com",
+    "FrontendBucketName": "cygni-frontend-123456789012-us-east-1",
+    "CloudFrontUrl": "https://d1234567890abc.cloudfront.net",
+    "CloudFrontDistributionId": "E1234567890ABC",
+    "DeploymentUserName": "cygni-deployment-user"
+  }
+}

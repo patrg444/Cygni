@@ -7,23 +7,17 @@ import { detectRuntime } from "../lib/runtime-validator";
 import { AWSDeployer } from "../lib/aws-deploy";
 import { exec } from "child_process";
 import { promisify } from "util";
+import { validateAwsResourceName, validateAwsRegion } from "../utils/aws-validation";
 
 const execAsync = promisify(exec);
 
-export const deployAwsCommand = new Command("deploy")
-  .description("Deploy your application")
-  .option("--aws", "Deploy to AWS (demo mode)")
+export const deployAwsCommand = new Command("deploy:aws")
+  .description("Deploy your application to AWS (demo mode)")
   .option("--rollback", "Rollback to previous deployment")
-  .option("-n, --name <name>", "Application name (required for AWS)")
+  .option("-n, --name <name>", "Application name (required)")
   .option("-r, --region <region>", "AWS region", "us-east-1")
   .option("-w, --watch", "Watch deployment logs")
   .action(async (options) => {
-    if (!options.aws) {
-      // Delegate to original deploy command
-      console.log(chalk.yellow("Use 'cx deploy --aws' for AWS deployment"));
-      process.exit(1);
-    }
-
     if (options.rollback) {
       return handleAWSRollback(options);
     }
@@ -31,14 +25,39 @@ export const deployAwsCommand = new Command("deploy")
     try {
       // Validate app name
       if (!options.name) {
-        console.error(chalk.red("Error: --name is required for AWS deployment"));
-        console.log("\nExample: cx deploy --aws --name my-app");
+        console.error(
+          chalk.red("Error: --name is required for AWS deployment"),
+        );
+        console.log("\nExample: cx deploy:aws --name my-app");
         process.exit(1);
       }
 
-      const appName = options.name.toLowerCase();
-      if (!/^[a-z0-9-]+$/.test(appName)) {
-        console.error(chalk.red("Error: App name must be lowercase alphanumeric with hyphens"));
+      // Strict AWS resource name validation
+      const nameValidation = validateAwsResourceName(options.name);
+      
+      if (!nameValidation.isValid) {
+        console.error(chalk.red("Error: Invalid app name"));
+        console.error(chalk.red(`  App name ${nameValidation.errors.join(", ")}`));
+        console.log("\nAWS resource naming requirements:");
+        console.log("  • 3-63 characters long");
+        console.log("  • Start with lowercase letter or number");
+        console.log("  • Contain only lowercase letters, numbers, and hyphens");
+        console.log("  • No consecutive hyphens or trailing hyphen");
+        console.log("  • No AWS reserved prefixes (aws, amazon, s3, etc.)");
+        console.log("\nExample: cx deploy:aws --name my-app-prod-v2");
+        process.exit(1);
+      }
+      
+      const appName = nameValidation.sanitized;
+      
+      // Validate region if provided
+      if (options.region && !validateAwsRegion(options.region)) {
+        console.error(chalk.red(`Error: Invalid AWS region "${options.region}"`));
+        console.log("\nValid regions include:");
+        console.log("  • us-east-1, us-west-2 (US regions)");
+        console.log("  • eu-west-1, eu-central-1 (EU regions)");
+        console.log("  • ap-southeast-1, ap-northeast-1 (Asia Pacific)");
+        console.log("\nExample: cx deploy:aws --name my-app --region us-west-2");
         process.exit(1);
       }
 
@@ -62,7 +81,7 @@ export const deployAwsCommand = new Command("deploy")
       // Detect runtime
       const runtimeSpinner = ora("Detecting application runtime").start();
       const runtime = await detectRuntime(process.cwd());
-      
+
       if (!runtime) {
         runtimeSpinner.fail("Unsupported application type");
         console.log("\nSupported frameworks for v0.1:");
@@ -83,10 +102,10 @@ export const deployAwsCommand = new Command("deploy")
 
       // Initialize AWS deployer
       const deployer = new AWSDeployer(options.region);
-      
+
       // Subscribe to events for progress updates
       let currentSpinner: any = null;
-      
+
       deployer.on("step", (message: string) => {
         if (currentSpinner) currentSpinner.succeed();
         currentSpinner = ora(message).start();
@@ -102,11 +121,11 @@ export const deployAwsCommand = new Command("deploy")
 
       deployer.on("build-output", (output: string) => {
         // Filter and format Docker build output
-        const lines = output.split('\n').filter(line => line.trim());
+        const lines = output.split("\n").filter((line) => line.trim());
         for (const line of lines) {
-          if (line.includes('Step') || line.includes('----->')) {
+          if (line.includes("Step") || line.includes("----->")) {
             process.stdout.write(chalk.gray(`  ${line.trim()}\n`));
-          } else if (line.includes('Successfully')) {
+          } else if (line.includes("Successfully")) {
             process.stdout.write(chalk.green(`  ✓ ${line.trim()}\n`));
           }
         }
@@ -134,7 +153,7 @@ export const deployAwsCommand = new Command("deploy")
       const minutes = Math.floor(duration / 60);
       const seconds = duration % 60;
       const timeStr = minutes > 0 ? `${minutes}m ${seconds}s` : `${seconds}s`;
-      
+
       // Success!
       console.log("\n" + chalk.green.bold("✅ Deployment complete!"));
       console.log("\nYour app is available at:");
@@ -143,13 +162,24 @@ export const deployAwsCommand = new Command("deploy")
 
       // Additional info
       console.log("\nUseful commands:");
-      console.log(chalk.gray(`  cx deploy --aws --name ${appName} --rollback  # Rollback`));
-      console.log(chalk.gray(`  cx logs ${appName} --aws                      # View logs`));
-      console.log(chalk.gray(`  cx status ${appName} --aws                    # Check status`));
+      console.log(
+        chalk.gray(
+          `  cx deploy:aws --name ${appName} --rollback    # Rollback`,
+        ),
+      );
+      console.log(
+        chalk.gray(
+          `  cx logs ${appName} --aws                      # View logs`,
+        ),
+      );
+      console.log(
+        chalk.gray(
+          `  cx status ${appName} --aws                    # Check status`,
+        ),
+      );
 
       // Store deployment info for later commands
       await storeDeploymentInfo(appName, result);
-
     } catch (error: any) {
       console.error(chalk.red("\nDeployment failed:"), error.message);
       if (error.stack && process.env.DEBUG) {
@@ -165,12 +195,29 @@ async function handleAWSRollback(options: any) {
     process.exit(1);
   }
 
-  console.log(chalk.blue(`Rolling back ${options.name}...\n`));
+  // Apply same validation as deploy command
+  const nameValidation = validateAwsResourceName(options.name);
+  
+  if (!nameValidation.isValid) {
+    console.error(chalk.red("Error: Invalid app name"));
+    console.error(chalk.red(`  App name ${nameValidation.errors.join(", ")}`));
+    process.exit(1);
+  }
+  
+  const appName = nameValidation.sanitized;
+  
+  // Validate region if provided
+  if (options.region && !validateAwsRegion(options.region)) {
+    console.error(chalk.red(`Error: Invalid AWS region "${options.region}"`));
+    process.exit(1);
+  }
+
+  console.log(chalk.blue(`Rolling back ${appName}...\n`));
 
   try {
     const deployer = new AWSDeployer(options.region);
-    await deployer.rollback(options.name);
-    
+    await deployer.rollback(appName);
+
     console.log("\n" + chalk.green.bold("✅ Rollback complete!"));
     console.log(chalk.gray("\n✨ Reverted to previous version successfully"));
   } catch (error: any) {
@@ -181,9 +228,9 @@ async function handleAWSRollback(options: any) {
 
 async function createDockerfile(runtime: string, filePath: string) {
   const { writeFileSync } = await import("fs");
-  
+
   let content = "";
-  
+
   if (runtime.startsWith("node")) {
     content = `FROM node:20-alpine
 
@@ -265,19 +312,19 @@ CMD ["npm", "start"]
 async function storeDeploymentInfo(appName: string, result: any) {
   const { writeFileSync, mkdirSync } = await import("fs");
   const configDir = path.join(process.env.HOME || "", ".cygni");
-  
+
   try {
     mkdirSync(configDir, { recursive: true });
-    
+
     const deploymentInfo = {
       appName,
       ...result,
       timestamp: new Date().toISOString(),
     };
-    
+
     writeFileSync(
       path.join(configDir, `${appName}.deployment.json`),
-      JSON.stringify(deploymentInfo, null, 2)
+      JSON.stringify(deploymentInfo, null, 2),
     );
   } catch (error) {
     // Non-critical, just log

@@ -6,23 +6,27 @@ RUN apk add --no-cache python3 make g++
 
 WORKDIR /app
 
-# Copy package files
-COPY package.json pnpm-lock.yaml ./
+# Copy all package files
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY services/builder/package.json ./services/builder/
+COPY services/api/package.json ./services/api/
+COPY packages/*/package.json ./packages/
 
-# Install dependencies
-RUN npm install -g pnpm
-RUN pnpm install --frozen-lockfile --filter @cloudexpress/builder...
+# Install pnpm
+RUN npm install -g pnpm@8
+
+# Install all dependencies
+RUN pnpm install --frozen-lockfile || pnpm install --no-frozen-lockfile
 
 # Copy source code
 COPY services/builder ./services/builder
-COPY packages ./packages
 
 # Generate Prisma client
-RUN pnpm --filter @cloudexpress/builder exec prisma generate
+WORKDIR /app/services/builder
+RUN npx prisma generate
 
 # Build the application
-RUN pnpm --filter @cloudexpress/builder build
+RUN pnpm build
 
 # Runtime stage
 FROM node:20-alpine

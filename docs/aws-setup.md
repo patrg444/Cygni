@@ -39,11 +39,7 @@ Create an IAM role with the following permissions:
     },
     {
       "Effect": "Allow",
-      "Action": [
-        "s3:PutObject",
-        "s3:GetObject",
-        "s3:ListBucket"
-      ],
+      "Action": ["s3:PutObject", "s3:GetObject", "s3:ListBucket"],
       "Resource": [
         "arn:aws:s3:::cygni-build-artifacts",
         "arn:aws:s3:::cygni-build-artifacts/*"
@@ -86,9 +82,7 @@ Create an IAM role with the following permissions:
     },
     {
       "Effect": "Allow",
-      "Action": [
-        "iam:PassRole"
-      ],
+      "Action": ["iam:PassRole"],
       "Resource": "arn:aws:iam::*:role/cygni-*"
     },
     {

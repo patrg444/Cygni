@@ -2,13 +2,16 @@
 
 // Quick test to verify AWS connection and permissions
 const { STSClient, GetCallerIdentityCommand } = require("@aws-sdk/client-sts");
-const { ECRClient, DescribeRepositoriesCommand } = require("@aws-sdk/client-ecr");
+const {
+  ECRClient,
+  DescribeRepositoriesCommand,
+} = require("@aws-sdk/client-ecr");
 
 async function testAWSConnection() {
   console.log("🧪 Testing AWS Connection...\n");
 
   const region = process.env.AWS_DEFAULT_REGION || "us-east-1";
-  
+
   try {
     // Test STS
     const stsClient = new STSClient({ region });
@@ -16,7 +19,7 @@ async function testAWSConnection() {
     console.log("✓ AWS credentials working");
     console.log(`  Account: ${identity.Account}`);
     console.log(`  Region: ${region}`);
-    
+
     // Test ECR
     const ecrClient = new ECRClient({ region });
     try {
@@ -28,9 +31,8 @@ async function testAWSConnection() {
         console.log("  Need: ecr:CreateRepository, ecr:GetAuthorizationToken");
       }
     }
-    
+
     console.log("\n✅ AWS connection test passed!");
-    
   } catch (error) {
     console.error("✗ AWS connection failed:", error.message);
     console.log("\nTroubleshooting:");

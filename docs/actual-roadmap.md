@@ -1,6 +1,7 @@
 # Realistic Product Roadmap: Demo → Launch
 
 ## Current State (What's Built)
+
 - ✅ CLI with basic commands
 - ✅ AWS deployment demo (requires manual setup)
 - ✅ Runtime detection for Node.js
@@ -8,23 +9,28 @@
 - ✅ Example apps
 
 ## Phase 0: Fundable Demo (1-2 weeks)
+
 **Goal**: Raise pre-seed funding
 
 ### Must Have
+
 - [ ] AWS demo account with pre-configured Route53 + ACM
 - [ ] 3-minute demo video showing "magic"
 - [ ] Landing page with waitlist
 - [ ] Investor deck with TAM/vision
 
 ### Nice to Have
+
 - [ ] Working deployment for 1-2 design partners
 - [ ] Basic usage analytics
 - [ ] Cost projections
 
 ## Phase 1: Real MVP (3 months)
+
 **Goal**: 10 paying customers
 
 ### Core Platform
+
 - [ ] **API Service** (FastAPI/Rails)
   - User auth (email/password + GitHub OAuth)
   - Project CRUD
@@ -44,12 +50,12 @@
   - Status webhooks
 
 ### MVP Features
+
 - [ ] Web dashboard (Next.js)
   - Login/signup
   - Project list
   - Deployment history
   - Live logs viewer
-  
 - [ ] CLI v2
   - Authenticated API calls
   - Project selection
@@ -62,6 +68,7 @@
   - Usage-based compute
 
 ## Phase 2: Growth Features (3 months)
+
 **Goal**: 100 paying customers
 
 - [ ] **GitHub Integration**
@@ -81,6 +88,7 @@
   - Alert notifications
 
 ## Phase 3: Scale (3 months)
+
 **Goal**: 1000 customers, Series A ready
 
 - [ ] **Enterprise Features**
@@ -104,6 +112,7 @@
 ## Technical Debt Reality
 
 ### What the Demo Hides
+
 1. **No State Management**: Everything is stateless
 2. **No Queue System**: Builds would block
 3. **No Database**: Can't track deployments
@@ -112,6 +121,7 @@
 6. **No Monitoring**: Blind to failures
 
 ### Minimum Infrastructure Needed
+
 ```yaml
 Production:
   Database: RDS PostgreSQL ($100/mo)
@@ -127,24 +137,28 @@ Production:
 ## Honest Timeline
 
 **Month 1-2**: Foundation
+
 - Set up real AWS infrastructure
 - Build authentication system
 - Create project/deployment models
 - Basic API + database
 
-**Month 3-4**: Core Features  
+**Month 3-4**: Core Features
+
 - Builder service with queuing
 - Deployment orchestration
 - Web dashboard MVP
 - Billing integration
 
 **Month 5-6**: Polish
+
 - GitHub integration
 - Monitoring/alerts
 - Documentation
 - Performance optimization
 
 **Month 7-9**: Scale Prep
+
 - Security audit
 - Load testing
 - Operational runbooks

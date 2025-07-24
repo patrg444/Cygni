@@ -1,0 +1,16 @@
+{
+  "timestamp": "2025-07-23T23:21:02.906Z",
+  "services": [
+    {
+      "name": "backend",
+      "success": true,
+      "duration": 134,
+      "artifacts": []
+    }
+  ],
+  "metadata": {
+    "totalDuration": 134,
+    "successCount": 1,
+    "failureCount": 0
+  }
+}

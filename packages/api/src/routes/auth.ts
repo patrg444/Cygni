@@ -3,6 +3,9 @@ import { z } from "zod";
 import bcrypt from "bcrypt";
 import { PrismaClient } from "@prisma/client";
 import { JWTRotationService } from "../services/auth/jwt-rotation.service";
+import { recordAuthentication, recordError } from "../lib/metrics";
+import { logAuditEvent } from "../middleware/audit.middleware";
+import { AuditEventType } from "../services/audit/audit-events";
 
 const router = Router();
 const prisma = new PrismaClient();
@@ -36,6 +39,7 @@ router.post("/auth/signup", async (req: Request, res: Response) => {
     });
 
     if (existingUser) {
+      recordAuthentication("signup", false);
       return res.status(400).json({ error: "User already exists" });
     }
 
@@ -70,6 +74,24 @@ router.post("/auth/signup", async (req: Request, res: Response) => {
       role: user.role,
     });
 
+    recordAuthentication("signup", true);
+
+    // Audit log for user creation
+    await logAuditEvent(
+      AuditEventType.USER_CREATED,
+      "user",
+      user.id,
+      {
+        ip: req.ip,
+        userAgent: req.headers["user-agent"],
+        method: req.method,
+        path: req.path,
+      },
+      {
+        metadata: { teamName, userName: name },
+      }
+    );
+
     res.json({
       token,
       user: {
@@ -84,6 +106,9 @@ router.post("/auth/signup", async (req: Request, res: Response) => {
       },
     });
   } catch (error) {
+    recordAuthentication("signup", false);
+    recordError("signup_error", "error");
+    
     if (error instanceof z.ZodError) {
       return res.status(400).json({ error: error.errors });
     }
@@ -106,12 +131,14 @@ router.post("/auth/login", async (req: Request, res: Response) => {
     });
 
     if (!user) {
+      recordAuthentication("login", false);
       return res.status(401).json({ error: "Invalid credentials" });
     }
 
     // Verify password
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) {
+      recordAuthentication("login", false);
       return res.status(401).json({ error: "Invalid credentials" });
     }
 
@@ -128,6 +155,29 @@ router.post("/auth/login", async (req: Request, res: Response) => {
       email: user.email,
       role: user.role,
     });
+
+    recordAuthentication("login", true);
+
+    // Audit log for successful login
+    await logAuditEvent(
+      AuditEventType.USER_LOGIN,
+      "auth",
+      user.id,
+      {
+        user: {
+          id: user.id,
+          email: user.email,
+          teamId: user.teamId,
+        },
+        ip: req.ip,
+        userAgent: req.headers["user-agent"],
+        method: req.method,
+        path: req.path,
+      },
+      {
+        metadata: { loginMethod: "password" },
+      }
+    );
 
     res.json({
       token,

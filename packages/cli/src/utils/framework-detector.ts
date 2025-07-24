@@ -199,15 +199,35 @@ export function getFrameworkDefaults(framework: string): {
       startCommand: "python app.py",
       port: 5000,
     },
+    fastapi: {
+      startCommand: "uvicorn main:app --host 0.0.0.0 --port 8000",
+      port: 8000,
+    },
     rails: {
       buildCommand: "bundle exec rake assets:precompile",
       startCommand: "bundle exec rails server -b 0.0.0.0",
       port: 3000,
     },
+    sinatra: {
+      startCommand: "ruby app.rb",
+      port: 4567,
+    },
     laravel: {
       buildCommand: "npm run build",
       startCommand: "php artisan serve --host=0.0.0.0",
       port: 8000,
+    },
+    nuxt: {
+      buildCommand: "npm run build",
+      startCommand: "npm start",
+      port: 3000,
+      outputDir: ".nuxt",
+    },
+    gatsby: {
+      buildCommand: "npm run build",
+      startCommand: "npm run serve",
+      port: 9000,
+      outputDir: "public",
     },
   };
 

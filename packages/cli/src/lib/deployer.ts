@@ -7,6 +7,7 @@ export interface DeploymentOptions {
   config: BuildConfig;
   buildResult: BuildResult;
   environment: string;
+  namespace?: string;
   healthGate?: string;
   strategy?: string;
   cachedImageId?: string;
@@ -74,11 +75,19 @@ export async function deployToCloudExpress(
 
   // Create deployment
   const deploySpinner = ora("Creating deployment...").start();
-  const deployment = await api.post("/deployments", {
+  const deploymentData: any = {
     projectId: project.id,
     buildId: build.data.id,
     environment: options.environment,
-  });
+  };
+
+  // Add namespace if provided (for preview environments)
+  if (options.namespace) {
+    deploymentData.namespace = options.namespace;
+    deploySpinner.text = `Creating deployment in namespace: ${options.namespace}...`;
+  }
+
+  const deployment = await api.post("/deployments", deploymentData);
   deploySpinner.succeed(`Deployment created: ${deployment.data.id}`);
 
   // Poll deployment status

@@ -2,6 +2,7 @@ import { CronJob } from "cron";
 import * as jwt from "jsonwebtoken";
 import * as crypto from "crypto";
 import { PrismaClient } from "@prisma/client";
+import logger from "../../lib/logger";
 
 interface JWKSKey {
   kid: string;
@@ -58,7 +59,7 @@ export class JWTRotationService {
 
   // Rotate JWT signing keys
   async rotateKeys() {
-    console.log("Rotating JWT signing keys...");
+    logger.info("JWT key rotation started");
 
     // Generate new RSA key pair
     const keyPair = crypto.generateKeyPairSync("rsa", {
@@ -102,7 +103,10 @@ export class JWTRotationService {
     // Clean up old keys
     await this.cleanupExpiredKeys();
 
-    console.log(`New JWT key generated with kid: ${kid}`);
+    logger.info("JWT key rotation completed", { 
+      kid, 
+      expiresAt: expiresAt.toISOString() 
+    });
   }
 
   // Get current signing key
@@ -238,8 +242,11 @@ export class JWTRotationService {
         try {
           await this.rotateKeys();
         } catch (error) {
-          console.error("JWT key rotation failed:", error);
-          // Send alert to ops team
+          logger.error("JWT key rotation failed", {
+            error: error instanceof Error ? error.message : error,
+            stack: error instanceof Error ? error.stack : undefined,
+          });
+          // TODO: Send alert to ops team
         }
       },
       null,
@@ -247,7 +254,9 @@ export class JWTRotationService {
       "UTC",
     );
 
-    console.log("JWT rotation job scheduled");
+    logger.info("JWT rotation job scheduled", { 
+      schedule: "0 0 * * * (daily at midnight UTC)" 
+    });
     return job;
   }
 }

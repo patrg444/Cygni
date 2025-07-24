@@ -12,7 +12,7 @@ datasource db {
 model User {
   id             String         @id @default(cuid())
   email          String         @unique
-  password       String
+  password       String?        // Optional for OAuth users
   name           String?
   role           String         @default("member")
   status         String         @default("active")
@@ -23,23 +23,75 @@ model User {
   teamId         String
   team           Team           @relation(fields: [teamId], references: [id])
   notifications  Notification[]
+  oauthAccounts  OAuthAccount[]
+  
+  // RBAC relations
+  userRoles      UserRole[]
+  permissions    UserPermission[]
+}
+
+model OAuthAccount {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  provider        String   // github, google, etc.
+  providerAccountId String // GitHub user ID
+  accessToken     String?  // Encrypted
+  refreshToken    String?  // Encrypted
+  expiresAt       DateTime?
+  tokenType       String?
+  scope           String?
+  
+  // Provider-specific data
+  username        String?  // GitHub username
+  avatarUrl       String?
+  profileUrl      String?
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@unique([provider, providerAccountId])
+  @@index([userId])
 }
 
 model Team {
   id                    String    @id @default(cuid())
   name                  String
+  planId               String    @default("free")
   stripeCustomerId      String?
   stripeSubscriptionId  String?
   subscriptionStatus    String?
   billingEmail         String?
   currentPeriodEnd     DateTime?
   paymentFailedAt      DateTime?
+  lastActivityAt       DateTime?
   createdAt            DateTime  @default(now())
   updatedAt            DateTime  @updatedAt
   
   users                User[]
   projects             Project[]
   invoices             Invoice[]
+  invitations          TeamInvitation[]
+  roles                Role[]
+  resourcePolicies     ResourcePolicy[]
+}
+
+model TeamInvitation {
+  id            String    @id @default(cuid())
+  teamId        String
+  team          Team      @relation(fields: [teamId], references: [id])
+  email         String
+  role          String    @default("member")
+  invitedBy     String
+  githubUsername String?
+  githubUserId  String?
+  acceptedAt    DateTime?
+  expiresAt     DateTime
+  createdAt     DateTime  @default(now())
+  
+  @@index([teamId])
+  @@index([email])
+  @@index([githubUserId])
 }
 
 model Project {
@@ -148,4 +200,148 @@ model Notification {
   createdAt   DateTime @default(now())
   
   @@index([userId, read])
+}
+
+model AuditLog {
+  id            String   @id @default(cuid())
+  timestamp     DateTime @default(now())
+  
+  // Actor information
+  actorId       String?  // User ID if authenticated
+  actorType     String   // user, system, api-key
+  actorEmail    String?
+  actorIp       String?
+  actorUserAgent String?
+  
+  // Action details
+  action        String   // e.g., user.login, team.update, payment.create
+  resourceType  String   // e.g., user, team, project, deployment
+  resourceId    String?  // ID of the affected resource
+  
+  // Request context
+  method        String?  // HTTP method
+  path          String?  // API endpoint
+  statusCode    Int?     // HTTP response code
+  
+  // Change details
+  oldValues     Json?    // Previous state (for updates)
+  newValues     Json?    // New state (for creates/updates)
+  metadata      Json?    // Additional context
+  
+  // Organization context
+  teamId        String?
+  projectId     String?
+  
+  // Risk and compliance
+  riskLevel     String   @default("low") // low, medium, high, critical
+  
+  @@index([timestamp])
+  @@index([actorId])
+  @@index([teamId])
+  @@index([action])
+  @@index([resourceType, resourceId])
+  @@index([riskLevel])
+}
+
+model AuditLogRetention {
+  id              String   @id @default(cuid())
+  teamId          String   @unique
+  retentionDays   Int      @default(90)
+  archiveEnabled  Boolean  @default(false)
+  archiveLocation String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+// RBAC Models
+model Role {
+  id              String          @id @default(cuid())
+  name            String
+  description     String?
+  teamId          String
+  team            Team            @relation(fields: [teamId], references: [id])
+  isSystem        Boolean         @default(false) // System roles can't be modified
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  
+  userRoles       UserRole[]
+  permissions     RolePermission[]
+  
+  @@unique([teamId, name])
+  @@index([teamId])
+}
+
+model Permission {
+  id              String          @id @default(cuid())
+  name            String          @unique // e.g., "projects.create", "users.delete"
+  resource        String          // e.g., "projects", "users", "billing"
+  action          String          // e.g., "create", "read", "update", "delete"
+  description     String?
+  createdAt       DateTime        @default(now())
+  
+  rolePermissions RolePermission[]
+  userPermissions UserPermission[]
+  
+  @@index([resource])
+  @@index([action])
+}
+
+model UserRole {
+  id              String          @id @default(cuid())
+  userId          String
+  user            User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  roleId          String
+  role            Role            @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  grantedBy       String?         // User who granted this role
+  expiresAt       DateTime?       // For temporary roles
+  createdAt       DateTime        @default(now())
+  
+  @@unique([userId, roleId])
+  @@index([userId])
+  @@index([roleId])
+  @@index([expiresAt])
+}
+
+model RolePermission {
+  id              String          @id @default(cuid())
+  roleId          String
+  role            Role            @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permissionId    String
+  permission      Permission      @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+  createdAt       DateTime        @default(now())
+  
+  @@unique([roleId, permissionId])
+  @@index([roleId])
+  @@index([permissionId])
+}
+
+model UserPermission {
+  id              String          @id @default(cuid())
+  userId          String
+  user            User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  permissionId    String
+  permission      Permission      @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+  grantedBy       String?         // User who granted this permission
+  expiresAt       DateTime?       // For temporary permissions
+  createdAt       DateTime        @default(now())
+  
+  @@unique([userId, permissionId])
+  @@index([userId])
+  @@index([permissionId])
+  @@index([expiresAt])
+}
+
+model ResourcePolicy {
+  id              String          @id @default(cuid())
+  teamId          String
+  team            Team            @relation(fields: [teamId], references: [id])
+  resourceType    String          // e.g., "project", "deployment"
+  resourceId      String          // Specific resource ID
+  policy          Json            // Policy rules (e.g., {"read": ["role:viewer"], "write": ["role:editor"]})
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  
+  @@unique([teamId, resourceType, resourceId])
+  @@index([teamId])
+  @@index([resourceType, resourceId])
 }

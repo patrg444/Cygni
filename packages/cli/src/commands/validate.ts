@@ -8,7 +8,9 @@ export const validateCommand = new Command()
   .argument("<file>", "File to validate (e.g., runtime.yaml)")
   .action(async (file: string) => {
     if (!file.endsWith("runtime.yaml")) {
-      console.error(chalk.red("✗ Only runtime.yaml validation is supported in v0.1"));
+      console.error(
+        chalk.red("✗ Only runtime.yaml validation is supported in v0.1"),
+      );
       process.exit(1);
     }
 
@@ -18,7 +20,7 @@ export const validateCommand = new Command()
 
     if (result.valid) {
       console.log(chalk.green("✓ Runtime spec is valid"));
-      
+
       if (result.spec) {
         console.log("\nRuntime details:");
         console.log(`  Name: ${result.spec.name}`);
@@ -28,11 +30,11 @@ export const validateCommand = new Command()
           console.log(`  Health check: ${result.spec.health.path}`);
         }
       }
-      
+
       process.exit(0);
     } else {
       console.error(chalk.red("✗ Validation failed:"));
-      result.errors?.forEach(error => {
+      result.errors?.forEach((error) => {
         console.error(chalk.red(`  - ${error}`));
       });
       process.exit(1);

@@ -22,7 +22,10 @@ vi.mock("../src/middleware/auth", () => ({
     // Simple mock auth for tests
     if (request.headers["x-api-key"] === "test-api-key") {
       request.user = { id: "test-user-id", organizationId: "test-org-id" };
-    } else if (!request.headers.authorization && !request.headers["x-api-key"]) {
+    } else if (
+      !request.headers.authorization &&
+      !request.headers["x-api-key"]
+    ) {
       throw new Error("Unauthorized");
     }
   }),

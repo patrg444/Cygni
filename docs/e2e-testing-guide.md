@@ -8,10 +8,11 @@ Before running E2E tests, ensure you have the following installed:
 
 1. **Docker Desktop** - For running containers and Kind
 2. **Kind** - Kubernetes in Docker
+
    ```bash
    # macOS
    brew install kind
-   
+
    # Linux
    curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.20.0/kind-linux-amd64
    chmod +x ./kind
@@ -19,10 +20,11 @@ Before running E2E tests, ensure you have the following installed:
    ```
 
 3. **kubectl** - Kubernetes CLI
+
    ```bash
    # macOS
    brew install kubectl
-   
+
    # Linux
    curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
    chmod +x kubectl
@@ -30,10 +32,11 @@ Before running E2E tests, ensure you have the following installed:
    ```
 
 4. **AWS CLI** - For ECS deployment tests
+
    ```bash
    # macOS
    brew install awscli
-   
+
    # Linux
    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
    unzip awscliv2.zip
@@ -47,18 +50,21 @@ Before running E2E tests, ensure you have the following installed:
 These tests verify the complete container build pipeline using Kaniko in a local Kind cluster.
 
 **Setup:**
+
 ```bash
 # Create Kind cluster with local registry
 ./scripts/setup-kind-cluster.sh
 ```
 
 **Run tests:**
+
 ```bash
 # Run Kaniko E2E tests
 pnpm --filter @cloudexpress/builder test tests/e2e/kaniko-local.test.ts
 ```
 
 **What's tested:**
+
 - ✅ Kubernetes Job creation for builds
 - ✅ Kaniko container image building
 - ✅ Registry push to local registry
@@ -70,12 +76,14 @@ pnpm --filter @cloudexpress/builder test tests/e2e/kaniko-local.test.ts
 These tests simulate ECS deployments and health-based rollbacks.
 
 **Run tests:**
+
 ```bash
 # Run health and rollback tests
 pnpm --filter @cloudexpress/services-api test tests/health-rollback.test.ts
 ```
 
 **What's tested:**
+
 - ✅ Failed canary auto-rollback within 2 minutes
 - ✅ Manual rollback commands
 - ✅ Deployment status tracking
@@ -87,12 +95,14 @@ pnpm --filter @cloudexpress/services-api test tests/health-rollback.test.ts
 These tests verify the CLI deployment commands work correctly.
 
 **Run tests:**
+
 ```bash
 # Run CLI deployment tests
 pnpm --filter @cygni/cli test tests/deploy-commands.test.ts
 ```
 
 **What's tested:**
+
 - ✅ `cx deploy --aws --dry-run` generates valid CloudFormation
 - ✅ `cx deploy --aws` deployment simulation
 - ✅ `cx deploy --rollback` rollback functionality
@@ -119,7 +129,7 @@ CLEANUP=true ./scripts/run-e2e-tests.sh
 export REGISTRY_URL=localhost:5000
 export K8S_NAMESPACE=cygni-builds
 
-# For API tests  
+# For API tests
 export API_URL=http://localhost:3000
 export BUILDER_URL=http://localhost:3001
 
@@ -194,21 +204,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Kind
         uses: helm/kind-action@v1.8.0
         with:
           cluster_name: cygni-test
           config: k8s/kind-config.yaml
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          
+          node-version: "20"
+
       - name: Install dependencies
         run: pnpm install
-        
+
       - name: Run E2E tests
         run: ./scripts/run-e2e-tests.sh
         env:

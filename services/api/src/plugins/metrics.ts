@@ -1,6 +1,11 @@
 import { FastifyPluginAsync } from "fastify";
 import fp from "fastify-plugin";
-import { register, collectDefaultMetrics, Counter, Histogram } from "prom-client";
+import {
+  register,
+  collectDefaultMetrics,
+  Counter,
+  Histogram,
+} from "prom-client";
 
 declare module "fastify" {
   interface FastifyInstance {
@@ -58,9 +63,13 @@ const metricsPlugin: FastifyPluginAsync = async (fastify) => {
   fastify.addHook("onResponse", async (request, reply) => {
     const responseTime = Date.now() - (request.startTime || Date.now());
     const route = request.routerPath || request.url;
-    
-    httpRequestsTotal.labels(request.method, route, reply.statusCode.toString()).inc();
-    httpRequestDuration.labels(request.method, route, reply.statusCode.toString()).observe(responseTime / 1000);
+
+    httpRequestsTotal
+      .labels(request.method, route, reply.statusCode.toString())
+      .inc();
+    httpRequestDuration
+      .labels(request.method, route, reply.statusCode.toString())
+      .observe(responseTime / 1000);
   });
 
   // Metrics endpoint

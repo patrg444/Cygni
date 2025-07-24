@@ -1,0 +1,41 @@
+export declare function validateEnv(): {
+    NODE_ENV: "production" | "development" | "test";
+    PORT: string;
+    DATABASE_URL: string;
+    JWT_SECRET: string;
+    JWT_EXPIRY: string;
+    ENABLE_MULTI_REGION: boolean;
+    ENABLE_CANARY_DEPLOYMENTS: boolean;
+    FREE_TIER_LIMIT: number;
+    REDIS_URL?: string | undefined;
+    STRIPE_SECRET_KEY?: string | undefined;
+    STRIPE_WEBHOOK_SECRET?: string | undefined;
+    STRIPE_PRICE_COMPUTE?: string | undefined;
+    STRIPE_PRICE_STORAGE?: string | undefined;
+    STRIPE_PRICE_BANDWIDTH?: string | undefined;
+    STRIPE_PRICE_REQUESTS?: string | undefined;
+    EMAIL_API_KEY?: string | undefined;
+    FROM_EMAIL?: string | undefined;
+    ADMIN_API_KEY?: string | undefined;
+};
+export declare const env: {
+    NODE_ENV: "production" | "development" | "test";
+    PORT: string;
+    DATABASE_URL: string;
+    JWT_SECRET: string;
+    JWT_EXPIRY: string;
+    ENABLE_MULTI_REGION: boolean;
+    ENABLE_CANARY_DEPLOYMENTS: boolean;
+    FREE_TIER_LIMIT: number;
+    REDIS_URL?: string | undefined;
+    STRIPE_SECRET_KEY?: string | undefined;
+    STRIPE_WEBHOOK_SECRET?: string | undefined;
+    STRIPE_PRICE_COMPUTE?: string | undefined;
+    STRIPE_PRICE_STORAGE?: string | undefined;
+    STRIPE_PRICE_BANDWIDTH?: string | undefined;
+    STRIPE_PRICE_REQUESTS?: string | undefined;
+    EMAIL_API_KEY?: string | undefined;
+    FROM_EMAIL?: string | undefined;
+    ADMIN_API_KEY?: string | undefined;
+};
+//# sourceMappingURL=env.validation.d.ts.map

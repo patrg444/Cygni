@@ -118,9 +118,10 @@ async function main() {
           projectId: project.id,
           name: envName.charAt(0).toUpperCase() + envName.slice(1),
           slug: envName,
-          domain: envName === "production" 
-            ? `${project.slug}.cygni.app` 
-            : `${project.slug}-${envName}.cygni.app`,
+          domain:
+            envName === "production"
+              ? `${project.slug}.cygni.app`
+              : `${project.slug}-${envName}.cygni.app`,
         },
       });
     }

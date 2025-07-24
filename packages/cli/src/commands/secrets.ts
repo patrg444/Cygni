@@ -5,6 +5,11 @@ import ora from "ora";
 import fs from "fs/promises";
 import { getApiClient } from "../lib/api-client";
 import { loadConfig } from "../utils/config";
+import {
+  SecretsManager,
+  getSecretsBackend,
+  getLocalStackConfig,
+} from "../lib/secrets-manager";
 
 export const secretsCommand = new Command("secrets")
   .description("Manage project secrets")
@@ -68,13 +73,27 @@ export const secretsCommand = new Command("secrets")
 
           const spinner = ora("Setting secret...").start();
 
-          await api.post(`/projects/${projectId}/secrets`, {
-            key,
-            value,
-            environmentId,
+          // Use SecretsManager
+          const backend = getSecretsBackend();
+          const secretsManager = new SecretsManager({
+            backend,
+            awsConfig: backend === "aws" ? getLocalStackConfig() : undefined,
+            projectId,
           });
 
-          spinner.succeed(`Secret ${key} set successfully!`);
+          try {
+            await secretsManager.setSecret(key, value, environmentId);
+            spinner.succeed(`Secret ${key} set successfully!`);
+          } catch (error: any) {
+            spinner.fail("Failed to set secret");
+            if (
+              error.response?.status === 409 ||
+              error.message?.includes("already exists")
+            ) {
+              throw { response: { status: 409 } };
+            }
+            throw error;
+          }
 
           if (environmentId) {
             console.log(
@@ -129,10 +148,17 @@ export const secretsCommand = new Command("secrets")
             }
           }
 
-          const response = await api.get(`/projects/${projectId}/secrets`, {
-            params,
+          // Use SecretsManager
+          const backend = getSecretsBackend();
+          const secretsManager = new SecretsManager({
+            backend,
+            awsConfig: backend === "aws" ? getLocalStackConfig() : undefined,
+            projectId,
           });
-          const secrets = response.data;
+
+          const secrets = await secretsManager.listSecrets(
+            params.environmentId,
+          );
 
           if (secrets.length === 0) {
             console.log(chalk.gray("No secrets found"));
@@ -184,8 +210,8 @@ export const secretsCommand = new Command("secrets")
             options.project || config.name,
           );
 
-          // Find the secret
-          const params: any = {};
+          // Get environment if specified
+          let environmentId;
           if (options.env) {
             const environments = await api.get(
               `/projects/${projectId}/environments`,
@@ -195,15 +221,19 @@ export const secretsCommand = new Command("secrets")
             );
 
             if (env) {
-              params.environmentId = env.id;
+              environmentId = env.id;
             }
           }
 
-          const response = await api.get(`/projects/${projectId}/secrets`, {
-            params,
+          // Use SecretsManager
+          const backend = getSecretsBackend();
+          const secretsManager = new SecretsManager({
+            backend,
+            awsConfig: backend === "aws" ? getLocalStackConfig() : undefined,
+            projectId,
           });
-          const secret = response.data.find((s: any) => s.key === key);
 
+          const secret = await secretsManager.getSecret(key, environmentId);
           if (!secret) {
             console.error(chalk.red(`Secret '${key}' not found`));
             process.exit(1);
@@ -224,7 +254,7 @@ export const secretsCommand = new Command("secrets")
 
           const spinner = ora("Removing secret...").start();
 
-          await api.delete(`/projects/${projectId}/secrets/${secret.id}`);
+          await secretsManager.deleteSecret(key, environmentId);
 
           spinner.succeed(`Secret ${key} removed successfully!`);
         } catch (error: any) {
@@ -298,20 +328,23 @@ export const secretsCommand = new Command("secrets")
 
           const spinner = ora("Importing secrets...").start();
 
-          const response = await api.post(
-            `/projects/${projectId}/secrets/bulk`,
-            {
-              secrets,
-              environmentId,
-            },
+          // Use SecretsManager
+          const backend = getSecretsBackend();
+          const secretsManager = new SecretsManager({
+            backend,
+            awsConfig: backend === "aws" ? getLocalStackConfig() : undefined,
+            projectId,
+          });
+
+          const response = await secretsManager.bulkImport(
+            secrets,
+            environmentId,
           );
 
-          const successful = response.data.results.filter(
+          const successful = response.results.filter(
             (r: any) => r.success,
           ).length;
-          const failed = response.data.results.filter(
-            (r: any) => r.error,
-          ).length;
+          const failed = response.results.filter((r: any) => r.error).length;
 
           spinner.succeed(
             `Import complete! ${successful} succeeded, ${failed} failed`,
@@ -319,7 +352,7 @@ export const secretsCommand = new Command("secrets")
 
           if (failed > 0) {
             console.log(chalk.red("\nFailed secrets:"));
-            response.data.results
+            response.results
               .filter((r: any) => r.error)
               .forEach((r: any) => {
                 console.log(`  ${r.key}: ${r.error}`);

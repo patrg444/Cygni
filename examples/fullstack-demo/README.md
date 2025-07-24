@@ -1,6 +1,7 @@
 # Full-Stack Demo App
 
 A complete todo application showcasing Cygni's ability to deploy full-stack applications with:
+
 - **Frontend**: React + Vite
 - **Backend**: Express API
 - **Database**: SQLite
@@ -13,6 +14,7 @@ cx deploy --aws --name my-todo-app
 ```
 
 That's it! You'll get:
+
 - ✅ HTTPS endpoint
 - ✅ Auto-scaling
 - ✅ Health monitoring
@@ -70,6 +72,7 @@ fullstack-demo/
 ## 🎯 Perfect for Demos
 
 This app demonstrates:
+
 - Full-stack deployment simplicity
 - Database persistence
 - Production best practices

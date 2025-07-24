@@ -1,5 +1,8 @@
 import Stripe from "stripe";
 import { PrismaClient } from "@prisma/client";
+import { recordStripeWebhook, recordExternalService, recordPayment } from "../../lib/metrics";
+import { getAuditLogger } from "../audit/audit-logger.service";
+import { AuditEventType, ActorType } from "../audit/audit-events";
 
 interface UsageRecord {
   projectId: string;
@@ -29,24 +32,33 @@ export class StripeService {
 
   // Create a Stripe customer for a team
   async createCustomer(teamId: string, email: string, name: string) {
-    const customer = await this.stripe.customers.create({
-      email,
-      name,
-      metadata: {
-        teamId,
-      },
-    });
+    const startTime = Date.now();
+    
+    try {
+      const customer = await this.stripe.customers.create({
+        email,
+        name,
+        metadata: {
+          teamId,
+        },
+      });
+      
+      recordExternalService("stripe", "customers.create", "success", Date.now() - startTime);
 
-    // Save Stripe customer ID
-    await this.prisma.team.update({
-      where: { id: teamId },
-      data: {
-        stripeCustomerId: customer.id,
-        billingEmail: email,
-      },
-    });
+      // Save Stripe customer ID
+      await this.prisma.team.update({
+        where: { id: teamId },
+        data: {
+          stripeCustomerId: customer.id,
+          billingEmail: email,
+        },
+      });
 
-    return customer;
+      return customer;
+    } catch (error) {
+      recordExternalService("stripe", "customers.create", "error", Date.now() - startTime);
+      throw error;
+    }
   }
 
   // Create a subscription with usage-based pricing
@@ -177,10 +189,12 @@ export class StripeService {
         process.env.STRIPE_WEBHOOK_SECRET!,
       );
     } catch (err) {
+      recordStripeWebhook("signature_verification_failed", "error");
       throw new Error(`Webhook signature verification failed`);
     }
 
-    switch (event.type) {
+    try {
+      switch (event.type) {
       case "customer.subscription.created":
       case "customer.subscription.updated":
         await this.handleSubscriptionUpdate(
@@ -203,6 +217,12 @@ export class StripeService {
       case "invoice.payment_succeeded":
         await this.handlePaymentSuccess(event.data.object as Stripe.Invoice);
         break;
+      }
+      
+      recordStripeWebhook(event.type, "success");
+    } catch (error) {
+      recordStripeWebhook(event.type, "error");
+      throw error;
     }
   }
 
@@ -273,6 +293,24 @@ export class StripeService {
         periodStart: new Date(invoice.period_start * 1000),
         periodEnd: new Date(invoice.period_end * 1000),
         paidAt: invoice.status === "paid" ? new Date() : null,
+      },
+    });
+    
+    // Record payment metrics
+    recordPayment("success", invoice.amount_paid / 100, invoice.currency);
+    
+    // Audit log for successful payment
+    const auditLogger = getAuditLogger(this.prisma);
+    await auditLogger.log({
+      action: AuditEventType.PAYMENT_SUCCEEDED,
+      actorType: ActorType.SYSTEM,
+      resourceType: "payment",
+      resourceId: invoice.id,
+      teamId: team.id,
+      metadata: {
+        amount: invoice.amount_paid / 100,
+        currency: invoice.currency,
+        invoiceId: invoice.id,
       },
     });
   }

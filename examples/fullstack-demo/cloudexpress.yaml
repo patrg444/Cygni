@@ -1,0 +1,22 @@
+version: "1.0"
+name: fullstack-demo
+description: Full-stack demo application
+
+services:
+  - name: backend
+    type: backend
+    path: ./backend
+    port: 3000
+    build:
+      command: npm run build
+    env:
+      - NODE_ENV=production
+      - DATABASE_URL
+
+  - name: frontend  
+    type: frontend
+    path: ./frontend
+    build:
+      command: npm run build
+      env:
+        - API_URL

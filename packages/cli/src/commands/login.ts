@@ -36,7 +36,9 @@ export const loginCommand = new Command("login")
           (await input({
             message: "Email:",
             validate: (value) => {
-              if (!value.includes("@")) {
+              // RFC 5322 simplified regex for email validation
+              const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+              if (!emailRegex.test(value)) {
                 return "Please enter a valid email address";
               }
               return true;

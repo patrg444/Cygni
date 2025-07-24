@@ -5,6 +5,7 @@ This guide demonstrates the magic of Cygni's single-command AWS deployment.
 ## Prerequisites
 
 1. **AWS CLI configured** with credentials:
+
    ```bash
    aws configure
    ```
@@ -61,6 +62,7 @@ cx deploy --aws --name my-app --rollback
 ## Architecture
 
 Your app runs on:
+
 - **AWS Fargate**: Serverless containers
 - **Application Load Balancer**: HTTPS termination
 - **Auto-scaling**: 2-10 instances based on CPU
@@ -75,6 +77,7 @@ For the demo to work, we need:
 2. **ACM Certificate** for `*.cx-demo.xyz`
 
 Set these as environment variables:
+
 ```bash
 export CX_HOSTED_ZONE_ID=Z0123456789ABC
 export CX_CERTIFICATE_ARN=arn:aws:acm:us-east-1:123456789012:certificate/...
@@ -83,11 +86,13 @@ export CX_CERTIFICATE_ARN=arn:aws:acm:us-east-1:123456789012:certificate/...
 ## Supported Frameworks
 
 ### Express.js
+
 - Auto-detects from `package.json`
 - Configures health endpoint
 - Optimized Node.js container
 
 ### Next.js
+
 - Multi-stage build for smaller images
 - Production-ready configuration
 - Static asset optimization
@@ -95,6 +100,7 @@ export CX_CERTIFICATE_ARN=arn:aws:acm:us-east-1:123456789012:certificate/...
 ## Cost Estimate
 
 For a typical demo app:
+
 - **Fargate**: ~$0.04/hour (2x 0.25 vCPU)
 - **ALB**: ~$0.025/hour
 - **Data Transfer**: ~$0.09/GB
@@ -104,6 +110,7 @@ For a typical demo app:
 ## Troubleshooting
 
 ### AWS Credentials Not Found
+
 ```bash
 aws configure
 # Or use environment variables:
@@ -112,6 +119,7 @@ export AWS_SECRET_ACCESS_KEY=...
 ```
 
 ### Docker Not Running
+
 ```bash
 # macOS
 open -a Docker
@@ -120,7 +128,9 @@ sudo systemctl start docker
 ```
 
 ### Deployment Failed
+
 Check CloudFormation events:
+
 ```bash
 aws cloudformation describe-stack-events --stack-name cygni-my-app
 ```
@@ -135,6 +145,7 @@ aws cloudformation describe-stack-events --stack-name cygni-my-app
 ## Technical Details
 
 The deployment creates:
+
 - VPC with public subnets (or uses default)
 - Security groups for ALB and ECS
 - ECS cluster with Fargate capacity
@@ -144,6 +155,7 @@ The deployment creates:
 - CloudWatch log group
 
 All resources are tagged and managed via CloudFormation for easy cleanup:
+
 ```bash
 aws cloudformation delete-stack --stack-name cygni-my-app
 ```
@@ -151,6 +163,7 @@ aws cloudformation delete-stack --stack-name cygni-my-app
 ## Feedback
 
 This is a demo showcasing Cygni's vision. Production features coming soon:
+
 - Multi-region deployment
 - Blue/green deployments
 - Custom domains

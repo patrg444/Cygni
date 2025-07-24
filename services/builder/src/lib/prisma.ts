@@ -36,11 +36,14 @@ if (process.env.NODE_ENV !== "production") {
 // Log Prisma queries in development
 if (process.env.NODE_ENV === "development") {
   (prisma as any).$on("query", (e: any) => {
-    logger.debug({
-      query: e.query,
-      params: e.params,
-      duration: e.duration,
-    }, "Prisma query");
+    logger.debug(
+      {
+        query: e.query,
+        params: e.params,
+        duration: e.duration,
+      },
+      "Prisma query",
+    );
   });
 }
 

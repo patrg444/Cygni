@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { Providers } from "./providers";
+import { Providers } from "./providers-simple";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,10 +24,16 @@ export default function RootLayout({
               <div className="container mx-auto px-4">
                 <div className="flex justify-between items-center h-16">
                   <div className="flex items-center">
-                    <h1 className="text-xl font-bold text-primary-600">
+                    <h1 className="text-xl font-bold text-primary-600" style={{ fontSize: "1.25rem" }}>
                       CloudExpress
                     </h1>
                     <div className="ml-10 flex items-baseline space-x-4">
+                      <a
+                        href="/console"
+                        className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium"
+                      >
+                        Console
+                      </a>
                       <a
                         href="/deployments"
                         className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium"

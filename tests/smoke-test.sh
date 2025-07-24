@@ -57,21 +57,21 @@ done
 echo -e "Redis is ready ${GREEN}✓${NC}"
 
 echo "🔨 Building services..."
-pnpm --filter services/api build
-pnpm --filter services/builder build
+pnpm --filter @cloudexpress/services-api build
+pnpm --filter @cloudexpress/builder build
 
 echo "🗄️  Running database migrations..."
-pnpm --filter services/api prisma:migrate:dev || pnpm --filter services/api prisma:migrate
+pnpm --filter @cloudexpress/services-api prisma:migrate:dev || pnpm --filter @cloudexpress/services-api prisma:migrate
 
 echo "🌱 Seeding database..."
-pnpm --filter services/api prisma:seed
+pnpm --filter @cloudexpress/services-api prisma:seed
 
 echo "🚀 Starting API service..."
-pnpm --filter services/api start &
+pnpm --filter @cloudexpress/services-api start &
 API_PID=$!
 
 echo "🚀 Starting Builder service..."
-pnpm --filter services/builder start &
+pnpm --filter @cloudexpress/builder start &
 BUILDER_PID=$!
 
 # Wait for services to be ready

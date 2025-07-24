@@ -1,0 +1,46 @@
+# Development Dockerfile for integration tests
+FROM node:20-alpine
+
+# Install dependencies
+RUN apk add --no-cache python3 make g++ curl openssl openssl-dev
+
+WORKDIR /app
+
+# Install pnpm
+RUN npm install -g pnpm@8
+
+# Copy package files first for better caching
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+
+# Copy service package.json files
+COPY services/builder/package.json ./services/builder/
+COPY services/api/package.json ./services/api/
+COPY packages/*/package.json ./packages/
+
+# Install all dependencies
+RUN pnpm install
+
+# Copy prisma schema first
+COPY services/builder/prisma ./services/builder/prisma
+
+# Generate Prisma client
+WORKDIR /app/services/builder
+RUN pnpm prisma generate
+
+# Copy source code
+WORKDIR /app
+COPY services/builder ./services/builder
+
+# Build the service
+WORKDIR /app/services/builder
+RUN pnpm exec tsc --project tsconfig.docker.json
+
+# Expose port
+EXPOSE 3001
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD curl -f http://localhost:3001/health || exit 1
+
+# Start the service
+CMD ["pnpm", "start"]

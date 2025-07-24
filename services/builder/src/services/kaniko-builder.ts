@@ -73,13 +73,13 @@ export class KanikoBuilder {
 
     while (Date.now() - startPoll < maxWaitTime) {
       status = await this.getBuildStatus(options.buildId);
-      
+
       if (status === BuildStatus.SUCCESS || status === BuildStatus.FAILED) {
         logs = await this.getBuildLogs(options.buildId);
         break;
       }
-      
-      await new Promise(resolve => setTimeout(resolve, pollInterval));
+
+      await new Promise((resolve) => setTimeout(resolve, pollInterval));
     }
 
     if (status !== BuildStatus.SUCCESS) {
@@ -87,7 +87,7 @@ export class KanikoBuilder {
     }
 
     const duration = Date.now() - startTime;
-    
+
     return {
       imageUrl: imageName,
       imageSha: options.gitRef,
@@ -181,7 +181,7 @@ export class KanikoBuilder {
                   `--cache-repo=${this.ecrRegistry}-cache`,
                   "--push-retry=3",
                   "--snapshotMode=redo",
-                  ...buildArgsFlags.split(' ').filter(Boolean),
+                  ...buildArgsFlags.split(" ").filter(Boolean),
                 ],
                 volumeMounts: [
                   {
@@ -280,20 +280,22 @@ export class KanikoBuilder {
 
   async streamLogs(buildId: string): Promise<NodeJS.ReadableStream> {
     const stream = new Readable({
-      read() {}
+      read() {},
     });
-    
+
     this.streamBuildLogs(buildId, (log) => {
       stream.push(log);
-    }).then(() => {
-      stream.push(null); // End the stream
-    }).catch((error) => {
-      stream.destroy(error);
-    });
-    
+    })
+      .then(() => {
+        stream.push(null); // End the stream
+      })
+      .catch((error) => {
+        stream.destroy(error);
+      });
+
     return stream;
   }
-  
+
   async cancelBuild(buildId: string): Promise<void> {
     try {
       await this.k8sApi.deleteNamespacedJob(
@@ -303,7 +305,7 @@ export class KanikoBuilder {
         undefined,
         undefined,
         undefined,
-        'Background'
+        "Background",
       );
     } catch (error) {
       logger.error("Failed to cancel build", { buildId, error });

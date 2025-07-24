@@ -91,7 +91,7 @@ export class AWSDeployer extends EventEmitter {
       repoUri,
       dockerfilePath,
       buildContext,
-      appName
+      appName,
     );
 
     // 3. Deploy CloudFormation stack
@@ -117,7 +117,7 @@ export class AWSDeployer extends EventEmitter {
         new DescribeServicesCommand({
           cluster: `${appName}-cluster`,
           services: [`${appName}-service`],
-        })
+        }),
       );
 
       if (!services.services || services.services.length === 0) {
@@ -153,11 +153,13 @@ export class AWSDeployer extends EventEmitter {
           service: `${appName}-service`,
           taskDefinition: `${family!}:${previousRevision}`,
           forceNewDeployment: true,
-        })
+        }),
       );
 
       spinner.succeed("Rollback initiated successfully");
-      this.emit("rollback", { taskDefinition: `${family!}:${previousRevision}` });
+      this.emit("rollback", {
+        taskDefinition: `${family!}:${previousRevision}`,
+      });
     } catch (error) {
       spinner.fail("Rollback failed");
       throw error;
@@ -167,7 +169,9 @@ export class AWSDeployer extends EventEmitter {
   private async getAccountId(): Promise<string> {
     if (this.accountId) return this.accountId;
 
-    const identity = await this.stsClient.send(new GetCallerIdentityCommand({}));
+    const identity = await this.stsClient.send(
+      new GetCallerIdentityCommand({}),
+    );
     this.accountId = identity.Account;
     if (!this.accountId) {
       throw new Error("Failed to get AWS account ID");
@@ -183,7 +187,7 @@ export class AWSDeployer extends EventEmitter {
       const repos = await this.ecrClient.send(
         new DescribeRepositoriesCommand({
           repositoryNames: [repoName],
-        })
+        }),
       );
 
       if (repos.repositories && repos.repositories.length > 0) {
@@ -207,7 +211,7 @@ export class AWSDeployer extends EventEmitter {
           scanOnPush: true,
         },
         imageTagMutability: "MUTABLE",
-      })
+      }),
     );
 
     if (!createResult.repository?.repositoryUri) {
@@ -220,17 +224,20 @@ export class AWSDeployer extends EventEmitter {
     repoUri: string,
     dockerfilePath: string,
     buildContext: string,
-    _appName: string
+    _appName: string,
   ): Promise<string> {
     const tag = `${repoUri}:latest`;
     const buildTag = `${repoUri}:build-${Date.now()}`;
 
     // Get ECR login token
     const authResult = await this.ecrClient.send(
-      new GetAuthorizationTokenCommand({})
+      new GetAuthorizationTokenCommand({}),
     );
 
-    if (!authResult.authorizationData || authResult.authorizationData.length === 0) {
+    if (
+      !authResult.authorizationData ||
+      authResult.authorizationData.length === 0
+    ) {
       throw new Error("Failed to get ECR authorization");
     }
 
@@ -244,7 +251,7 @@ export class AWSDeployer extends EventEmitter {
     // Docker login
     this.emit("log", "Authenticating with ECR");
     await execAsync(
-      `echo "${password}" | docker login --username ${username} --password-stdin ${authData.proxyEndpoint}`
+      `echo "${password}" | docker login --username ${username} --password-stdin ${authData.proxyEndpoint}`,
     );
 
     // Build image
@@ -287,7 +294,7 @@ export class AWSDeployer extends EventEmitter {
     const stackName = `cygni-${params.appName}`;
     const templatePath = path.join(
       __dirname,
-      "../../templates/fargate-demo-stack.yaml"
+      "../../templates/fargate-demo-stack.yaml",
     );
 
     // Read template
@@ -297,8 +304,14 @@ export class AWSDeployer extends EventEmitter {
     const stackParams = [
       { ParameterKey: "AppName", ParameterValue: params.appName },
       { ParameterKey: "ImageUri", ParameterValue: params.imageUri },
-      { ParameterKey: "ServicePort", ParameterValue: params.servicePort.toString() },
-      { ParameterKey: "HealthCheckPath", ParameterValue: params.healthCheckPath },
+      {
+        ParameterKey: "ServicePort",
+        ParameterValue: params.servicePort.toString(),
+      },
+      {
+        ParameterKey: "HealthCheckPath",
+        ParameterValue: params.healthCheckPath,
+      },
     ];
 
     if (params.hostedZoneId) {
@@ -318,7 +331,7 @@ export class AWSDeployer extends EventEmitter {
     try {
       // Check if stack exists
       const stacks = await this.cfClient.send(
-        new DescribeStacksCommand({ StackName: stackName })
+        new DescribeStacksCommand({ StackName: stackName }),
       );
 
       if (stacks.Stacks && stacks.Stacks.length > 0) {
@@ -330,11 +343,14 @@ export class AWSDeployer extends EventEmitter {
             TemplateBody: templateBody,
             Parameters: stackParams,
             Capabilities: ["CAPABILITY_IAM"],
-          })
+          }),
         );
       }
     } catch (error: any) {
-      if (error.name === "ValidationError" && error.message.includes("does not exist")) {
+      if (
+        error.name === "ValidationError" &&
+        error.message.includes("does not exist")
+      ) {
         // Create new stack
         this.emit("log", "Creating new stack");
         await this.cfClient.send(
@@ -343,7 +359,7 @@ export class AWSDeployer extends EventEmitter {
             TemplateBody: templateBody,
             Parameters: stackParams,
             Capabilities: ["CAPABILITY_IAM"],
-          })
+          }),
         );
       } else {
         throw error;
@@ -372,7 +388,7 @@ export class AWSDeployer extends EventEmitter {
 
     for (let i = 0; i < maxAttempts; i++) {
       const result = await this.cfClient.send(
-        new DescribeStacksCommand({ StackName: stackName })
+        new DescribeStacksCommand({ StackName: stackName }),
       );
 
       if (!result.Stacks || result.Stacks.length === 0) {
@@ -386,10 +402,7 @@ export class AWSDeployer extends EventEmitter {
       this.emit("stack-status", status);
 
       // Check if complete
-      if (
-        status === "CREATE_COMPLETE" ||
-        status === "UPDATE_COMPLETE"
-      ) {
+      if (status === "CREATE_COMPLETE" || status === "UPDATE_COMPLETE") {
         return stack as Stack;
       }
 
@@ -401,13 +414,13 @@ export class AWSDeployer extends EventEmitter {
       ) {
         // Get failure reason
         const events = await this.cfClient.send(
-          new DescribeStackEventsCommand({ StackName: stackName })
+          new DescribeStackEventsCommand({ StackName: stackName }),
         );
-        const failureEvent = events.StackEvents?.find(
-          (e) => e.ResourceStatus?.includes("FAILED")
+        const failureEvent = events.StackEvents?.find((e) =>
+          e.ResourceStatus?.includes("FAILED"),
         );
         throw new Error(
-          `Stack operation failed: ${failureEvent?.ResourceStatusReason || status}`
+          `Stack operation failed: ${failureEvent?.ResourceStatusReason || status}`,
         );
       }
 

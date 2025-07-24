@@ -1,0 +1,68 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Auto-generated API Documentation",
+    "version": "1.0.0",
+    "description": "Automatically detected 5 endpoints in express application"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Development server"
+    }
+  ],
+  "paths": {
+    "/posts": {
+      "get": {
+        "summary": "GET /posts",
+        "description": "Auto-detected from index.js:13",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          }
+        }
+      },
+      "post": {
+        "summary": "POST /posts",
+        "description": "Auto-detected from index.js:27",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          }
+        }
+      }
+    },
+    "/posts/:id": {
+      "get": {
+        "summary": "GET /posts/:id",
+        "description": "Auto-detected from index.js:18",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          }
+        }
+      },
+      "put": {
+        "summary": "PUT /posts/:id",
+        "description": "Auto-detected from index.js:41",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          }
+        }
+      },
+      "delete": {
+        "summary": "DELETE /posts/:id",
+        "description": "Auto-detected from index.js:51",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {}
+  }
+}

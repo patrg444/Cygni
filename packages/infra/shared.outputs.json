@@ -1,0 +1,17 @@
+{
+  "CygniSharedStack-us-east": {
+    "ClusterArn": "arn:aws:ecs:us-east-1:012178036894:cluster/cygni-shared-cluster",
+    "HttpListenerArn": "arn:aws:elasticloadbalancing:us-east-1:012178036894:listener/app/cygni-shared-alb/7a051958a7dc7584/be575fe04d4ac6f5",
+    "TaskExecutionRoleArn": "arn:aws:iam::012178036894:role/CygniSharedStack-us-east-SharedTaskExecutionRole540-xKbeT8Jmk7Np",
+    "VPCId": "vpc-0e9b5e79e9988c817",
+    "ALBDnsName": "cygni-shared-alb-1935803843.us-east-1.elb.amazonaws.com",
+    "SubnetIds": "subnet-0211a07897a97f006,subnet-0df701965b489aad3",
+    "HttpsListenerArn": "arn:aws:elasticloadbalancing:us-east-1:012178036894:listener/app/cygni-shared-alb/7a051958a7dc7584/be575fe04d4ac6f5",
+    "DeploymentUserName": "cygni-shared-deployment-user",
+    "ClusterName": "cygni-shared-cluster",
+    "ALBHostedZoneId": "Z35SXDOTRQ7X7K",
+    "LogGroupName": "/ecs/cygni-shared",
+    "ALBArn": "arn:aws:elasticloadbalancing:us-east-1:012178036894:loadbalancer/app/cygni-shared-alb/7a051958a7dc7584",
+    "ECRRepositoryUri": "012178036894.dkr.ecr.us-east-1.amazonaws.com/cygni-shared-apps-cygnisharedstack-us-east"
+  }
+}

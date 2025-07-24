@@ -1,0 +1,9 @@
+# Cygni Configuration
+name: test-project
+
+framework: express
+
+services:
+  web:
+    
+    
