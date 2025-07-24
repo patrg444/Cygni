@@ -1,6 +1,7 @@
 import Redis from "ioredis";
 import { createHash } from "crypto";
 import logger from "../../lib/logger";
+import { trackCacheOperation } from "../../lib/performance";
 
 export interface TenantCacheOptions {
   ttl?: number; // Time to live in seconds
@@ -83,6 +84,7 @@ export class TenantCacheService {
         const value = await this.redis.get(cacheKey);
         if (value) {
           logger.debug("Cache hit (Redis)", { teamId, key });
+          trackCacheOperation("get", true);
           return JSON.parse(value);
         }
       }
@@ -91,10 +93,12 @@ export class TenantCacheService {
       const localEntry = this.localCache.get(cacheKey);
       if (localEntry && localEntry.expires > Date.now()) {
         logger.debug("Cache hit (local)", { teamId, key });
+        trackCacheOperation("get", true);
         return localEntry.value;
       }
 
       logger.debug("Cache miss", { teamId, key });
+      trackCacheOperation("get", false);
       return null;
     } catch (error) {
       logger.error("Cache get error", { error, teamId, key });

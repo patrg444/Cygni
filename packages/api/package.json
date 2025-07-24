@@ -24,6 +24,8 @@
   },
   "dependencies": {
     "@prisma/client": "^5.0.0",
+    "@sentry/node": "^9.40.0",
+    "@sentry/profiling-node": "^9.40.0",
     "aws-sdk": "^2.1400.0",
     "axios": "^1.11.0",
     "bcrypt": "^5.1.0",
@@ -64,5 +66,14 @@
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.0.0"
-  }
+  },
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "types": "./dist/index.d.ts"
 }

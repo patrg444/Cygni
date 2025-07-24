@@ -18,6 +18,9 @@ import { RateLimitMetricsCollector } from "./services/metrics/rate-limit-metrics
 import { getAuditRetentionService } from "./services/audit/audit-retention.service";
 import { getDataRetentionService } from "./services/compliance/data-retention.service";
 import { getSecurityEventMonitor } from "./services/security/security-event-monitor.service";
+import { initializeSentry, getSentryHandlers } from "./lib/sentry";
+import { performanceMiddleware, performanceMonitor } from "./lib/performance";
+import { getWebhookService } from "./services/webhook/webhook.service";
 
 // Import routes
 import { authRouter, jwtService } from "./routes/auth";
@@ -33,12 +36,19 @@ import { oauthRouter } from "./routes/oauth";
 import { teamRouter } from "./routes/team";
 import { permissionsRouter } from "./routes/permissions";
 import { complianceRouter } from "./routes/compliance";
+import { performanceRouter } from "./routes/performance";
+import { onboardingRouter } from "./routes/onboarding";
+import { versionRouter } from "./routes/version";
+import { webhooksRouter } from "./routes/webhooks";
 
 // Import middleware
 import { jwtMiddleware } from "./services/auth/jwt-rotation.service";
 import { teamLoaderMiddleware } from "./middleware/team-loader.middleware";
 import { rateLimiterService } from "./services/rate-limit/rate-limiter.service";
 import { auditMiddleware } from "./middleware/audit.middleware";
+import { apiVersionMiddleware } from "./middleware/api-version.middleware";
+import { v1Router } from "./routes/v1";
+import { v2Router } from "./routes/v2";
 
 export function createServer() {
   // Validate environment first
@@ -47,6 +57,9 @@ export function createServer() {
   const app = express();
   const prisma = new PrismaClient();
 
+  // Initialize Sentry error tracking
+  initializeSentry(app);
+  
   // Initialize database logging
   databaseLoggingMiddleware(prisma);
 
@@ -67,9 +80,24 @@ export function createServer() {
   
   // Initialize security event monitor
   const securityEventMonitor = getSecurityEventMonitor(prisma);
+  
+  // Initialize webhook service and start retry job
+  const webhookService = getWebhookService(prisma);
+  // Retry failed webhook deliveries every 5 minutes
+  setInterval(() => {
+    webhookService.retryFailedDeliveries().catch(err => 
+      logger.error("Failed to retry webhook deliveries", { error: err })
+    );
+  }, 5 * 60 * 1000);
 
+  // Get Sentry handlers
+  const sentryHandlers = getSentryHandlers();
+  
   // Middleware - order matters!
-  app.use(requestLoggingMiddleware); // Must be first to create request logger
+  app.use(sentryHandlers.requestHandler); // Sentry request handler must be first
+  app.use(sentryHandlers.tracingHandler); // Sentry tracing
+  app.use(performanceMiddleware()); // Performance monitoring
+  app.use(requestLoggingMiddleware); // Request logging
   app.use(metricsMiddleware); // Collect HTTP metrics
   app.use(performanceLoggingMiddleware(1000)); // Log requests over 1s
   app.use(securityLoggingMiddleware);
@@ -89,6 +117,9 @@ export function createServer() {
   
   // Apply audit logging middleware globally
   app.use(auditMiddleware);
+  
+  // Apply API versioning middleware
+  app.use(apiVersionMiddleware);
 
   // Metrics endpoint (no auth required for Prometheus scraping)
   app.get("/metrics", async (req, res) => {
@@ -156,7 +187,14 @@ export function createServer() {
     res.status(health.status === "healthy" ? 200 : 503).json(health);
   });
 
-  // Public routes
+  // Version info endpoints (no auth required)
+  app.use("/api", versionRouter);
+  
+  // Version-specific routes
+  app.use("/api/v1", v1Router);
+  app.use("/api/v2", v2Router);
+  
+  // Legacy routes (default to v1 for backward compatibility)
   app.use("/api", waitlistRouter);
   app.use("/api", authRouter);
   app.use("/api", oauthRouter);
@@ -172,6 +210,9 @@ export function createServer() {
   app.use("/api", teamLoaderMiddleware, teamRouter);
   app.use("/api", teamLoaderMiddleware, permissionsRouter);
   app.use("/api", teamLoaderMiddleware, complianceRouter);
+  app.use("/api", teamLoaderMiddleware, performanceRouter);
+  app.use("/api", teamLoaderMiddleware, onboardingRouter);
+  app.use("/api", teamLoaderMiddleware, webhooksRouter);
   
   app.get("/api/protected", jwtMiddleware(jwtService), (req, res) => {
     res.json({
@@ -287,10 +328,13 @@ export function createServer() {
     res.status(404).json({ error: "Endpoint not found" });
   });
 
-  // Error logging middleware - must be last
+  // Error logging middleware - must be before Sentry
   app.use(errorLoggingMiddleware);
   
-  // Error handling - must be after error logging
+  // Sentry error handler - must be before other error handlers
+  app.use(sentryHandlers.errorHandler);
+  
+  // Error handling - must be last
   app.use(
     (
       err: any,

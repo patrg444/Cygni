@@ -81,18 +81,18 @@ pnpm test
 
 ```
 cygni/
- packages/           # Shared packages
-    cli/           # Command-line interface
-    sdk/           # JavaScript/TypeScript SDK
- services/          # Microservices
-    api/           # REST API service
-    auth/          # Authentication service (planned)
-    builder/       # Build service (planned)
-    runtime/       # Runtime orchestrator (planned)
- infrastructure/    # Infrastructure as Code
-    terraform/     # AWS infrastructure
-    helm/          # Kubernetes charts
- docs/             # Documentation
+ packages/
+    api/              # REST API with Express
+    cli/              # Command-line interface
+    sdk/              # TypeScript SDK
+    dashboard/        # Next.js admin dashboard
+    docs/             # Docusaurus documentation
+ infrastructure/
+    docker/           # Docker configurations
+    kubernetes/       # K8s manifests
+    terraform/        # AWS infrastructure
+ scripts/              # Development scripts
+ docs/                 # Additional documentation
 ```
 
 ## Testing

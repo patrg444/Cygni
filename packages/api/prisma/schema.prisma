@@ -10,153 +10,159 @@ datasource db {
 }
 
 model User {
-  id             String         @id @default(cuid())
-  email          String         @unique
-  password       String?        // Optional for OAuth users
-  name           String?
-  role           String         @default("member")
-  status         String         @default("active")
-  lastLoginAt    DateTime?
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt
-  
-  teamId         String
-  team           Team           @relation(fields: [teamId], references: [id])
-  notifications  Notification[]
-  oauthAccounts  OAuthAccount[]
-  
+  id            String    @id @default(cuid())
+  email         String    @unique
+  password      String? // Optional for OAuth users
+  name          String?
+  role          String    @default("member")
+  status        String    @default("active")
+  emailVerified Boolean   @default(false)
+  metadata      Json?
+  lastLoginAt   DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  teamId        String
+  team          Team           @relation(fields: [teamId], references: [id])
+  notifications Notification[]
+  oauthAccounts OAuthAccount[]
+
   // RBAC relations
-  userRoles      UserRole[]
-  permissions    UserPermission[]
+  userRoles   UserRole[]
+  permissions UserPermission[]
 }
 
 model OAuthAccount {
-  id              String   @id @default(cuid())
-  userId          String
-  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  provider        String   // github, google, etc.
+  id                String    @id @default(cuid())
+  userId            String
+  user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  provider          String // github, google, etc.
   providerAccountId String // GitHub user ID
-  accessToken     String?  // Encrypted
-  refreshToken    String?  // Encrypted
-  expiresAt       DateTime?
-  tokenType       String?
-  scope           String?
-  
+  accessToken       String? // Encrypted
+  refreshToken      String? // Encrypted
+  expiresAt         DateTime?
+  tokenType         String?
+  scope             String?
+
   // Provider-specific data
-  username        String?  // GitHub username
-  avatarUrl       String?
-  profileUrl      String?
-  
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  
+  username   String? // GitHub username
+  avatarUrl  String?
+  profileUrl String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@unique([provider, providerAccountId])
   @@index([userId])
 }
 
 model Team {
-  id                    String    @id @default(cuid())
-  name                  String
+  id                   String    @id @default(cuid())
+  name                 String
   planId               String    @default("free")
-  stripeCustomerId      String?
-  stripeSubscriptionId  String?
-  subscriptionStatus    String?
+  stripeCustomerId     String?
+  stripeSubscriptionId String?
+  subscriptionStatus   String?
   billingEmail         String?
   currentPeriodEnd     DateTime?
   paymentFailedAt      DateTime?
   lastActivityAt       DateTime?
   createdAt            DateTime  @default(now())
   updatedAt            DateTime  @updatedAt
-  
-  users                User[]
-  projects             Project[]
-  invoices             Invoice[]
-  invitations          TeamInvitation[]
-  roles                Role[]
-  resourcePolicies     ResourcePolicy[]
+
+  users            User[]
+  projects         Project[]
+  invoices         Invoice[]
+  invitations      TeamInvitation[]
+  roles            Role[]
+  resourcePolicies ResourcePolicy[]
+  webhooks         Webhook[]
 }
 
 model TeamInvitation {
-  id            String    @id @default(cuid())
-  teamId        String
-  team          Team      @relation(fields: [teamId], references: [id])
-  email         String
-  role          String    @default("member")
-  invitedBy     String
+  id             String    @id @default(cuid())
+  teamId         String
+  team           Team      @relation(fields: [teamId], references: [id])
+  email          String
+  role           String    @default("member")
+  invitedBy      String
   githubUsername String?
-  githubUserId  String?
-  acceptedAt    DateTime?
-  expiresAt     DateTime
-  createdAt     DateTime  @default(now())
-  
+  githubUserId   String?
+  acceptedAt     DateTime?
+  expiresAt      DateTime
+  createdAt      DateTime  @default(now())
+
   @@index([teamId])
   @@index([email])
   @@index([githubUserId])
 }
 
 model Project {
-  id              String       @id @default(cuid())
-  name            String
-  slug            String       @unique
-  status          String       @default("active")
+  id               String    @id @default(cuid())
+  name             String
+  slug             String    @unique
+  status           String    @default("active")
+  description      String?
+  repository       String?
+  metadata         Json?
   budgetExceededAt DateTime?
-  suspendedAt     DateTime?
-  createdAt       DateTime     @default(now())
-  updatedAt       DateTime     @updatedAt
-  
-  teamId          String
-  team            Team         @relation(fields: [teamId], references: [id])
-  deployments     Deployment[]
-  environments    Environment[]
+  suspendedAt      DateTime?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  teamId               String
+  team                 Team                  @relation(fields: [teamId], references: [id])
+  deployments          Deployment[]
+  environments         Environment[]
+  domains              Domain[]
+  environmentVariables EnvironmentVariable[]
 }
 
 model Deployment {
-  id          String      @id @default(cuid())
+  id          String   @id @default(cuid())
   status      String
+  environment String   @default("production")
   metadata    Json?
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-  
-  projectId   String
-  project     Project     @relation(fields: [projectId], references: [id])
-  
-  environmentId String
-  environment   Environment @relation(fields: [environmentId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  projectId String
+  project   Project         @relation(fields: [projectId], references: [id])
+  logs      DeploymentLog[]
 }
 
 model Environment {
-  id          String       @id @default(cuid())
-  name        String
-  slug        String
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  
-  projectId   String
-  project     Project      @relation(fields: [projectId], references: [id])
-  deployments Deployment[]
-  
+  id        String   @id @default(cuid())
+  name      String
+  slug      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id])
+
   @@unique([projectId, slug])
 }
 
 model Waitlist {
-  id          String   @id @default(cuid())
-  email       String   @unique
-  position    Int      @unique
-  source      String?
-  referrer    String?
-  metadata    Json?
-  createdAt   DateTime @default(now())
+  id        String   @id @default(cuid())
+  email     String   @unique
+  position  Int      @unique
+  source    String?
+  referrer  String?
+  metadata  Json?
+  createdAt DateTime @default(now())
 }
 
 model UsageEvent {
-  id          String   @id @default(cuid())
-  projectId   String
-  serviceId   String?
-  metricType  String
-  quantity    Decimal
-  timestamp   DateTime @default(now())
-  region      String?
-  
+  id         String   @id @default(cuid())
+  projectId  String
+  serviceId  String?
+  metricType String
+  quantity   Decimal
+  timestamp  DateTime @default(now())
+  region     String?
+
   @@index([projectId, timestamp])
 }
 
@@ -175,66 +181,66 @@ model Invoice {
 }
 
 model JwtKey {
-  id          String   @id @default(cuid())
-  kid         String   @unique
-  privateKey  String
-  publicKey   String
-  algorithm   String
-  expiresAt   DateTime
-  createdAt   DateTime @default(now())
-  
+  id         String   @id @default(cuid())
+  kid        String   @unique
+  privateKey String
+  publicKey  String
+  algorithm  String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+
   @@index([expiresAt])
 }
 
 model Notification {
-  id          String   @id @default(cuid())
-  userId      String
-  user        User     @relation(fields: [userId], references: [id])
-  type        String
-  severity    String
-  title       String
-  message     String
-  data        Json?
-  read        Boolean  @default(false)
-  readAt      DateTime?
-  createdAt   DateTime @default(now())
-  
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id])
+  type      String
+  severity  String
+  title     String
+  message   String
+  data      Json?
+  read      Boolean   @default(false)
+  readAt    DateTime?
+  createdAt DateTime  @default(now())
+
   @@index([userId, read])
 }
 
 model AuditLog {
-  id            String   @id @default(cuid())
-  timestamp     DateTime @default(now())
-  
+  id        String   @id @default(cuid())
+  timestamp DateTime @default(now())
+
   // Actor information
-  actorId       String?  // User ID if authenticated
-  actorType     String   // user, system, api-key
-  actorEmail    String?
-  actorIp       String?
+  actorId        String? // User ID if authenticated
+  actorType      String // user, system, api-key
+  actorEmail     String?
+  actorIp        String?
   actorUserAgent String?
-  
+
   // Action details
-  action        String   // e.g., user.login, team.update, payment.create
-  resourceType  String   // e.g., user, team, project, deployment
-  resourceId    String?  // ID of the affected resource
-  
+  action       String // e.g., user.login, team.update, payment.create
+  resourceType String // e.g., user, team, project, deployment
+  resourceId   String? // ID of the affected resource
+
   // Request context
-  method        String?  // HTTP method
-  path          String?  // API endpoint
-  statusCode    Int?     // HTTP response code
-  
+  method     String? // HTTP method
+  path       String? // API endpoint
+  statusCode Int? // HTTP response code
+
   // Change details
-  oldValues     Json?    // Previous state (for updates)
-  newValues     Json?    // New state (for creates/updates)
-  metadata      Json?    // Additional context
-  
+  oldValues Json? // Previous state (for updates)
+  newValues Json? // New state (for creates/updates)
+  metadata  Json? // Additional context
+
   // Organization context
-  teamId        String?
-  projectId     String?
-  
+  teamId    String?
+  projectId String?
+
   // Risk and compliance
-  riskLevel     String   @default("low") // low, medium, high, critical
-  
+  riskLevel String @default("low") // low, medium, high, critical
+
   @@index([timestamp])
   @@index([actorId])
   @@index([teamId])
@@ -255,47 +261,47 @@ model AuditLogRetention {
 
 // RBAC Models
 model Role {
-  id              String          @id @default(cuid())
-  name            String
-  description     String?
-  teamId          String
-  team            Team            @relation(fields: [teamId], references: [id])
-  isSystem        Boolean         @default(false) // System roles can't be modified
-  createdAt       DateTime        @default(now())
-  updatedAt       DateTime        @updatedAt
-  
-  userRoles       UserRole[]
-  permissions     RolePermission[]
-  
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  teamId      String
+  team        Team     @relation(fields: [teamId], references: [id])
+  isSystem    Boolean  @default(false) // System roles can't be modified
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  userRoles   UserRole[]
+  permissions RolePermission[]
+
   @@unique([teamId, name])
   @@index([teamId])
 }
 
 model Permission {
-  id              String          @id @default(cuid())
-  name            String          @unique // e.g., "projects.create", "users.delete"
-  resource        String          // e.g., "projects", "users", "billing"
-  action          String          // e.g., "create", "read", "update", "delete"
-  description     String?
-  createdAt       DateTime        @default(now())
-  
+  id          String   @id @default(cuid())
+  name        String   @unique // e.g., "projects.create", "users.delete"
+  resource    String // e.g., "projects", "users", "billing"
+  action      String // e.g., "create", "read", "update", "delete"
+  description String?
+  createdAt   DateTime @default(now())
+
   rolePermissions RolePermission[]
   userPermissions UserPermission[]
-  
+
   @@index([resource])
   @@index([action])
 }
 
 model UserRole {
-  id              String          @id @default(cuid())
-  userId          String
-  user            User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-  roleId          String
-  role            Role            @relation(fields: [roleId], references: [id], onDelete: Cascade)
-  grantedBy       String?         // User who granted this role
-  expiresAt       DateTime?       // For temporary roles
-  createdAt       DateTime        @default(now())
-  
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  roleId    String
+  role      Role      @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  grantedBy String? // User who granted this role
+  expiresAt DateTime? // For temporary roles
+  createdAt DateTime  @default(now())
+
   @@unique([userId, roleId])
   @@index([userId])
   @@index([roleId])
@@ -303,28 +309,28 @@ model UserRole {
 }
 
 model RolePermission {
-  id              String          @id @default(cuid())
-  roleId          String
-  role            Role            @relation(fields: [roleId], references: [id], onDelete: Cascade)
-  permissionId    String
-  permission      Permission      @relation(fields: [permissionId], references: [id], onDelete: Cascade)
-  createdAt       DateTime        @default(now())
-  
+  id           String     @id @default(cuid())
+  roleId       String
+  role         Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permissionId String
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+  createdAt    DateTime   @default(now())
+
   @@unique([roleId, permissionId])
   @@index([roleId])
   @@index([permissionId])
 }
 
 model UserPermission {
-  id              String          @id @default(cuid())
-  userId          String
-  user            User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-  permissionId    String
-  permission      Permission      @relation(fields: [permissionId], references: [id], onDelete: Cascade)
-  grantedBy       String?         // User who granted this permission
-  expiresAt       DateTime?       // For temporary permissions
-  createdAt       DateTime        @default(now())
-  
+  id           String     @id @default(cuid())
+  userId       String
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  permissionId String
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+  grantedBy    String? // User who granted this permission
+  expiresAt    DateTime? // For temporary permissions
+  createdAt    DateTime   @default(now())
+
   @@unique([userId, permissionId])
   @@index([userId])
   @@index([permissionId])
@@ -332,16 +338,102 @@ model UserPermission {
 }
 
 model ResourcePolicy {
-  id              String          @id @default(cuid())
-  teamId          String
-  team            Team            @relation(fields: [teamId], references: [id])
-  resourceType    String          // e.g., "project", "deployment"
-  resourceId      String          // Specific resource ID
-  policy          Json            // Policy rules (e.g., {"read": ["role:viewer"], "write": ["role:editor"]})
-  createdAt       DateTime        @default(now())
-  updatedAt       DateTime        @updatedAt
-  
+  id           String   @id @default(cuid())
+  teamId       String
+  team         Team     @relation(fields: [teamId], references: [id])
+  resourceType String // e.g., "project", "deployment"
+  resourceId   String // Specific resource ID
+  policy       Json // Policy rules (e.g., {"read": ["role:viewer"], "write": ["role:editor"]})
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
   @@unique([teamId, resourceType, resourceId])
   @@index([teamId])
   @@index([resourceType, resourceId])
+}
+
+model Domain {
+  id        String   @id @default(cuid())
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id])
+  domain    String   @unique
+  verified  Boolean  @default(false)
+  primary   Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model EnvironmentVariable {
+  id          String   @id @default(cuid())
+  projectId   String
+  project     Project  @relation(fields: [projectId], references: [id])
+  key         String
+  value       String // Encrypted
+  environment String   @default("all")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([projectId, key, environment])
+}
+
+model DeploymentLog {
+  id           String     @id @default(cuid())
+  deploymentId String
+  deployment   Deployment @relation(fields: [deploymentId], references: [id])
+  level        String // info, warning, error
+  message      String
+  timestamp    DateTime   @default(now())
+
+  @@index([deploymentId, timestamp])
+}
+
+model Webhook {
+  id          String   @id @default(cuid())
+  teamId      String
+  team        Team     @relation(fields: [teamId], references: [id])
+  url         String
+  events      String[] // Array of event types to subscribe to
+  description String?
+  headers     Json?    // Custom headers to send with webhook
+  signingSecret String // Secret for HMAC signature
+  enabled     Boolean  @default(true)
+  metadata    Json?
+  
+  // Delivery tracking
+  lastDeliveryAt     DateTime?
+  lastDeliveryStatus String?   // success, failed
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  deliveries  WebhookDelivery[]
+  
+  @@index([teamId])
+  @@index([enabled])
+}
+
+model WebhookDelivery {
+  id          String   @id @default(cuid())
+  webhookId   String
+  webhook     Webhook  @relation(fields: [webhookId], references: [id], onDelete: Cascade)
+  eventId     String   // ID of the event that triggered this delivery
+  eventType   String   // Type of event
+  payload     Json     // Event payload
+  
+  status      String   // pending, success, failed
+  statusCode  Int?     // HTTP response status code
+  response    String?  // Response body (truncated)
+  error       String?  // Error message if failed
+  
+  attempts    Int      @default(0)
+  nextRetryAt DateTime?
+  completedAt DateTime?
+  
+  createdAt   DateTime @default(now())
+  
+  @@index([webhookId])
+  @@index([status])
+  @@index([eventType])
+  @@index([createdAt])
+  @@index([nextRetryAt])
 }

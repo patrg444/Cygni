@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import logger from "./logger";
+import { trackDatabaseQuery } from "./performance";
 
 // Models that require tenant isolation
 const TENANT_MODELS = [
@@ -30,10 +31,14 @@ export interface RLSContext {
 // Row-Level Security middleware for Prisma
 export function createRLSMiddleware(context: RLSContext) {
   return async (params: any, next: any) => {
-    // Skip RLS for system operations
-    if (context.bypassRLS) {
-      return next(params);
-    }
+    // Track database query performance
+    const stopTracking = trackDatabaseQuery(params.action, params.model);
+    
+    try {
+      // Skip RLS for system operations
+      if (context.bypassRLS) {
+        return await next(params);
+      }
 
     // Apply RLS for tenant-isolated models
     if (TENANT_MODELS.includes(params.model)) {
@@ -174,6 +179,9 @@ export function createRLSMiddleware(context: RLSContext) {
     }
 
     return result;
+    } finally {
+      stopTracking();
+    }
   };
 }
 

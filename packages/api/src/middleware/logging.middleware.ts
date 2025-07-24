@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import onFinished from "on-finished";
 import { createRequestLogger, logHttpRequest } from "../lib/logger";
+import { captureException } from "../lib/sentry";
 
 // Extend Request type to include logger
 declare global {
@@ -66,6 +67,25 @@ export function errorLoggingMiddleware(
       url: req.originalUrl,
       body: req.body,
       query: req.query,
+    },
+  });
+
+  // Send error to Sentry with context
+  const authReq = req as any;
+  captureException(err, {
+    user: authReq.user ? {
+      id: authReq.user.userId || authReq.user.id,
+      email: authReq.user.email,
+    } : undefined,
+    tags: {
+      endpoint: req.path,
+      method: req.method,
+    },
+    extra: {
+      requestId: req.headers["x-request-id"],
+      teamId: authReq.user?.teamId,
+      query: req.query,
+      params: req.params,
     },
   });
 

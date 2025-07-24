@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Cygni</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .logo {
+            font-size: 36px;
+            font-weight: bold;
+            color: #2563eb;
+            margin-bottom: 10px;
+        }
+        h1 {
+            color: #1f2937;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        .emoji {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        .content {
+            color: #4b5563;
+            margin-bottom: 30px;
+        }
+        .cta-button {
+            display: inline-block;
+            background-color: #2563eb;
+            color: #ffffff;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            margin: 20px 0;
+        }
+        .features {
+            background-color: #f9fafb;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 30px 0;
+        }
+        .feature {
+            margin: 15px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+        .feature::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #10b981;
+            font-weight: bold;
+        }
+        .footer {
+            text-align: center;
+            color: #6b7280;
+            font-size: 14px;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #e5e7eb;
+        }
+        .social-links {
+            margin: 20px 0;
+        }
+        .social-links a {
+            color: #6b7280;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">Cygni</div>
+            <div class="emoji">🚀</div>
+            <h1>Welcome to Cygni, {{name}}!</h1>
+        </div>
+        
+        <div class="content">
+            <p>We're thrilled to have you join the Cygni community! You're now part of a platform that makes deploying applications as simple as a single command.</p>
+            
+            <p>Your account has been successfully created, and you're ready to start deploying amazing applications.</p>
+        </div>
+        
+        <div class="features">
+            <h3>What you can do with Cygni:</h3>
+            <div class="feature">Deploy applications in seconds with zero configuration</div>
+            <div class="feature">Scale automatically to handle millions of requests</div>
+            <div class="feature">Monitor performance and costs in real-time</div>
+            <div class="feature">Collaborate seamlessly with your team</div>
+            <div class="feature">Deploy from GitHub with automatic CI/CD</div>
+        </div>
+        
+        <div style="text-align: center;">
+            <a href="{{dashboardUrl}}" class="cta-button">Start Your Onboarding</a>
+        </div>
+        
+        <div class="content">
+            <h3>Quick Start Guide:</h3>
+            <ol>
+                <li><strong>Install the CLI:</strong> <code>npm install -g @cygni/cli</code></li>
+                <li><strong>Navigate to your project:</strong> <code>cd your-project</code></li>
+                <li><strong>Deploy:</strong> <code>cygni deploy</code></li>
+            </ol>
+            
+            <p>That's it! Your application will be live in seconds.</p>
+        </div>
+        
+        <div class="content">
+            <p>Need help getting started? Check out our <a href="{{docsUrl}}">documentation</a> or reply to this email, and our team will be happy to assist you.</p>
+        </div>
+        
+        <div class="footer">
+            <div class="social-links">
+                <a href="https://twitter.com/cygnidev">Twitter</a>
+                <a href="https://github.com/cygni">GitHub</a>
+                <a href="https://discord.gg/cygni">Discord</a>
+            </div>
+            <p>© 2024 Cygni. All rights reserved.</p>
+            <p>Deploy in seconds, scale to millions.</p>
+        </div>
+    </div>
+</body>
+</html>
