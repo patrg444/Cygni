@@ -1,62 +1,143 @@
 # Cygni
 
 [![CI Pipeline](https://github.com/patrg444/Cygni/actions/workflows/ci.yml/badge.svg)](https://github.com/patrg444/Cygni/actions/workflows/ci.yml)
-![Status: Alpha](https://img.shields.io/badge/Status-Alpha-yellow)
+![Status: Beta](https://img.shields.io/badge/Status-Beta-orange)
 ![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue)
 
 The full-stack developer cloud platform that combines the simplicity of PaaS with the flexibility of AWS. Deploy frontend, backend, databases, and workers - all in one place.
 
-> **Current Status**: Cygni is in early alpha development. Core infrastructure is being built. Not yet ready for production use.
+> **Current Status**: Cygni is in beta. All core features are implemented and the platform is ready for testing. Join our beta program!
 
 ## Vision
 
 Cygni aims to be the developer-first cloud platform that makes deploying full-stack applications as simple as `git push`, while giving you the power and flexibility of your own cloud infrastructure.
 
-## Features (Planned)
+## Features
 
-- **One-Click Deployments**: Push to deploy with automatic CI/CD
-- **Full-Stack Preview Environments**: Complete environments for every PR
-- **Integrated Services**: Database, auth, storage, and background jobs built-in
-- **Multi-Language Support**: Node.js, Python, Go, Ruby, and more
-- **Bring Your Own Cloud**: Deploy to your own AWS/GCP/Azure account
-- **Open Source**: Fully transparent and self-hostable
+### Production Ready
 
-## Current Implementation Status
+- **One-Click Deployments**: Deploy any framework with `cygni deploy`
+- **Preview Environments**: Automatic deployments for every PR
+- **Multi-Framework Support**: Next.js, React, Vue, Express, Python, and more
+- **Custom Domains**: SSL certificates auto-provisioned
+- **Environment Variables**: Secure secret management
+- **GitHub Integration**: Auto-deploy on push
 
-### Completed
+### Developer Experience
 
-- **Infrastructure as Code**: Terraform modules for AWS (VPC, RDS, EKS, S3)
-- **Kubernetes Deployment**: Production-ready Helm charts
-- **API Service**: Core REST API with authentication and RBAC
-- **CLI Tool**: Framework detection and deployment commands
-- **SDK**: TypeScript/JavaScript SDK with full API coverage
-- **CI/CD**: GitHub Actions with health checks and security scanning
-- **Docker**: Multi-stage builds with security hardening
+- **Interactive CLI**: Framework detection and smart defaults
+- **Real-time Logs**: Stream logs with `cygni logs --follow`
+- **Performance Monitoring**: Built-in metrics and alerts
+- **Team Collaboration**: Role-based access control
+- **API Access**: Full REST API v2 with webhooks
+- **Zero-config Deployments**: Works out of the box
 
-### In Progress
+### Enterprise Ready
 
-- Runtime orchestrator for container management
-- Builder service for source-to-container
-- Web dashboard UI
-- Billing and metering integration
+- **SOC2 Compliant**: Audit logs and security controls
+- **Multi-tenant Isolation**: Secure data separation
+- **OAuth/SAML**: GitHub and enterprise SSO
+- **Rate Limiting**: Tiered by plan
+- **99.9% Uptime SLA**: With monitoring
+- **24/7 Support**: For enterprise customers
 
-### Roadmap
+## Quick Start
 
-- [ ] Complete runtime orchestrator with Kubernetes CRDs
-- [ ] Implement builder service with buildpack support
-- [ ] Create web dashboard for project management
-- [ ] Add support for multiple cloud providers
-- [ ] Implement preview environments
-- [ ] Add monitoring and observability stack
+### 1. Install Cygni CLI
 
-## Tech Stack
+```bash
+npm install -g @cygni/cli
+```
 
-- **Backend**: Node.js, Fastify, Prisma, PostgreSQL
-- **Infrastructure**: Kubernetes, Terraform, Docker
-- **Languages**: TypeScript, Go (for K8s controllers)
-- **Tools**: pnpm workspaces, Turbo
+### 2. Deploy Your First App
 
-## Quick Start (Development)
+#### Deploy a Next.js App
+
+```bash
+cd my-nextjs-app
+cygni deploy
+# Your app is live at https://my-app-abc123.cygni.app
+```
+
+#### Deploy from GitHub
+
+```bash
+cygni deploy --git https://github.com/username/repo
+```
+
+#### Deploy with Custom Domain
+
+```bash
+cygni deploy --prod
+cygni domains add app.yourdomain.com
+```
+
+### 3. Manage Your Deployment
+
+```bash
+# View logs
+cygni logs --follow
+
+# Add environment variables
+cygni env add DATABASE_URL "postgres://..." --production --encrypted
+
+# Check status
+cygni status
+```
+
+## Examples
+
+Check out our [examples directory](./examples) for complete deployment examples:
+
+- [Next.js App Router](./examples/nextjs-app-router)
+- [Express API](./examples/express-api)
+- [React SPA](./examples/react-spa)
+- [Full-Stack App](./examples/nextjs-prisma)
+- [And many more...](./examples)
+
+## Implementation Status
+
+### Phase 1: Observability & Operations ✅
+
+- Structured logging with JSON format
+- Prometheus metrics for monitoring
+- Alerting system integration
+- Comprehensive runbooks
+
+### Phase 2: Billing & User Management ✅
+
+- User accounts with secure authentication
+- Stripe integration for payments
+- Usage tracking and quotas
+- Subscription management
+
+### Phase 3: Security & Compliance ✅
+
+- Rate limiting by tier
+- Complete audit logging
+- GitHub OAuth integration
+- Multi-tenant data isolation
+- Role-based access control
+- SOC2 Type II preparation
+
+### Phase 4: Production Polish ✅
+
+- Modern dashboard (Next.js 15)
+- Documentation site (Docusaurus)
+- Interactive onboarding
+- Sentry error tracking
+- API v2 with versioning
+- Webhook system
+- Performance monitoring
+
+### Coming Soon (Phase 5)
+
+- SSO/SAML for enterprises
+- Advanced deployment strategies
+- Private cloud options
+- Global edge network
+
+## Development Setup
 
 ```bash
 # Clone the repository
@@ -93,6 +174,7 @@ cygni/
     terraform/        # AWS infrastructure
  scripts/              # Development scripts
  docs/                 # Additional documentation
+ examples/             # Example applications
 ```
 
 ## Testing
@@ -155,11 +237,13 @@ We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for deta
 
 ## Documentation
 
-- [Architecture Overview](docs/ARCHITECTURE.md)
+- [Getting Started](docs/GETTING_STARTED.md)
+- [Architecture Overview](docs/ARCHITECTURE_OVERVIEW.md)
+- [CLI Command Reference](packages/cli/docs/COMMAND_REFERENCE.md)
 - [API Documentation](docs/api/README.md)
-- [CLI Reference](packages/cli/README.md)
 - [SDK Documentation](packages/sdk/README.md)
-- [Secrets Generation Guide](docs/ops/secrets.md)
+- [Example Applications](examples/README.md)
+- [Video Tutorials](packages/docs/docs/tutorials/video-tutorials.md)
 
 ## Security
 
@@ -169,6 +253,22 @@ We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for deta
 - Regular security scanning with Trivy
 
 For security issues, please email security@cygni.dev
+
+## Tech Stack
+
+- **Backend**: Node.js, Express.js, Prisma, PostgreSQL
+- **Frontend**: Next.js 15, React 19, TailwindCSS
+- **Infrastructure**: Kubernetes, Docker, Terraform
+- **Languages**: TypeScript throughout
+- **Monitoring**: Prometheus, Sentry, custom APM
+- **Security**: JWT auth, OAuth, RBAC, rate limiting
+
+## Support
+
+- **Documentation**: https://docs.cygni.dev
+- **Discord Community**: https://discord.gg/cygni
+- **Email**: support@cygni.dev
+- **GitHub Issues**: https://github.com/patrg444/Cygni/issues
 
 ## License
 
