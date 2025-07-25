@@ -19,7 +19,7 @@ import { getAuditRetentionService } from "./services/audit/audit-retention.servi
 import { getDataRetentionService } from "./services/compliance/data-retention.service";
 import { getSecurityEventMonitor } from "./services/security/security-event-monitor.service";
 import { initializeSentry, getSentryHandlers } from "./lib/sentry";
-import { performanceMiddleware, performanceMonitor } from "./lib/performance";
+import { performanceMiddleware } from "./lib/performance";
 import { getWebhookService } from "./services/webhook/webhook.service";
 
 // Import routes
@@ -40,6 +40,7 @@ import { performanceRouter } from "./routes/performance";
 import { onboardingRouter } from "./routes/onboarding";
 import { versionRouter } from "./routes/version";
 import { webhooksRouter } from "./routes/webhooks";
+import { samlRoutes } from "./routes/auth/saml.routes";
 
 // Import middleware
 import { jwtMiddleware } from "./services/auth/jwt-rotation.service";
@@ -79,7 +80,7 @@ export function createServer() {
   dataRetentionService.startRetentionJobs();
   
   // Initialize security event monitor
-  const securityEventMonitor = getSecurityEventMonitor(prisma);
+  getSecurityEventMonitor(prisma);
   
   // Initialize webhook service and start retry job
   const webhookService = getWebhookService(prisma);
@@ -198,6 +199,7 @@ export function createServer() {
   app.use("/api", waitlistRouter);
   app.use("/api", authRouter);
   app.use("/api", oauthRouter);
+  app.use("/api", samlRoutes);
 
   // Protected routes - Apply team loader middleware for authenticated routes
   app.use("/api", teamLoaderMiddleware, billingRouter);

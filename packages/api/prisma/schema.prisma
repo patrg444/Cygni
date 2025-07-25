@@ -17,6 +17,7 @@ model User {
   role          String    @default("member")
   status        String    @default("active")
   emailVerified Boolean   @default(false)
+  authProvider  String    @default("local") // local, oauth, saml
   metadata      Json?
   lastLoginAt   DateTime?
   createdAt     DateTime  @default(now())
@@ -129,6 +130,9 @@ model Deployment {
   projectId String
   project   Project         @relation(fields: [projectId], references: [id])
   logs      DeploymentLog[]
+  canaryDeployments CanaryDeployment[]
+  blueDeployments BlueGreenDeployment[] @relation("BlueDeployment")
+  greenDeployments BlueGreenDeployment[] @relation("GreenDeployment")
 }
 
 model Environment {
@@ -436,4 +440,101 @@ model WebhookDelivery {
   @@index([eventType])
   @@index([createdAt])
   @@index([nextRetryAt])
+}
+
+model SAMLConfig {
+  id                 String   @id @default(cuid())
+  teamId             String   @unique
+  entryPoint         String   // IDP SSO URL
+  issuer             String   // Entity ID
+  certificate        String   // IDP public certificate
+  logoutUrl          String?  // Optional logout URL
+  identifierFormat   String?  // NameID format
+  signatureAlgorithm String?  // RSA-SHA256, etc.
+  digestAlgorithm    String?  // SHA256, etc.
+  enabled            Boolean  @default(true)
+  metadata           Json?    // Additional metadata
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  
+  @@index([teamId])
+}
+
+model CanaryDeployment {
+  id                String   @id @default(cuid())
+  deploymentId      String
+  deployment        Deployment @relation(fields: [deploymentId], references: [id])
+  projectId         String
+  status            String   // running, paused, promoted, rolled_back
+  trafficPercentage Int      // 1-100
+  duration          Int      // Duration in minutes
+  
+  // Thresholds
+  successThreshold  Float    // 0-1
+  errorThreshold    Float    // 0-1
+  latencyThreshold  Int      // milliseconds
+  
+  // Automation settings
+  autoPromote       Boolean  @default(false)
+  autoRollback      Boolean  @default(true)
+  
+  // Timestamps
+  startedAt         DateTime @default(now())
+  scheduledEndAt    DateTime
+  pausedAt          DateTime?
+  completedAt       DateTime?
+  
+  // Results
+  rollbackReason    String?
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  metrics           CanaryMetric[]
+  
+  @@index([deploymentId])
+  @@index([projectId])
+  @@index([status])
+}
+
+model CanaryMetric {
+  id                 String   @id @default(cuid())
+  canaryDeploymentId String
+  canaryDeployment   CanaryDeployment @relation(fields: [canaryDeploymentId], references: [id], onDelete: Cascade)
+  
+  timestamp          DateTime @default(now())
+  successRate        Float
+  errorRate          Float
+  latencyP50         Int
+  latencyP95         Int
+  latencyP99         Int
+  requestCount       Int
+  
+  @@index([canaryDeploymentId])
+  @@index([timestamp])
+}
+
+model BlueGreenDeployment {
+  id                String   @id @default(cuid())
+  projectId         String
+  blueDeploymentId  String
+  blueDeployment    Deployment @relation(fields: [blueDeploymentId], references: [id], name: "BlueDeployment")
+  greenDeploymentId String
+  greenDeployment   Deployment @relation(fields: [greenDeploymentId], references: [id], name: "GreenDeployment")
+  
+  status            String   // active_blue, active_green, switching, completed
+  trafficToGreen    Int      @default(0) // 0-100
+  
+  // Switch settings
+  switchStrategy    String   // immediate, gradual, canary
+  switchDuration    Int?     // Duration in minutes for gradual switch
+  
+  startedAt         DateTime @default(now())
+  completedAt       DateTime?
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  @@index([projectId])
+  @@index([status])
 }

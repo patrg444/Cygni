@@ -14,6 +14,7 @@ import { complianceRouter } from "../compliance";
 import { performanceRouter } from "../performance";
 import { onboardingRouter } from "../onboarding";
 import { webhooksRouter } from "../webhooks";
+import { samlRoutes } from "../auth/saml.routes";
 import { usersRouter } from "./users";
 import { projectsRouter } from "./projects";
 import { deploymentsRouter } from "./deployments";
@@ -22,6 +23,7 @@ const v2Router = Router();
 
 // Mount all v2 routes (includes v1 routes plus new ones)
 v2Router.use("/auth", authRouter);
+v2Router.use("/auth", samlRoutes);
 v2Router.use("/billing", billingRouter);
 v2Router.use("/usage", usageRouter);
 v2Router.use("/subscriptions", subscriptionsRouter);
