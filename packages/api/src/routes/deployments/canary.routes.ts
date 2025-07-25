@@ -6,6 +6,7 @@ import { authorize } from '../../middleware/rbac.middleware';
 import { validate } from '../../middleware/validation.middleware';
 import { asyncHandler } from '../../utils/async-handler';
 import { checkFeatureFlag } from '../../middleware/feature-flag.middleware';
+import { prisma } from '../../lib/prisma';
 
 const router = Router();
 const canaryService = new CanaryDeploymentService();

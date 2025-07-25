@@ -522,7 +522,7 @@ model BlueGreenDeployment {
   greenDeploymentId String
   greenDeployment   Deployment @relation(fields: [greenDeploymentId], references: [id], name: "GreenDeployment")
   
-  status            String   // active_blue, active_green, switching, completed
+  status            String   // active_blue, active_green, switching, completed, paused
   trafficToGreen    Int      @default(0) // 0-100
   
   // Switch settings
@@ -537,4 +537,81 @@ model BlueGreenDeployment {
   
   @@index([projectId])
   @@index([status])
+}
+
+model DeploymentMetric {
+  id                String   @id @default(cuid())
+  deploymentId      String
+  timestamp         DateTime @default(now())
+  
+  requestCount      Int      @default(0)
+  successCount      Int      @default(0)
+  errorCount        Int      @default(0)
+  
+  latencyP50        Int      @default(0) // milliseconds
+  latencyP95        Int      @default(0)
+  latencyP99        Int      @default(0)
+  
+  activeConnections Int      @default(0)
+  cpuUsage          Float    @default(0)
+  memoryUsage       Float    @default(0)
+  
+  @@index([deploymentId])
+  @@index([timestamp])
+}
+
+model Alert {
+  id           String   @id @default(cuid())
+  projectId    String
+  type         String
+  severity     String   // info, warning, error, critical
+  message      String
+  metadata     Json?
+  timestamp    DateTime @default(now())
+  sentAt       DateTime?
+  sentChannels String[]
+  
+  @@index([projectId])
+  @@index([type])
+  @@index([severity])
+  @@index([timestamp])
+}
+
+model AlertChannel {
+  id        String   @id @default(cuid())
+  projectId String
+  type      String   // email, slack, webhook, pagerduty
+  config    Json     // Channel-specific configuration
+  enabled   Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@index([projectId])
+  @@index([type])
+}
+
+model AlertRule {
+  id        String   @id @default(cuid())
+  projectId String
+  name      String
+  type      String   // error_rate, response_time, etc
+  condition Json     // Rule condition
+  channels  String[] // Alert channel IDs
+  enabled   Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@index([projectId])
+  @@index([type])
+  @@index([enabled])
+}
+
+model EscalationPolicy {
+  id        String   @id @default(cuid())
+  projectId String   @unique
+  levels    Json     // Escalation levels and contacts
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@index([projectId])
 }
