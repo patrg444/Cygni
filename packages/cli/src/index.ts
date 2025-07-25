@@ -19,6 +19,7 @@ import { buildCommand } from "./commands/build";
 import { generateCommand } from "./commands/generate";
 import { gitCommand } from "./commands/git";
 import { projectsCommand } from "./commands/projects";
+import { doctorCommand } from "./commands/doctor";
 import { periodicUpdateCheck, autoUpdate } from "./utils/update-check";
 
 program
@@ -43,6 +44,7 @@ program.addCommand(buildCommand);
 program.addCommand(generateCommand);
 program.addCommand(gitCommand);
 program.addCommand(projectsCommand);
+program.addCommand(doctorCommand);
 
 // Error handling
 program.exitOverride();

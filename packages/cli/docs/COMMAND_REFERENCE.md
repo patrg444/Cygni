@@ -52,6 +52,31 @@ cygni signup
 
 ## Deployment Commands
 
+### `cygni doctor`
+
+Run pre-deployment diagnostics to check your environment and configuration.
+
+```bash
+cygni doctor
+# Run all diagnostic checks
+
+cygni doctor --fix
+# Attempt to automatically fix issues
+
+cygni doctor --category aws
+# Run only AWS-related checks
+
+cygni doctor --json
+# Output results in JSON format
+```
+
+The doctor command checks:
+- **Environment**: Node.js version, Docker, disk space
+- **AWS**: CLI installation, credentials, region, service quotas
+- **Project**: Cygni configuration, framework detection, build scripts
+- **Network**: API connectivity, DNS resolution
+- **Dependencies**: Git repository status
+
 ### `cygni deploy`
 
 Deploy your application.
