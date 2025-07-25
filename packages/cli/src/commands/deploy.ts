@@ -14,6 +14,7 @@ import {
   checkDeploymentHealth,
   handleDeploymentFailure,
 } from "../lib/deploy-helpers";
+import { CostEstimator } from "../lib/cost-estimator";
 
 export const deployCommand = new Command("deploy")
   .description("Deploy your application to CloudExpress")
@@ -34,6 +35,8 @@ export const deployCommand = new Command("deploy")
     "Deployment strategy (rolling, canary)",
     "rolling",
   )
+  .option("--dry-run", "Show deployment cost analysis without deploying")
+  .option("--skip-cost-check", "Skip cost analysis (useful for CI/CD)")
   .action(async (options) => {
     if (options.rollback) {
       return handleRollback(options);
@@ -64,6 +67,73 @@ export const deployCommand = new Command("deploy")
         );
       } else {
         buildSpinner.succeed("Build complete!");
+      }
+
+      // Cost analysis (unless skipped)
+      if (!options.skipCostCheck) {
+        const costSpinner = ora("Analyzing deployment cost impact...").start();
+        
+        try {
+          const costEstimator = new CostEstimator(process.env.AWS_DEFAULT_REGION || "us-east-1");
+          
+          // Get deployment configuration from the API
+          const api = await getApiClient();
+          const projectData = await api.get(`/projects/${config.projectId}`);
+          const project = projectData.data;
+          
+          // Estimate costs
+          // For now, we'll use some defaults - in a real implementation, 
+          // we'd get these from the deployment configuration
+          const region = process.env.AWS_DEFAULT_REGION || "us-east-1";
+          const taskDefinitionArn = `arn:aws:ecs:${region}:123456789:task-definition/${config.name}:1`;
+          const desiredCount = 2; // Default task count
+          
+          // Get current deployment cost
+          const currentCost = await costEstimator.getCurrentDeploymentCost(
+            project.clusterName || "cygni-cluster",
+            `${config.name}-${options.env}`,
+            region
+          );
+          
+          // Estimate new deployment cost
+          const projectedCost = await costEstimator.estimateDeploymentCost(
+            taskDefinitionArn,
+            desiredCount,
+            region
+          );
+          
+          // Calculate delta
+          const costDelta = await costEstimator.calculateCostDelta(currentCost, projectedCost);
+          
+          costSpinner.stop();
+          
+          // Display cost analysis
+          console.log("\n" + costEstimator.formatCostDelta(costDelta));
+          
+          // If dry run, stop here
+          if (options.dryRun) {
+            console.log(chalk.gray("\n--dry-run specified. Deployment cancelled."));
+            process.exit(0);
+          }
+          
+          // If costs are increasing significantly, ask for confirmation
+          if (costDelta.difference.percentage > 20 && costDelta.difference.amount > 10) {
+            const shouldDeploy = await confirm({
+              message: chalk.yellow("Deploy with these cost changes?"),
+              default: false,
+            });
+            
+            if (!shouldDeploy) {
+              console.log(chalk.gray("\nDeployment cancelled."));
+              process.exit(0);
+            }
+          }
+        } catch (error: any) {
+          costSpinner.warn("Cost analysis failed (continuing with deployment)");
+          if (process.env.DEBUG) {
+            console.error(chalk.gray("Cost analysis error:", error.message));
+          }
+        }
       }
 
       // Deploy
