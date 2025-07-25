@@ -15,12 +15,14 @@ import {
   BarChart3,
   LogOut,
   Rocket,
+  GitBranch,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navigation = [
   { name: "Overview", href: "/", icon: LayoutDashboard },
   { name: "Getting Started", href: "/onboarding", icon: Rocket },
+  { name: "Deployments", href: "/deployments", icon: GitBranch },
   { name: "Activity", href: "/activity", icon: Activity },
   { name: "Billing", href: "/billing", icon: DollarSign },
   { name: "Users", href: "/users", icon: Users },
